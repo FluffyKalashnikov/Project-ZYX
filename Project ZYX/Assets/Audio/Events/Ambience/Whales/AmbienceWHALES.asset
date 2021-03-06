@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b5e4568f40bc8549ae14507fb6ad9a5, type: 3}
+  m_Name: AmbienceWHALES
+  m_EditorClassIdentifier: 
+  clips:
+  - {fileID: 8300000, guid: 3dff5c8b10b076249b601d426c2909d7, type: 3}
+  - {fileID: 8300000, guid: 5819ba46acfbaba40800c617448f710b, type: 3}
+  - {fileID: 8300000, guid: 18d193cc29fdd64458311a67e228222c, type: 3}
+  - {fileID: 8300000, guid: b9c58ee1c7b951947bada5af755aae6d, type: 3}
+  - {fileID: 8300000, guid: 4ac1fe77e39596344b1265562c139480, type: 3}
+  - {fileID: 8300000, guid: f83949ac2878f114a84858794158c245, type: 3}
+  - {fileID: 8300000, guid: d4a4d73f3332cb349bf16d9ac8d8ab5d, type: 3}
+  - {fileID: 8300000, guid: 40877cadda611384eb479926f58bc5fc, type: 3}
+  - {fileID: 8300000, guid: bbbe6b8b3ece5944aae35f3334596dce, type: 3}
+  - {fileID: 8300000, guid: 75a073d0b104420499ab75f319227328, type: 3}
+  - {fileID: 8300000, guid: 4a20f220db3d23e41858953783e9758d, type: 3}
+  - {fileID: 8300000, guid: a58f3be70e35a6944a0a5a8357e61df7, type: 3}
+  - {fileID: 8300000, guid: 429d07d1253eafc4582331ed2e5345f8, type: 3}
+  loop: 0
+  playOneShot: 1
+  volume:
+    type: 0
+    slider: 0
+    single: 0.3
+    min: 0
+    max: 1
+    minLimit: 1
+    maxLimit: 1
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  pitch:
+    type: 0
+    slider: 0
+    single: 1
+    min: 0
+    max: 1
+    minLimit: 1
+    maxLimit: 1
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  spatialBlend:
+    type: 0
+    slider: 0
+    single: 0
+    min: 0
+    max: 1
+    minLimit: 0
+    maxLimit: 0
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4

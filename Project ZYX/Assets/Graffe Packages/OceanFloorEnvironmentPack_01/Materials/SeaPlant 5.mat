@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: SeaPlant 5
+  m_Shader: {fileID: -6465566751694194690, guid: f3920a9905f273941833b83542dbc2f6, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - Texture2D_73D48AC4:
+        m_Texture: {fileID: 2800000, guid: 0b609c5ec97c76d4eba8846e8dd34548, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_A2A562CE:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - Boolean_491C0D64: 0
+    - Vector1_323D966F: 2.97
+    - Vector1_35E9837A: -0.1
+    - Vector1_37676A52: 1
+    - Vector1_38F9E309: 0.23
+    - Vector1_3AB96CD8: 0
+    - Vector1_3CDA6FD6: 0.48
+    - Vector1_46CFBEE8: 0.64
+    - Vector1_5EDEC674: -0.46
+    - Vector1_6227D201: 1.12
+    - Vector1_9479852E: 1.62
+    - Vector1_9FFA98EF: 0.5
+    - Vector1_A4CB231B: 0
+    - Vector1_BFB02F98: 0.09
+    - Vector1_DF3B6CD6: 1.04
+    m_Colors:
+    - Color_59DAD7FE: {r: 0.19811317, g: 0.0929055, b: 0.07382519, a: 0}
+    - Color_7198B2C1: {r: 1, g: 1, b: 1, a: 0}
+    - Color_9BF4E465: {r: 1, g: 1, b: 1, a: 0}
+  m_BuildTextureStacks: []

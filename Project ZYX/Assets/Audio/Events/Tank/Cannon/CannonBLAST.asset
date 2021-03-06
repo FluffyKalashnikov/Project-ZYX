@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b5e4568f40bc8549ae14507fb6ad9a5, type: 3}
+  m_Name: CannonBLAST
+  m_EditorClassIdentifier: 
+  clips:
+  - {fileID: 8300000, guid: e4e12b11d23986f4d8cdbaf28e4aa9be, type: 3}
+  - {fileID: 8300000, guid: aa98d8e7bfb856c4fa4c6ad39bdb91a6, type: 3}
+  - {fileID: 8300000, guid: bbcf3330bb64c87449315a7625abfa7d, type: 3}
+  - {fileID: 8300000, guid: b2f8a003b565c7045b4eaf338c411f04, type: 3}
+  - {fileID: 8300000, guid: b042651974511ad42a5e29b5367320d3, type: 3}
+  loop: 0
+  playOneShot: 1
+  volume:
+    type: 0
+    slider: 0
+    single: 1
+    min: 0
+    max: 1
+    minLimit: 1
+    maxLimit: 1
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  pitch:
+    type: 0
+    slider: 0
+    single: 1
+    min: 0
+    max: 1
+    minLimit: 1
+    maxLimit: 1
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  spatialBlend:
+    type: 0
+    slider: 0
+    single: 0
+    min: 0
+    max: 1
+    minLimit: 0
+    maxLimit: 0
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4

@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Darkness
+  m_Shader: {fileID: -6465566751694194690, guid: 9c2d10cfc7252984a9e397f100211f93, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Floats:
+    - Vector1_74D7A40A: 1.7
+    - Vector1_81521761: 0.16
+    - Vector1_B7B2D35B: 1
+    m_Colors:
+    - Color_1AACD231: {r: 0.010087496, g: 0.16714418, b: 0.008672576, a: 1}
+    - Color_A8190E1A: {r: 0.16269517, g: 1, b: 0, a: 0}
+  m_BuildTextureStacks: []
