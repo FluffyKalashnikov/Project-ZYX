@@ -10490,25 +10490,13 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 378456680, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.000000015896624
-      objectReference: {fileID: 0}
-    - target: {fileID: 378456680, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0.000000006584597
-      objectReference: {fileID: 0}
     - target: {fileID: 868862682, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.8635249
       objectReference: {fileID: 0}
     - target: {fileID: 868862682, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
       propertyPath: m_LocalRotation.z
-<<<<<<< HEAD
       value: 0.13604765
-=======
-      value: 0.13604762
->>>>>>> parent of bb1b31a (All elements animated, stable Widget-class done)
       objectReference: {fileID: 0}
     - target: {fileID: 1350783316, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
       propertyPath: m_LocalRotation.w
@@ -10516,7 +10504,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1350783316, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
       propertyPath: m_LocalRotation.z
-<<<<<<< HEAD
       value: 0.13604765
       objectReference: {fileID: 0}
     - target: {fileID: 1915683843, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
@@ -10530,9 +10517,6 @@ PrefabInstance:
     - target: {fileID: 1915683843, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
       propertyPath: playerColors.Array.data[3].r
       value: 1
-=======
-      value: 0.13604762
->>>>>>> parent of bb1b31a (All elements animated, stable Widget-class done)
       objectReference: {fileID: 0}
     - target: {fileID: 821787623625406256, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
       propertyPath: m_RootOrder
