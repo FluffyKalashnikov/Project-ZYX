@@ -29,15 +29,19 @@ public class Game : MonoBehaviour
     public static List<Tank>             PlayerList    = new List<Tank>();
     public static List<Tank>             AliveList     = new List<Tank>();
     public static List<Color>            PlayerColors  = new List<Color>();
+<<<<<<< HEAD
     public static EState                 State         = EState.Empty;
     public static MultiplayerEventSystem EventSystem   = null;
+=======
+    public static GameState              State         = GameState.Empty;
+>>>>>>> parent of bb1b31a (All elements animated, stable Widget-class done)
 
     public static Camera                 Camera        = null;
     public static PlayerInputManager     InputManager  = null;
     public static Game                   Instance      = null;
     public static CinemachineTargetGroup CameraTargets = null;
 
-    public enum EState
+    public enum GameState
     {
         Empty,
         Match,
@@ -63,6 +67,14 @@ public class Game : MonoBehaviour
         InputManager  = GetComponent<PlayerInputManager>();
         CameraTargets = GetComponentInChildren<CinemachineTargetGroup>();
         Camera        = GetComponentInChildren<Camera>();
+<<<<<<< HEAD
+=======
+
+        // 4. EVENT SUBSCRIPTION
+
+        InputManager.onPlayerJoined += OnPlayerJoin;
+        InputManager.onPlayerLeft   += OnPlayerLeft;
+>>>>>>> parent of bb1b31a (All elements animated, stable Widget-class done)
     }
     
     
@@ -188,7 +200,7 @@ public class Game : MonoBehaviour
     public static void StartMatch()
     {
         OnStartMatch?.Invoke();
-        State = EState.Match;
+        State = GameState.Match;
 
         SpawnTanks();
 
@@ -197,7 +209,7 @@ public class Game : MonoBehaviour
     public static void StartLobby()
     {
         OnStartLobby?.Invoke();
-        State = EState.Lobby;
+        State = GameState.Lobby;
     }
     public static void MatchCleanup()
     {

@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class GameUI : MonoBehaviour
 {
@@ -14,9 +12,9 @@ public class GameUI : MonoBehaviour
     public UnityEvent OnUnpause;
 
     private ActionAsset actionAsset = null;
-    private Widget pauseWidget = null;
-
+    [SerializeField] private Canvas[] everyCanvas = null;
     
+
 
     private void Awake() 
     {
@@ -26,11 +24,12 @@ public class GameUI : MonoBehaviour
 
         actionAsset.Player.Pause.performed += ctx => 
         {
-            if (Game.State == Game.EState.Match)
+            Debug.Log("Bröd");
+            if (Game.State == Game.GameState.Match)
             {
                 OnPause.Invoke();
             }
-            else if (Game.State == Game.EState.Paused)
+            else if (Game.State == Game.GameState.Paused)
             {
                 OnUnpause.Invoke();
             }
@@ -38,30 +37,29 @@ public class GameUI : MonoBehaviour
 
         OnPause  .AddListener(Pause);
         OnUnpause.AddListener(Unpause);
-
-        pauseWidget = Widget.Find("Pause UI");
     }
-
-
-
     
-    public static void SetActiveWidget(Widget widget)
+
+
+
+    public static void SetActiveUI(GameObject UI)
     {
-        Widget.SetSelected(widget);
+        foreach (var i in FindObjectsOfType<Canvas>())
+        {
+            i.gameObject.SetActive(false);
+        }
+
+        UI.SetActive(true);
     }
-    
 
     private void Pause()
     {
         Debug.Log("Pausing...");
-        Game.State = Game.EState.Paused;
-        Widget.AddWidget(pauseWidget);
+        Game.State = Game.GameState.Paused;
     }
     private void Unpause()
     {
         Debug.Log("Unpausing...");
-        Game.State = Game.EState.Match;
-        Widget.RemoveWidget(pauseWidget);
+        Game.State = Game.GameState.Match;
     }
 }
-
