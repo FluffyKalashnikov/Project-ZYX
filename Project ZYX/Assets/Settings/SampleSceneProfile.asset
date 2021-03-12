@@ -20,7 +20,7 @@ MonoBehaviour:
     min: 0
   intensity:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 0.39
     min: 0
   scatter:
     m_OverrideState: 0
@@ -186,7 +186,7 @@ MonoBehaviour:
   - {fileID: 2205264615218205103}
   - {fileID: -1963459855679584887}
   - {fileID: -758779243051831059}
-  - {fileID: 1821920083588083889}
+  - {fileID: 1517216643266343948}
   - {fileID: 6655288435151154471}
   - {fileID: 7154010883182679461}
 --- !u!114 &849379129802519247
@@ -206,7 +206,7 @@ MonoBehaviour:
   mode:
     m_OverrideState: 1
     m_Value: 2
---- !u!114 &1821920083588083889
+--- !u!114 &1517216643266343948
 MonoBehaviour:
   m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
@@ -218,14 +218,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66f335fb1ffd8684294ad653bf1c7564, type: 3}
   m_Name: ColorAdjustments
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   m_AdvancedMode: 0
   postExposure:
     m_OverrideState: 1
-    m_Value: -0.61
+    m_Value: 0.22
   contrast:
     m_OverrideState: 1
-    m_Value: 21
+    m_Value: 8
     min: -100
     max: 100
   colorFilter:
