@@ -9,6 +9,8 @@ public class TankMovement : MonoBehaviour
     #region Setup Var
     ActionAsset actionAsset;
     [SerializeField] private Tank tankScript;
+
+    public bool moveable = false;
     #endregion
 
     #region Stats
@@ -20,7 +22,7 @@ public class TankMovement : MonoBehaviour
     #endregion
 
     #region Audio
-    [Header("Audio Objects")]
+    [Header("Audio")]
     [SerializeField] private AudioEvent engineStartup;
     [SerializeField] private AudioEvent engineIdle;
     [SerializeField] private AudioEvent engineThrottle;
@@ -29,6 +31,10 @@ public class TankMovement : MonoBehaviour
     [SerializeField] private AudioSource engineIdleSource;
     [SerializeField] private AudioSource engineThrottleSource;
     [SerializeField] private AudioSource engineRevSource;
+
+    [SerializeField] float velocityMax;
+    [SerializeField] float throttlePitchMin;
+    [SerializeField] float throttlePitchMax;
 
     private float currentVelMultiplier;
     public float Timer;
@@ -42,10 +48,9 @@ public class TankMovement : MonoBehaviour
 
     #region Audio Bools
     private bool ifReving = false;
-    private bool driveable = false;
-    #endregion 
-     
-  
+    #endregion
+
+
 
     #region Setup
     private void Awake()
@@ -57,22 +62,21 @@ public class TankMovement : MonoBehaviour
     {
         StartCoroutine(EngineStartUpSound());
         actionAsset.Player.Enable();
-        SFXMultiplierSetup();
     }
     private void Update()
     {
-        if (driveable)
+        if (moveable)
         {
             BaseMovement(actionAsset.Player.Move.ReadValue<Vector2>());
             EngineRev(actionAsset.Player.Move.ReadValue<Vector2>());
         }
         VolumeManager();
-        
+
         if (Timer < 0)
         {
             Timer -= Time.deltaTime;
             accelerationForce = 0.2f;
-        } 
+        }
         else if (Timer > 0)
         {
             Timer -= Time.deltaTime;
@@ -85,31 +89,30 @@ public class TankMovement : MonoBehaviour
     private void BaseMovement(Vector2 input)
     {
         #region Actual Movement
-        float multipliedDriveForce = input.y * motorForce;
-        driveForce = new Vector3(0, 0, multipliedDriveForce) * Time.fixedDeltaTime;
+        float multipliedMotorForce = input.y * motorForce;
+        driveForce = new Vector3(0, 0, multipliedMotorForce) * Time.deltaTime;
         #region Accel/Decel-Physics
         if (input.y != 0)
         {
-            currentVel = Vector3.MoveTowards(currentVel, driveForce, accelerationForce * Time.fixedDeltaTime);
+            currentVel = Vector3.MoveTowards(currentVel, driveForce, accelerationForce * Time.deltaTime);
         }
-        else if(input.y == 0 && currentVel.z != 0)
+        else if (input.y == 0 && currentVel.z != 0)
         {
-            currentVel = Vector3.MoveTowards(currentVel, Vector3.zero, decelerationForce * Time.fixedDeltaTime);
+            currentVel = Vector3.MoveTowards(currentVel, Vector3.zero, decelerationForce * Time.deltaTime);
         }
         #endregion
         float multipliedRotationForce = input.x * rotationForce;
 
-        tankScript.Controller.transform.Rotate(0, multipliedRotationForce * Time.fixedDeltaTime, 0);
+        tankScript.Controller.transform.Rotate(0, multipliedRotationForce * Time.deltaTime, 0);
         direction = tankScript.Controller.transform.TransformDirection(currentVel);
         tankScript.Controller.Move(direction);
         #endregion
- }
+    }
     #endregion
 
     #region EngineRev
     private void EngineRev(Vector2 input)
     {
-        #region Engine Rev Audio (Based on Input)
         if (engineRev != null && input.y > 0 && input.y <= 0.3 && !ifReving || engineRev != null && input.y < 0 && input.y >= -0.3 && !ifReving)
         {
             engineRevSource.Stop();
@@ -142,20 +145,10 @@ public class TankMovement : MonoBehaviour
         {
             ifReving = false;
         }
-        #endregion
     }
     #endregion
 
     #region Audio Manager
-
-    private void SFXMultiplierSetup()
-    {
-        //Gets the top speed. motorForceDivdided is the velocity value that prints out whenever you debug currentVel.z
-        float motorForceDivided = motorForce / 50;
-        //Sets a multiplier value for currentvalue to make sure the final values always becomes the same no matter what the top speed is
-        currentVelMultiplier = 0.1f / motorForceDivided;
-    }
-
     private void VolumeManager()
     {
         //Absolutes currentVel
@@ -167,17 +160,24 @@ public class TankMovement : MonoBehaviour
 
         engineThrottleSource.pitch = 10 * tankVelForAudio;
         engineThrottleSource.volume = 10 * tankVelForAudio - 0.3f;
-    }    
+
+        float velocityScale = currentVel.z / velocityMax;
+
+        engineThrottleSource.pitch = Mathf.Lerp(throttlePitchMin, throttlePitchMax, velocityScale);
+    }
     IEnumerator EngineStartUpSound()
     {
         engineStartup.Play(engineStartupSource);
-        
+
         yield return new WaitForSeconds(1.1568f);
-        
+
         engineIdle.Play(engineIdleSource);
         engineThrottle.Play(engineThrottleSource);
-        
-        driveable = true;
     }
     #endregion
+
+    public void enableTankMovement()
+    {
+        moveable = true;
+    }
 }

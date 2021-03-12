@@ -6,11 +6,7 @@ public class AmbientSFX : MonoBehaviour
 {
     [Header("Operation Aquatic (BATTLE THEME)")]
     [SerializeField] private AudioSource battleTrackSource;
-    [Tooltip("The first clip that plays when you start the game. The end of the track has its reverb tail removed")]
-    [SerializeField] private AudioEvent battleTrackUnlooped;
-    [Tooltip("The looped version has the reverb tail on the intro instead of at the end so that it can loop semlessly")]
-    [SerializeField] private AudioEvent battleTrackLooped;
-    private bool battleOSTunloopedBool;
+    [SerializeField] private AudioEvent battleTrack;
 
     [Header("Played on start")]
     [SerializeField] private AudioEvent[] backgroundAmbientSound;
@@ -42,33 +38,27 @@ public class AmbientSFX : MonoBehaviour
     private void Awake()
     {
         #region Starts background SFX
-        List<AudioSource> audioSources = new List<AudioSource>();
-        foreach (var i in backgroundAmbientSound) audioSources.Add(gameObject.AddComponent<AudioSource>());
+    List<AudioSource> audioSources = new List<AudioSource>();
+    foreach (var i in backgroundAmbientSound) audioSources.Add(gameObject.AddComponent<AudioSource>());
 
-        for (int i = 0; i < backgroundAmbientSound.Length; i++)
-        {
-            backgroundAmbientSound[i].Play(audioSources[i]);
-        }
-        #endregion
+    for (int i = 0; i < backgroundAmbientSound.Length; i++)
+    {
+        backgroundAmbientSound[i].Play(audioSources[i]);
+    }
+    #endregion
     }
     private void Start()
     {
         //PlayBattleTheme();
 
-        StartCoroutine(WhaleSFX());
-        StartCoroutine(BubblesSFX());
-        StartCoroutine(DarkSFX());
-        StartCoroutine(MiscSFX());
+    StartCoroutine(WhaleSFX());
+    StartCoroutine(BubblesSFX());
+    StartCoroutine(DarkSFX());
+    StartCoroutine(MiscSFX());
     }
     private void PlayBattleTheme()
     {
-        battleTrackUnlooped.Play(battleTrackSource);
-        battleOSTunloopedBool = true;
-
-        if(!battleTrackSource.isPlaying && battleOSTunloopedBool)
-        {
-            battleTrackLooped.Play(battleTrackSource);
-        }
+        battleTrack.Play(battleTrackSource);
     }
 
 

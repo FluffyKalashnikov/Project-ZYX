@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4b5e4568f40bc8549ae14507fb6ad9a5, type: 3}
-  m_Name: TankIDLE
+  m_Name: AbbotTankIDLE
   m_EditorClassIdentifier: 
   clips:
-  - {fileID: 8300000, guid: 61c9e2173a364bf4e893e0004ff9b687, type: 3}
+  - {fileID: 8300000, guid: fe10f0aaf3e12e64f9f50bc4317ecf31, type: 3}
   loop: 1
   playOneShot: 0
   volume:
