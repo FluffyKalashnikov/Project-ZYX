@@ -329,14 +329,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tankScript: {fileID: -3102628908101986431}
-  moveable: 0
+  moveable: 1
   motorForce: 5
-  accelerationForce: 0.2
-  decelerationForce: 0.05
+  accelerationForce: 3
+  decelerationForce: 1
   rotationForce: 100
   engineStartup: {fileID: 11400000, guid: 4045cf4dbe878b64fa54bb4cd27d4355, type: 2}
   engineIdle: {fileID: 11400000, guid: 0166dd06cd772ec44bd672d6bfa21f0f, type: 2}
-  engineThrottle: {fileID: 11400000, guid: f7007e364c67a3648a0ec1e96e5eed71, type: 2}
+  engineThrottle: {fileID: 11400000, guid: 6e42d13bebd4b3140b9526fbe72ac7b6, type: 2}
   engineRev:
   - {fileID: 11400000, guid: da6a16cf2d256ae40864524f814bab6b, type: 2}
   - {fileID: 11400000, guid: ca035b26f7afa314084ce732fcdcb8e7, type: 2}
@@ -345,6 +345,13 @@ MonoBehaviour:
   engineIdleSource: {fileID: 7604507413556875858}
   engineThrottleSource: {fileID: 5723528227627813004}
   engineRevSource: {fileID: 3751981127765194699}
+  velocityMax: 0.035
+  idleVolumeMin: 0
+  idleVolumeMax: 1
+  throttlePitchMin: -0.75
+  throttlePitchMax: 1.03
+  throttleVolumeMin: 0
+  throttleVolumeMax: 1
   Timer: 0
 --- !u!114 &2348111853355917877
 MonoBehaviour:

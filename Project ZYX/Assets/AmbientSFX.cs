@@ -49,12 +49,12 @@ public class AmbientSFX : MonoBehaviour
     }
     private void Start()
     {
-        //PlayBattleTheme();
+        PlayBattleTheme();
 
-    StartCoroutine(WhaleSFX());
-    StartCoroutine(BubblesSFX());
-    StartCoroutine(DarkSFX());
-    StartCoroutine(MiscSFX());
+        StartCoroutine(WhaleSFX());
+        StartCoroutine(BubblesSFX());
+        StartCoroutine(DarkSFX());
+        StartCoroutine(MiscSFX());
     }
     private void PlayBattleTheme()
     {

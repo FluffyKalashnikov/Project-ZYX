@@ -33,8 +33,12 @@ public class TankMovement : MonoBehaviour
     [SerializeField] private AudioSource engineRevSource;
 
     [SerializeField] float velocityMax;
+    [SerializeField] float idleVolumeMin;
+    [SerializeField] float idleVolumeMax;
     [SerializeField] float throttlePitchMin;
     [SerializeField] float throttlePitchMax;
+    [SerializeField] float throttleVolumeMin;
+    [SerializeField] float throttleVolumeMax;
 
     private float currentVelMultiplier;
     public float Timer;
@@ -94,17 +98,18 @@ public class TankMovement : MonoBehaviour
         #region Accel/Decel-Physics
         if (input.y != 0)
         {
-            currentVel = Vector3.MoveTowards(currentVel, driveForce, accelerationForce * Time.deltaTime);
+            currentVel = Vector3.Lerp(currentVel, driveForce, accelerationForce * Time.deltaTime);
         }
         else if (input.y == 0 && currentVel.z != 0)
         {
-            currentVel = Vector3.MoveTowards(currentVel, Vector3.zero, decelerationForce * Time.deltaTime);
+            currentVel = Vector3.Lerp(currentVel, Vector3.zero, decelerationForce * Time.deltaTime);
         }
         #endregion
         float multipliedRotationForce = input.x * rotationForce;
 
         tankScript.Controller.transform.Rotate(0, multipliedRotationForce * Time.deltaTime, 0);
         direction = tankScript.Controller.transform.TransformDirection(currentVel);
+        Debug.Log(currentVel.z);
         tankScript.Controller.Move(direction);
         #endregion
     }
@@ -153,17 +158,11 @@ public class TankMovement : MonoBehaviour
     {
         //Absolutes currentVel
         float tankVelAbs = Mathf.Abs(currentVel.z);
-        //Sets a multiplier value for currentvalue to make sure the top value never goes below or higher than 0.1
-        float tankVelForAudio = tankVelAbs * currentVelMultiplier;
+        float velocityScale = tankVelAbs / velocityMax;
 
-        engineIdleSource.volume = 1 - tankVelForAudio * 10;
-
-        engineThrottleSource.pitch = 10 * tankVelForAudio;
-        engineThrottleSource.volume = 10 * tankVelForAudio - 0.3f;
-
-        float velocityScale = currentVel.z / velocityMax;
-
+        engineIdleSource.volume = Mathf.Lerp(idleVolumeMax, idleVolumeMin, velocityScale);
         engineThrottleSource.pitch = Mathf.Lerp(throttlePitchMin, throttlePitchMax, velocityScale);
+        engineThrottleSource.volume = Mathf.Lerp(throttleVolumeMin, throttleVolumeMax, velocityScale);
     }
     IEnumerator EngineStartUpSound()
     {
