@@ -60,7 +60,7 @@ public class Widget : MonoBehaviour
         {
             yield return new WaitUntil(() => defaultElement.activeInHierarchy);
 
-            Game.EventSystem.SetSelectedGameObject(defaultElement);
+            EventSystem.current.SetSelectedGameObject(defaultElement);
         }
     }
     public static void SetSelected(Widget widget, bool ignoreNull = true)

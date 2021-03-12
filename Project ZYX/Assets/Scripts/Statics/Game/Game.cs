@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.UI;
 
 [RequireComponent(typeof(PlayerInputManager))]
 public class Game : MonoBehaviour
@@ -23,14 +22,14 @@ public class Game : MonoBehaviour
     public static event Action<Tank> OnWinMatch   = wn => Instance.onWinMatch  .Invoke();
     public static event Action       OnStartLobby = () => Instance.onStartLobby.Invoke();
 
+    public static event Action<PlayerInput> OnPlayerJoin = player => PlayerJoin(player, player.GetComponent<Tank>());
+    public static event Action<PlayerInput> OnPlayerLeft = player => PlayerLeft(player, player.GetComponent<Tank>());
+
     
-    public static int                    ReadyCount    = 0;
-    public static int                    PlayerCount   = 0;
     public static List<Tank>             PlayerList    = new List<Tank>();
     public static List<Tank>             AliveList     = new List<Tank>();
     public static List<Color>            PlayerColors  = new List<Color>();
     public static EState                 State         = EState.Empty;
-    public static MultiplayerEventSystem EventSystem   = null;
 
     public static Camera                 Camera        = null;
     public static PlayerInputManager     InputManager  = null;
@@ -63,29 +62,23 @@ public class Game : MonoBehaviour
         InputManager  = GetComponent<PlayerInputManager>();
         CameraTargets = GetComponentInChildren<CinemachineTargetGroup>();
         Camera        = GetComponentInChildren<Camera>();
+
+        // 4. EVENT SUBSCRIPTION
+        InputManager.onPlayerJoined += OnPlayerJoin;
+        InputManager.onPlayerLeft   += OnPlayerLeft;
     }
     
     
-    // PLAYER LOGIC
-    public static void AddPlayer(PlayerInput player, Tank tank)
+    
+    public static void PlayerJoin(PlayerInput player, Tank tank)
     {
         PlayerList.Add(tank);
-        PlayerCount++;
-
-        if (tank == PlayerList[0])
-        Game.EventSystem = tank.EventSystem;
-
-        Debug.Log("Player Added!");
     }
-    public static void RemovePlayer(PlayerInput player, Tank tank)
+    public static void PlayerLeft(PlayerInput player, Tank tank)
     {
         PlayerList.Add(tank);
-        PlayerCount--;
-
-        Debug.Log("Player Removed!");
     }
 
-    // TANK LOGIC
     public static void SpawnTank(Tank tank, float delay = 0f)
     {
         Instance.StartCoroutine(Spawn());
@@ -155,13 +148,6 @@ public class Game : MonoBehaviour
     {
 
     }
-    public static void OnPlayerReady(Tank tank)
-    {
-        if (ReadyCount >= PlayerCount)
-        {
-            StartMatch();
-        }
-    }
     public static void SpawnTanks(float delay = 0f)
     {
         foreach (Tank tank in FindObjectsOfType<Tank>())
@@ -184,7 +170,7 @@ public class Game : MonoBehaviour
         }
     }
     
-    // MATCH LOGIC
+
     public static void StartMatch()
     {
         OnStartMatch?.Invoke();
@@ -210,7 +196,6 @@ public class Game : MonoBehaviour
         OnWinMatch(winner);
     }
     
-    // APPLICATION LOGIC
     public static void Exit()
     {
         Debug.Log("Quitting...");

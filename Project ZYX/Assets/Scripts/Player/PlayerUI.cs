@@ -12,16 +12,12 @@ public class PlayerUI : MonoBehaviour
     [Header("Name Settings")]
     [SerializeField] private int maxNameLength = 13;
 
-    private bool ready = false;
-    private IEnumerator IE_ResetSelect = null;
+    IEnumerator IE_ResetSelect = null;
 
     [Header("REFERENCES")]
-    [SerializeField] private Tank          owner          = null;
-    [SerializeField] private GameObject    previewPrefab  = null;
+    [SerializeField] private Tank          owner = null;
     [Space(10)]
-    [SerializeField] private GameObject    previewRoot    = null;
-    [SerializeField] private Image         previewBackrnd = null;
-    [SerializeField] private GameObject    previewObject  = null;
+    [SerializeField] private GameObject    previewRoot  = null;
     [SerializeField] private RenderTexture previewTexture = null;
     [SerializeField] private Camera        previewCamera  = null;
     [SerializeField] private RawImage      previewImage   = null;
@@ -36,26 +32,10 @@ public class PlayerUI : MonoBehaviour
 
 
 
-    private void Start() 
+    private void Awake()
     {
-        // 1. CREATE USER INTERFACE
-        previewRoot   = Game.Instance.GetComponentInChildren<HorizontalLayoutGroup>().gameObject;
-        previewObject = Instantiate(previewPrefab, previewRoot.transform);
-        eventSystem.playerRoot = previewObject;
-
-        // 2. GET REFERENCES
-        Button[] buttons = previewObject.GetComponentsInChildren<Button>(true);
-        buttonRDY = buttons[0];
-        buttonRGT = buttons[1];
-        buttonLFT = buttons[2];
-
-        previewImage   = previewObject.GetComponentInChildren<RawImage>();
-        previewBackrnd = previewObject.GetComponentInChildren<Image>();
-        nameField      = previewObject.GetComponentInChildren<TMP_InputField>();
-
-        // 3. CHECK REFERENCES
+        // 1. CHECK REFERENCES
         #if UNITY_EDITOR
-        if (!previewPrefab) Debug.LogError("Preview Prefab has not been assigned.", this);
         if (!owner)         Debug.LogError("Tank Owner has not been assigned.",     this);
         if (!previewRoot)   Debug.LogError("Preview Root has not been assigned.",   this);
         if (!previewCamera) Debug.LogError("Preview Camera has not been assigned.", this);
@@ -68,36 +48,21 @@ public class PlayerUI : MonoBehaviour
         if (!nameField)     Debug.LogError("Name Field has not been assigned.",     this);
         #endif
 
-
-        // 4. CREATE/ASSIGN PREVIEW TEXTURE
+        // 2. CREATE/ASSIGN PREVIEW TEXTURE
         previewTexture = new RenderTexture(256, 256, 24);
         previewCamera.targetTexture = previewTexture;
         previewImage .texture       = previewTexture;
 
-        // 5. SUBSCRIBE TO EVENTS
+        // 3. SUBSCRIBE TO EVENTS
         Game.OnStartLobby += EnablePreview;
         Game.OnStartMatch += DisablePreview;
-        Game.OnStartMatch += () => ready = false;
 
         nameField.onValidateInput += NameValidation;
         nameField.onSubmit.AddListener(NameSubmit);
         nameField.onSelect.AddListener(NameSelect);
-
-        buttonRDY.onClick .AddListener
-        (
-            () =>
-            {
-                switch (ready = !ready)
-                {
-                    case true:  Ready();   break;
-                    case false: Unready(); break;
-                }
-            }
-        );
         
         // 4. INITIALIZE
-        DisablePreview();
-        previewBackrnd.color = Game.PlayerColors[owner.PlayerInput.playerIndex];
+        EnablePreview();
     }
     
 
@@ -147,32 +112,15 @@ public class PlayerUI : MonoBehaviour
     }
     public void EnablePreview()
     {
-        previewCamera.enabled = true;
         previewRoot.SetActive(true);
         previewTank.SetActive(true);
         previewTexture.Create();
-
         ResetPreviewSelection();
     }
     public void DisablePreview()
     {
-        previewCamera.enabled = false;
         previewRoot.SetActive(false);
         previewTank.SetActive(false);
         previewTexture.Release();
-    }
-
-    // LOBBY LOGIC
-    private void Ready()
-    {
-        Debug.Log("Ready!");
-        Game.ReadyCount++;
-        Game.OnPlayerReady(owner);
-    }
-    private void Unready()
-    {
-        Debug.Log("Unready...");
-        Game.ReadyCount--;
-        Game.OnPlayerReady(owner);
     }
 }

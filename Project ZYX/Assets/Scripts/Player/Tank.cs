@@ -4,7 +4,6 @@ using System;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
 
 public class Tank : MonoBehaviour, IDamageable
@@ -15,9 +14,8 @@ public class Tank : MonoBehaviour, IDamageable
     public float health;
     public bool  alive = false;
     [Header("REFERENCES")]
-    public CharacterController    Controller   = null;
-    public PlayerInput            PlayerInput  = null; 
-    public MultiplayerEventSystem EventSystem  = null;
+    public CharacterController Controller      = null;
+    public PlayerInput         PlayerInput     = null; 
     [SerializeField]
     private Image[] imagesToColor = null;
 
@@ -29,36 +27,22 @@ public class Tank : MonoBehaviour, IDamageable
     public UnityEvent OnDisable;
 
 
-    public int   Power = 0;
+    public int Power = 0;
     public float PowerUpTimer;
 
-
-    private void Awake() 
-    {
-        // 1. REFERENCES
-        this.EventSystem = GetComponent<MultiplayerEventSystem>();
-
-        // 2. GAME LOGIC
-        Game.AddPlayer(PlayerInput, this);
-    }
-    private void OnDestroy() 
-    {
-        Game.RemovePlayer(PlayerInput, this);
-    }
-
-
-
-
-
-
-    public void  Initialize()
+    public void Initialize()
     {
         gameObject.name = name = $"Player {PlayerInput.playerIndex+1}";
         health = maxHealth;
 
+
         foreach (var i in GetComponentsInChildren<MeshRenderer>())
         {
             i.material.color = Game.PlayerColors[PlayerInput.playerIndex];
+        }
+        foreach (var i in imagesToColor)
+        {
+            i.color = Game.PlayerColors[PlayerInput.playerIndex];
         }
     }
     
@@ -81,7 +65,7 @@ public class Tank : MonoBehaviour, IDamageable
 
         return damage;
     }
-    public void  Die()
+    public void Die()
     {
         StartCoroutine(DeathEffect());
         IEnumerator DeathEffect()
@@ -92,7 +76,8 @@ public class Tank : MonoBehaviour, IDamageable
         }
     }
 
-    public void  Enable()
+
+    public void Enable()
     {
         if (alive) return;
 
@@ -102,7 +87,7 @@ public class Tank : MonoBehaviour, IDamageable
         OnEnable.Invoke();
         alive = true;
     }
-    public void  Disable()
+    public void Disable()
     {
         if (!alive) return;
 
