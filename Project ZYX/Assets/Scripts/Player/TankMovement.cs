@@ -19,6 +19,11 @@ public class TankMovement : MonoBehaviour
     [SerializeField] private float accelerationForce;
     [SerializeField] private float decelerationForce;
     [SerializeField] private float rotationForce;
+
+    [Header("Porpeller Values")]
+    [SerializeField] private GameObject propellerBlades;
+    [SerializeField] private float propellerIdleSpeed;
+    [SerializeField] private float propellerForceMultiplier;
     #endregion
 
     #region Audio
@@ -48,6 +53,7 @@ public class TankMovement : MonoBehaviour
     private Vector3 driveForce;
     private Vector3 currentVel;
     private Vector3 direction;
+    private Vector3 propellerVector;
     #endregion
 
     #region Audio Bools
@@ -75,6 +81,7 @@ public class TankMovement : MonoBehaviour
             EngineRev(actionAsset.Player.Move.ReadValue<Vector2>());
         }
         VolumeManager();
+        PropellerSpin();
 
         if (Timer < 0)
         {
@@ -174,6 +181,14 @@ public class TankMovement : MonoBehaviour
         engineThrottle.Play(engineThrottleSource);
     }
     #endregion
+
+    private void PropellerSpin()
+    {
+        Vector3 multipliedPropellerValue;
+        propellerVector = new Vector3(0, 0, propellerIdleSpeed) * Time.deltaTime;
+        multipliedPropellerValue = (currentVel * propellerForceMultiplier) + propellerVector;
+        propellerBlades.transform.Rotate(multipliedPropellerValue);
+    }
 
     public void enableTankMovement()
     {
