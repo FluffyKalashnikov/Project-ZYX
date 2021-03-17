@@ -73,11 +73,11 @@ public class Game : MonoBehaviour
     
     public static void PlayerJoin(PlayerInput player, Tank tank)
     {
-        PlayerList.Add(tank);
+        
     }
     public static void PlayerLeft(PlayerInput player, Tank tank)
     {
-        PlayerList.Add(tank);
+        
     }
 
     public static void SpawnTank(Tank tank, float delay = 0f)
