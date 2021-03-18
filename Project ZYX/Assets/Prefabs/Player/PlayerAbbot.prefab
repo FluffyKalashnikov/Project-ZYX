@@ -561,7 +561,7 @@ MonoBehaviour:
   spinLoop: {fileID: 11400000, guid: 89a3268d024a2b04898561b92510edad, type: 2}
   spinLoopSource: {fileID: 8345302937858743616}
   spinStop: {fileID: 11400000, guid: d1df3b8859a438c4d926efcd70d8223e, type: 2}
-  spinStopSource: {fileID: 4931367472552671318}
+  spinStopSource: {fileID: 2366362721499861865}
   barrelLoop: {fileID: 11400000, guid: 279ebad322280c34ea3ca6006cb8046f, type: 2}
   barrelLoopSource: {fileID: 4931367472552671318}
   barrelStuckStart: {fileID: 11400000, guid: 87cf676d1d107374c84f785fd7b89cfd, type: 2}
