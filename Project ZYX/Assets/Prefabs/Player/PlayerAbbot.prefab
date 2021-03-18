@@ -542,7 +542,7 @@ MonoBehaviour:
   idleVolumeMin: 0
   idleVolumeMax: 0.5
   throttlePitchMin: 0
-  throttlePitchMax: 3
+  throttlePitchMax: 1
   throttleVolumeMin: 0
   throttleVolumeMax: 0.5
   engineStartup: {fileID: 11400000, guid: 4045cf4dbe878b64fa54bb4cd27d4355, type: 2}
