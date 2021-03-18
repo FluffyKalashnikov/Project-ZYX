@@ -8,6 +8,7 @@ public class TankShoot : MonoBehaviour
     #region Setup Var
     ActionAsset actionAsset;
     [SerializeField] private Tank tankScript;
+    [SerializeField] private TankAudio tankAudioScript;
     private bool gunActive;
     private bool launchActive;
     private float chargeStrength;
@@ -17,9 +18,6 @@ public class TankShoot : MonoBehaviour
     [SerializeField] private GameObject bullet;
     [SerializeField] private Shell bulletScript;
 
-    [Header("Audio Objects")]
-    [SerializeField] private AudioEvent cannonBlast;
-    [SerializeField] private AudioSource cannonBlastsource;
     public float timer;
     public float timer2;
 
@@ -79,7 +77,7 @@ public class TankShoot : MonoBehaviour
             timer -= Time.deltaTime;
             for (int i = 0; i <= 2; i++)
             {
-                cannonBlast.Play(cannonBlastsource);
+                tankAudioScript.CannonFire();
                 var projectile = Instantiate(bullet, bulletPoint.position, bulletPoint.rotation);
                 projectile.GetComponentInChildren<Shell>().Init(chargeStrength, tankScript);
                
@@ -91,7 +89,7 @@ public class TankShoot : MonoBehaviour
         else if (timer > 0)
         {
             timer -= Time.deltaTime;
-            cannonBlast.Play(cannonBlastsource);
+            tankAudioScript.CannonFire();
             var projectile = Instantiate(bullet, bulletPoint.position, bulletPoint.rotation);
             projectile.GetComponentInChildren<Shell>().Init(chargeStrength, tankScript);
             chargeStrength = 0;

@@ -9,6 +9,7 @@ public class TankMovement : MonoBehaviour
     #region Setup Var
     ActionAsset actionAsset;
     [SerializeField] private Tank tankScript;
+    [SerializeField] private TankAudio tankAudioScript;
 
     public bool moveable = false;
     #endregion
@@ -24,29 +25,9 @@ public class TankMovement : MonoBehaviour
     [SerializeField] private GameObject propellerBlades;
     [SerializeField] private float propellerIdleSpeed;
     [SerializeField] private float propellerForceMultiplier;
-    #endregion
 
-    #region Audio
-    [Header("Audio")]
-    [SerializeField] private AudioEvent engineStartup;
-    [SerializeField] private AudioEvent engineIdle;
-    [SerializeField] private AudioEvent engineThrottle;
-    [SerializeField] private AudioEvent[] engineRev;
-    [SerializeField] private AudioSource engineStartupSource;
-    [SerializeField] private AudioSource engineIdleSource;
-    [SerializeField] private AudioSource engineThrottleSource;
-    [SerializeField] private AudioSource engineRevSource;
-
+    [Header("Velocity Max for engine sounds")]
     [SerializeField] float velocityMax;
-    [SerializeField] float idleVolumeMin;
-    [SerializeField] float idleVolumeMax;
-    [SerializeField] float throttlePitchMin;
-    [SerializeField] float throttlePitchMax;
-    [SerializeField] float throttleVolumeMin;
-    [SerializeField] float throttleVolumeMax;
-
-    private float currentVelMultiplier;
-    public float Timer;
     #endregion
 
     #region Vectors
@@ -60,7 +41,7 @@ public class TankMovement : MonoBehaviour
     private bool ifReving = false;
     #endregion
 
-
+    public float Timer;
 
     #region Setup
     private void Awake()
@@ -70,7 +51,7 @@ public class TankMovement : MonoBehaviour
     }
     void Start()
     {
-        StartCoroutine(EngineStartUpSound());
+        StartCoroutine(tankAudioScript.EngineStartUpSound());
         actionAsset.Player.Enable();
     }
     private void Update()
@@ -125,10 +106,9 @@ public class TankMovement : MonoBehaviour
     #region EngineRev
     private void EngineRev(Vector2 input)
     {
-        if (engineRev != null && input.y > 0 && input.y <= 0.3 && !ifReving || engineRev != null && input.y < 0 && input.y >= -0.3 && !ifReving)
+        if (input.y > 0 && input.y <= 0.3 && !ifReving || input.y < 0 && input.y >= -0.3 && !ifReving)
         {
-            engineRevSource.Stop();
-            engineRev[0].Play(engineRevSource);
+            tankAudioScript.EngineRevLow();
             ifReving = true;
         }
         else if (input.y == 0 && ifReving)
@@ -136,10 +116,9 @@ public class TankMovement : MonoBehaviour
             ifReving = false;
         }
 
-        if (engineRev != null && input.y > 0.3 && input.y <= 0.6 && !ifReving || engineRev != null && input.y < -0.3 && input.y >= -0.6 && !ifReving)
+        if (input.y > 0.3 && input.y <= 0.6 && !ifReving || input.y < -0.3 && input.y >= -0.6 && !ifReving)
         {
-            engineRevSource.Stop();
-            engineRev[1].Play(engineRevSource);
+            tankAudioScript.EngineRevMid();
             ifReving = true;
         }
         else if (input.y == 0 && ifReving)
@@ -147,10 +126,9 @@ public class TankMovement : MonoBehaviour
             ifReving = false;
         }
 
-        if (engineRev != null && input.y > 0.6 && !ifReving || engineRev != null && input.y < -0.6 && !ifReving)
+        if (input.y > 0.6 && !ifReving || input.y < -0.6 && !ifReving)
         {
-            engineRevSource.Stop();
-            engineRev[2].Play(engineRevSource);
+            tankAudioScript.EngineRevHigh();
             ifReving = true;
         }
         else if (input.y == 0 && ifReving)
@@ -167,18 +145,7 @@ public class TankMovement : MonoBehaviour
         float tankVelAbs = Mathf.Abs(currentVel.z);
         float velocityScale = tankVelAbs / velocityMax;
 
-        engineIdleSource.volume = Mathf.Lerp(idleVolumeMax, idleVolumeMin, velocityScale);
-        engineThrottleSource.pitch = Mathf.Lerp(throttlePitchMin, throttlePitchMax, velocityScale);
-        engineThrottleSource.volume = Mathf.Lerp(throttleVolumeMin, throttleVolumeMax, velocityScale);
-    }
-    IEnumerator EngineStartUpSound()
-    {
-        engineStartup.Play(engineStartupSource);
-
-        yield return new WaitForSeconds(1.1568f);
-
-        engineIdle.Play(engineIdleSource);
-        engineThrottle.Play(engineThrottleSource);
+        tankAudioScript.EngineSounds(velocityScale);
     }
     #endregion
 

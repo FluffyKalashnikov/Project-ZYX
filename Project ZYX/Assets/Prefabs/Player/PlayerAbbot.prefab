@@ -103,6 +103,7 @@ GameObject:
   - component: {fileID: 5959674917080585871}
   - component: {fileID: 4953861047107962875}
   - component: {fileID: 970993439782629045}
+  - component: {fileID: 8687575689784582287}
   m_Layer: 0
   m_Name: PlayerAbbot
   m_TagString: Player
@@ -330,6 +331,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tankScript: {fileID: -3102628908101986431}
+  tankAudioScript: {fileID: 8687575689784582287}
   moveable: 1
   motorForce: 5
   accelerationForce: 3
@@ -338,24 +340,7 @@ MonoBehaviour:
   propellerBlades: {fileID: 533273478052375446}
   propellerIdleSpeed: 150
   propellerForceMultiplier: 500
-  engineStartup: {fileID: 11400000, guid: 4045cf4dbe878b64fa54bb4cd27d4355, type: 2}
-  engineIdle: {fileID: 11400000, guid: 0166dd06cd772ec44bd672d6bfa21f0f, type: 2}
-  engineThrottle: {fileID: 11400000, guid: 6e42d13bebd4b3140b9526fbe72ac7b6, type: 2}
-  engineRev:
-  - {fileID: 11400000, guid: da6a16cf2d256ae40864524f814bab6b, type: 2}
-  - {fileID: 11400000, guid: ca035b26f7afa314084ce732fcdcb8e7, type: 2}
-  - {fileID: 11400000, guid: d29e01db6c8a77546bfcfb9abb6ae61f, type: 2}
-  engineStartupSource: {fileID: 7089312630585880386}
-  engineIdleSource: {fileID: 7604507413556875858}
-  engineThrottleSource: {fileID: 5723528227627813004}
-  engineRevSource: {fileID: 3751981127765194699}
-  velocityMax: 0.035
-  idleVolumeMin: 0
-  idleVolumeMax: 1
-  throttlePitchMin: -0.75
-  throttlePitchMax: 1.03
-  throttleVolumeMin: 0
-  throttleVolumeMax: 1
+  velocityMax: 0.03
   Timer: 0
 --- !u!114 &2348111853355917877
 MonoBehaviour:
@@ -370,18 +355,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tankScript: {fileID: -3102628908101986431}
-  spinStart: {fileID: 11400000, guid: ec306f9e1ac7b5e4784f685d2aded5ae, type: 2}
-  spinStartSource: {fileID: 6457879100731510367}
-  spinLoop: {fileID: 11400000, guid: 89a3268d024a2b04898561b92510edad, type: 2}
-  spinLoopSource: {fileID: 8345302937858743616}
-  spinStop: {fileID: 11400000, guid: d1df3b8859a438c4d926efcd70d8223e, type: 2}
-  spinStopSource: {fileID: 2366362721499861865}
-  barrelLoop: {fileID: 11400000, guid: 279ebad322280c34ea3ca6006cb8046f, type: 2}
-  barrelLoopSource: {fileID: 4931367472552671318}
-  barrelStuckStart: {fileID: 11400000, guid: 87cf676d1d107374c84f785fd7b89cfd, type: 2}
-  barrelStuckStartSource: {fileID: 1027149589731448932}
-  barrelStuckLoop: {fileID: 11400000, guid: 020ef68a5075b254397cd803733cccc3, type: 2}
-  barrelStuckLoopSource: {fileID: 4931367472552671318}
+  tankAudioScript: {fileID: 8687575689784582287}
   spinForce: 50
   turret: {fileID: 3562267710135224368}
   barrel: {fileID: 8383341180509930708}
@@ -400,11 +374,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tankScript: {fileID: -3102628908101986431}
+  tankAudioScript: {fileID: 8687575689784582287}
   bulletPoint: {fileID: 9034319821922354299}
   bullet: {fileID: 646759349837301862, guid: 4af3f896bf7abce4c9a4e4326f725b00, type: 3}
   bulletScript: {fileID: 5307936641746764853, guid: 4af3f896bf7abce4c9a4e4326f725b00, type: 3}
-  cannonBlast: {fileID: 11400000, guid: 7cdc000d9a1cbcd4d84482d9cb0b9a82, type: 2}
-  cannonBlastsource: {fileID: 2023070199977753595}
   timer: 0
   timer2: 0
 --- !u!114 &5575168297313598256
@@ -553,6 +526,50 @@ MonoBehaviour:
   path: Players
   active: 1
   activeDuringRuntime: 1
+--- !u!114 &8687575689784582287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 166991493596452056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eda3ea722589d234c8aafb69f1d21965, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  engineStartUpTime: 1.1568
+  idleVolumeMin: 0
+  idleVolumeMax: 0.5
+  throttlePitchMin: 0
+  throttlePitchMax: 3
+  throttleVolumeMin: 0
+  throttleVolumeMax: 0.5
+  engineStartup: {fileID: 11400000, guid: 4045cf4dbe878b64fa54bb4cd27d4355, type: 2}
+  engineStartupSource: {fileID: 7089312630585880386}
+  engineIdle: {fileID: 11400000, guid: 0166dd06cd772ec44bd672d6bfa21f0f, type: 2}
+  engineIdleSource: {fileID: 7604507413556875858}
+  engineThrottle: {fileID: 11400000, guid: 6e42d13bebd4b3140b9526fbe72ac7b6, type: 2}
+  engineThrottleSource: {fileID: 5723528227627813004}
+  engineRev:
+  - {fileID: 11400000, guid: da6a16cf2d256ae40864524f814bab6b, type: 2}
+  - {fileID: 11400000, guid: ca035b26f7afa314084ce732fcdcb8e7, type: 2}
+  - {fileID: 11400000, guid: d29e01db6c8a77546bfcfb9abb6ae61f, type: 2}
+  engineRevSource: {fileID: 3751981127765194699}
+  spinStart: {fileID: 11400000, guid: ec306f9e1ac7b5e4784f685d2aded5ae, type: 2}
+  spinStartSource: {fileID: 6457879100731510367}
+  spinLoop: {fileID: 11400000, guid: 89a3268d024a2b04898561b92510edad, type: 2}
+  spinLoopSource: {fileID: 8345302937858743616}
+  spinStop: {fileID: 11400000, guid: d1df3b8859a438c4d926efcd70d8223e, type: 2}
+  spinStopSource: {fileID: 4931367472552671318}
+  barrelLoop: {fileID: 11400000, guid: 279ebad322280c34ea3ca6006cb8046f, type: 2}
+  barrelLoopSource: {fileID: 4931367472552671318}
+  barrelStuckStart: {fileID: 11400000, guid: 87cf676d1d107374c84f785fd7b89cfd, type: 2}
+  barrelStuckStartSource: {fileID: 1027149589731448932}
+  barrelStuckLoop: {fileID: 11400000, guid: 020ef68a5075b254397cd803733cccc3, type: 2}
+  barrelStuckLoopSource: {fileID: 2620510253743948029}
+  cannonBlast: {fileID: 11400000, guid: 7cdc000d9a1cbcd4d84482d9cb0b9a82, type: 2}
+  cannonBlastsource: {fileID: 2023070199977753595}
 --- !u!1 &596158864443318188
 GameObject:
   m_ObjectHideFlags: 0
