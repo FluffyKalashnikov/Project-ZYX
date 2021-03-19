@@ -864,6 +864,52 @@ public class @ActionAsset : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Ingame UI"",
+            ""id"": ""63d4fec5-4f94-4b6c-8057-2f37eb50e817"",
+            ""actions"": [
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""999173d7-c9cd-4601-a6be-95ebaf29317e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Resume"",
+                    ""type"": ""Button"",
+                    ""id"": ""dd5a5582-a401-48f1-9d5a-a390be29b537"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""1ac8be55-0fef-4f5c-96ea-bcae337c7798"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d5a9d066-f592-4307-98be-073c5490ddf3"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Resume"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -948,6 +994,10 @@ public class @ActionAsset : IInputActionCollection, IDisposable
         m_UI_RightClick = m_UI.FindAction("RightClick", throwIfNotFound: true);
         m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
+        // Ingame UI
+        m_IngameUI = asset.FindActionMap("Ingame UI", throwIfNotFound: true);
+        m_IngameUI_Pause = m_IngameUI.FindAction("Pause", throwIfNotFound: true);
+        m_IngameUI_Resume = m_IngameUI.FindAction("Resume", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1163,6 +1213,47 @@ public class @ActionAsset : IInputActionCollection, IDisposable
         }
     }
     public UIActions @UI => new UIActions(this);
+
+    // Ingame UI
+    private readonly InputActionMap m_IngameUI;
+    private IIngameUIActions m_IngameUIActionsCallbackInterface;
+    private readonly InputAction m_IngameUI_Pause;
+    private readonly InputAction m_IngameUI_Resume;
+    public struct IngameUIActions
+    {
+        private @ActionAsset m_Wrapper;
+        public IngameUIActions(@ActionAsset wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Pause => m_Wrapper.m_IngameUI_Pause;
+        public InputAction @Resume => m_Wrapper.m_IngameUI_Resume;
+        public InputActionMap Get() { return m_Wrapper.m_IngameUI; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(IngameUIActions set) { return set.Get(); }
+        public void SetCallbacks(IIngameUIActions instance)
+        {
+            if (m_Wrapper.m_IngameUIActionsCallbackInterface != null)
+            {
+                @Pause.started -= m_Wrapper.m_IngameUIActionsCallbackInterface.OnPause;
+                @Pause.performed -= m_Wrapper.m_IngameUIActionsCallbackInterface.OnPause;
+                @Pause.canceled -= m_Wrapper.m_IngameUIActionsCallbackInterface.OnPause;
+                @Resume.started -= m_Wrapper.m_IngameUIActionsCallbackInterface.OnResume;
+                @Resume.performed -= m_Wrapper.m_IngameUIActionsCallbackInterface.OnResume;
+                @Resume.canceled -= m_Wrapper.m_IngameUIActionsCallbackInterface.OnResume;
+            }
+            m_Wrapper.m_IngameUIActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Pause.started += instance.OnPause;
+                @Pause.performed += instance.OnPause;
+                @Pause.canceled += instance.OnPause;
+                @Resume.started += instance.OnResume;
+                @Resume.performed += instance.OnResume;
+                @Resume.canceled += instance.OnResume;
+            }
+        }
+    }
+    public IngameUIActions @IngameUI => new IngameUIActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     public InputControlScheme KeyboardMouseScheme
     {
@@ -1228,5 +1319,10 @@ public class @ActionAsset : IInputActionCollection, IDisposable
         void OnRightClick(InputAction.CallbackContext context);
         void OnTrackedDevicePosition(InputAction.CallbackContext context);
         void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
+    }
+    public interface IIngameUIActions
+    {
+        void OnPause(InputAction.CallbackContext context);
+        void OnResume(InputAction.CallbackContext context);
     }
 }

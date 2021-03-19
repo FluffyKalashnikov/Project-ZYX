@@ -4,8 +4,10 @@ using System;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(MultiplayerEventSystem), typeof(InputSystemUIInputModule), typeof(PlayerInput))]
 public class Tank : MonoBehaviour, IDamageable
 {
     [Header("Variables")]
@@ -14,14 +16,38 @@ public class Tank : MonoBehaviour, IDamageable
     public float health;
     public bool  alive = false;
     [Header("REFERENCES")]
-    public CharacterController Controller      = null;
-    public PlayerInput         PlayerInput     = null; 
+    public TankMovement        TankMovement = null;
+    public TankShoot           TankShoot    = null;
+    public TankTurret          TankTurret   = null;
+    public CharacterController Controller   = null;
+    public PlayerInput         PlayerInput  = null; 
+
     [SerializeField]
     private Image[] imagesToColor = null;
 
     public static       Action<Tank> OnTankFire;
     public static event Action<Tank> OnTankDeath = tank => tank.Die();
+    public static       MultiplayerEventSystem EventSystem = null;
 
+    /*
+    public static MultiplayerEventSystem EventSystem 
+    {
+        get
+        {
+            // 1. IF EXISTS RETURN
+            if (EventSystem != null) return EventSystem;
+
+            // 2. IF NOT GET
+            EventSystem = Game.PlayerList[0].GetComponent<MultiplayerEventSystem>();
+            Debug.Log("EventSystem created.");
+            return EventSystem;
+        }
+        private set
+        {
+            EventSystem = value;
+        }
+    }
+    */
     [Header("Unity Events")]
     public UnityEvent OnEnable;
     public UnityEvent OnDisable;
@@ -30,21 +56,35 @@ public class Tank : MonoBehaviour, IDamageable
     public int Power = 0;
     public float PowerUpTimer;
 
-    public void Initialize()
+    public void Awake()
     {
+        // 1. REFERENCES
+        if (!EventSystem) EventSystem = GetComponent<MultiplayerEventSystem>();
+
+        this.TankMovement = GetComponent<TankMovement>();
+        this.TankShoot    = GetComponent<TankShoot>();
+        this.TankTurret   = GetComponent<TankTurret>();
+
+        // 2. SETUP
         gameObject.name = name = $"Player {PlayerInput.playerIndex+1}";
         health = maxHealth;
 
+        
 
+        /*
         foreach (var i in GetComponentsInChildren<MeshRenderer>())
         {
             i.material.color = Game.PlayerColors[PlayerInput.playerIndex];
         }
-        foreach (var i in imagesToColor)
-        {
-            i.color = Game.PlayerColors[PlayerInput.playerIndex];
-        }
+         */
+        //foreach (var i in imagesToColor)
+        //{
+            //i.color = Game.PlayerColors[PlayerInput.playerIndex];
+        //}
+    
+        Game.PlayerList.Add(this);
     }
+
     
     public float TakeDamage(float damage, DamageInfo info, MonoBehaviour dealer)
     {

@@ -60,9 +60,6 @@ public class PlayerUI : MonoBehaviour
         nameField.onValidateInput += NameValidation;
         nameField.onSubmit.AddListener(NameSubmit);
         nameField.onSelect.AddListener(NameSelect);
-        
-        // 4. INITIALIZE
-        EnablePreview();
     }
     
 
