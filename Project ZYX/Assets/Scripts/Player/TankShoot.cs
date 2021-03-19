@@ -72,7 +72,7 @@ public class TankShoot : MonoBehaviour
     }
     private void LaunchFunction()
     {
-        if (timer < 0)
+        if (timer > 0)
         {
             timer -= Time.deltaTime;
             for (int i = 0; i <= 2; i++)
@@ -86,7 +86,7 @@ public class TankShoot : MonoBehaviour
             Tank.OnTankFire?.Invoke(tankScript); // Fires of OnTankFire event
             launchActive = false;
         }
-        else if (timer > 0)
+        else if (timer < 0)
         {
             timer -= Time.deltaTime;
             tankAudioScript.CannonFire();
