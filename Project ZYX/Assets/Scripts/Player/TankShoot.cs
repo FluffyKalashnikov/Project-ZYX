@@ -8,6 +8,7 @@ public class TankShoot : MonoBehaviour
     #region Setup Var
     ActionAsset actionAsset;
     [SerializeField] private Tank tankScript;
+    [SerializeField] private TankAudio tankAudioScript;
     private bool gunActive;
     private bool launchActive;
     private float chargeStrength;
@@ -17,9 +18,6 @@ public class TankShoot : MonoBehaviour
     [SerializeField] private GameObject bullet;
     [SerializeField] private Shell bulletScript;
 
-    [Header("Audio Objects")]
-    [SerializeField] private AudioEvent cannonBlast;
-    [SerializeField] private AudioSource cannonBlastsource;
     public float timer;
     public float timer2;
 
@@ -53,7 +51,7 @@ public class TankShoot : MonoBehaviour
     #endregion
     private void ChargeFunction()
     {
-        if (timer2 < 0)
+        if (timer2 <= 0)
         {
             timer2 -= Time.deltaTime;
             if (chargeStrength <= 30)
@@ -61,7 +59,7 @@ public class TankShoot : MonoBehaviour
                 chargeStrength = chargeStrength + 10 * (Time.deltaTime * 6);
             }
         }
-        else if (timer2 > 0)
+        else if (timer2 >= 0)
         {
             timer2 -= Time.deltaTime;
             if (chargeStrength <= 30)
@@ -74,24 +72,24 @@ public class TankShoot : MonoBehaviour
     }
     private void LaunchFunction()
     {
-        if (timer < 0)
+        if (timer >= 0)
         {
             timer -= Time.deltaTime;
             for (int i = 0; i <= 2; i++)
             {
-                cannonBlast.Play(cannonBlastsource);
+                tankAudioScript.CannonFire();
                 var projectile = Instantiate(bullet, bulletPoint.position, bulletPoint.rotation);
                 projectile.GetComponentInChildren<Shell>().Init(chargeStrength, tankScript);
-               
+                chargeStrength = 0;
+                Tank.OnTankFire?.Invoke(tankScript); // Fires of OnTankFire event
+                launchActive = false;
             }
-            chargeStrength = 0;
-            Tank.OnTankFire?.Invoke(tankScript); // Fires of OnTankFire event
-            launchActive = false;
+            
         }
-        else if (timer > 0)
+        else if (timer <= 0)
         {
             timer -= Time.deltaTime;
-            cannonBlast.Play(cannonBlastsource);
+            tankAudioScript.CannonFire();
             var projectile = Instantiate(bullet, bulletPoint.position, bulletPoint.rotation);
             projectile.GetComponentInChildren<Shell>().Init(chargeStrength, tankScript);
             chargeStrength = 0;

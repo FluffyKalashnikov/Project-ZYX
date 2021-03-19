@@ -6,10 +6,12 @@ using System;
 
 public class TankMovement : MonoBehaviour
 {
-    #region Setup Var
     ActionAsset actionAsset;
     [SerializeField] private Tank tankScript;
-    #endregion
+    [SerializeField] private TankAudio tankAudioScript;
+    [SerializeField] private TankAnimation tankAnimationScript;
+
+    public bool moveable = false;
 
     #region Stats
     [Header("Force Values")]
@@ -17,35 +19,24 @@ public class TankMovement : MonoBehaviour
     [SerializeField] private float accelerationForce;
     [SerializeField] private float decelerationForce;
     [SerializeField] private float rotationForce;
+
+    [Header("Porpeller Values")]
+    [SerializeField] private GameObject propellerBlades;
+    [SerializeField] private float propellerIdleSpeed;
+    [SerializeField] private float propellerForceMultiplier;
+
+    [Header("Velocity Max for engine sounds")]
+    [SerializeField] float velocityMax;
     #endregion
 
-    #region Audio
-    [Header("Audio Objects")]
-    [SerializeField] private AudioEvent engineStartup;
-    [SerializeField] private AudioEvent engineIdle;
-    [SerializeField] private AudioEvent engineThrottle;
-    [SerializeField] private AudioEvent[] engineRev;
-    [SerializeField] private AudioSource engineStartupSource;
-    [SerializeField] private AudioSource engineIdleSource;
-    [SerializeField] private AudioSource engineThrottleSource;
-    [SerializeField] private AudioSource engineRevSource;
-
-    private float currentVelMultiplier;
-    public float Timer;
-    #endregion
-
-    #region Vectors
     private Vector3 driveForce;
     private Vector3 currentVel;
     private Vector3 direction;
-    #endregion
+    private Vector3 propellerVector;
 
-    #region Audio Bools
     private bool ifReving = false;
-    private bool driveable = false;
-    #endregion 
-     
-  
+
+    public float Timer;
 
     #region Setup
     private void Awake()
@@ -55,24 +46,25 @@ public class TankMovement : MonoBehaviour
     }
     void Start()
     {
-        StartCoroutine(EngineStartUpSound());
+        StartCoroutine(tankAudioScript.EngineStartUpSound());
         actionAsset.Player.Enable();
-        SFXMultiplierSetup();
     }
     private void Update()
     {
-        if (driveable)
+        if (moveable)
         {
             BaseMovement(actionAsset.Player.Move.ReadValue<Vector2>());
             EngineRev(actionAsset.Player.Move.ReadValue<Vector2>());
+            MovementAnimations(actionAsset.Player.Move.ReadValue<Vector2>());
         }
         VolumeManager();
-        
+        PropellerSpin();
+
         if (Timer < 0)
         {
             Timer -= Time.deltaTime;
             accelerationForce = 0.2f;
-        } 
+        }
         else if (Timer > 0)
         {
             Timer -= Time.deltaTime;
@@ -81,39 +73,34 @@ public class TankMovement : MonoBehaviour
     }
     #endregion
 
-    #region Movement Functions
     private void BaseMovement(Vector2 input)
     {
         #region Actual Movement
-        float multipliedDriveForce = input.y * motorForce;
-        driveForce = new Vector3(0, 0, multipliedDriveForce) * Time.fixedDeltaTime;
+        float multipliedMotorForce = input.y * motorForce;
+        driveForce = new Vector3(0, 0, multipliedMotorForce) * Time.deltaTime;
         #region Accel/Decel-Physics
         if (input.y != 0)
         {
-            currentVel = Vector3.MoveTowards(currentVel, driveForce, accelerationForce * Time.fixedDeltaTime);
+            currentVel = Vector3.Lerp(currentVel, driveForce, accelerationForce * Time.deltaTime);
         }
-        else if(input.y == 0 && currentVel.z != 0)
+        else if (input.y == 0 && currentVel.z != 0)
         {
-            currentVel = Vector3.MoveTowards(currentVel, Vector3.zero, decelerationForce * Time.fixedDeltaTime);
+            currentVel = Vector3.Lerp(currentVel, Vector3.zero, decelerationForce * Time.deltaTime);
         }
         #endregion
         float multipliedRotationForce = input.x * rotationForce;
 
-        tankScript.Controller.transform.Rotate(0, multipliedRotationForce * Time.fixedDeltaTime, 0);
+        tankScript.Controller.transform.Rotate(0, multipliedRotationForce * Time.deltaTime, 0);
         direction = tankScript.Controller.transform.TransformDirection(currentVel);
         tankScript.Controller.Move(direction);
         #endregion
- }
-    #endregion
+    }
 
-    #region EngineRev
     private void EngineRev(Vector2 input)
     {
-        #region Engine Rev Audio (Based on Input)
-        if (engineRev != null && input.y > 0 && input.y <= 0.3 && !ifReving || engineRev != null && input.y < 0 && input.y >= -0.3 && !ifReving)
+        if (input.y > 0 && input.y <= 0.3 && !ifReving || input.y < 0 && input.y >= -0.3 && !ifReving)
         {
-            engineRevSource.Stop();
-            engineRev[0].Play(engineRevSource);
+            tankAudioScript.EngineRevLow();
             ifReving = true;
         }
         else if (input.y == 0 && ifReving)
@@ -121,10 +108,9 @@ public class TankMovement : MonoBehaviour
             ifReving = false;
         }
 
-        if (engineRev != null && input.y > 0.3 && input.y <= 0.6 && !ifReving || engineRev != null && input.y < -0.3 && input.y >= -0.6 && !ifReving)
+        if (input.y > 0.3 && input.y <= 0.6 && !ifReving || input.y < -0.3 && input.y >= -0.6 && !ifReving)
         {
-            engineRevSource.Stop();
-            engineRev[1].Play(engineRevSource);
+            tankAudioScript.EngineRevMid();
             ifReving = true;
         }
         else if (input.y == 0 && ifReving)
@@ -132,52 +118,48 @@ public class TankMovement : MonoBehaviour
             ifReving = false;
         }
 
-        if (engineRev != null && input.y > 0.6 && !ifReving || engineRev != null && input.y < -0.6 && !ifReving)
+        if (input.y > 0.6 && !ifReving || input.y < -0.6 && !ifReving)
         {
-            engineRevSource.Stop();
-            engineRev[2].Play(engineRevSource);
+            tankAudioScript.EngineRevHigh();
             ifReving = true;
         }
         else if (input.y == 0 && ifReving)
         {
             ifReving = false;
         }
-        #endregion
     }
-    #endregion
 
-    #region Audio Manager
-
-    private void SFXMultiplierSetup()
+    private void MovementAnimations(Vector2 input)
     {
-        //Gets the top speed. motorForceDivdided is the velocity value that prints out whenever you debug currentVel.z
-        float motorForceDivided = motorForce / 50;
-        //Sets a multiplier value for currentvalue to make sure the final values always becomes the same no matter what the top speed is
-        currentVelMultiplier = 0.1f / motorForceDivided;
+        if(input.y > 1)
+        {
+            tankAnimationScript.MoveForwardAnim();
+        }
+        else if(input.y < 1)
+        {
+            tankAnimationScript.MoveBackwardAnim();
+        }
     }
 
     private void VolumeManager()
     {
         //Absolutes currentVel
         float tankVelAbs = Mathf.Abs(currentVel.z);
-        //Sets a multiplier value for currentvalue to make sure the top value never goes below or higher than 0.1
-        float tankVelForAudio = tankVelAbs * currentVelMultiplier;
+        float velocityScale = tankVelAbs / velocityMax;
 
-        engineIdleSource.volume = 1 - tankVelForAudio * 10;
-
-        engineThrottleSource.pitch = 10 * tankVelForAudio;
-        engineThrottleSource.volume = 10 * tankVelForAudio - 0.3f;
-    }    
-    IEnumerator EngineStartUpSound()
-    {
-        engineStartup.Play(engineStartupSource);
-        
-        yield return new WaitForSeconds(1.1568f);
-        
-        engineIdle.Play(engineIdleSource);
-        engineThrottle.Play(engineThrottleSource);
-        
-        driveable = true;
+        tankAudioScript.EngineSounds(velocityScale);
     }
-    #endregion
+
+    private void PropellerSpin()
+    {
+        Vector3 multipliedPropellerValue;
+        propellerVector = new Vector3(0, 0, propellerIdleSpeed) * Time.deltaTime;
+        multipliedPropellerValue = (currentVel * propellerForceMultiplier) + propellerVector;
+        propellerBlades.transform.Rotate(multipliedPropellerValue);
+    }
+
+    public void EnableTankMovement()
+    {
+        moveable = true;
+    }
 }
