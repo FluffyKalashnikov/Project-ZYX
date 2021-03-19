@@ -55,7 +55,7 @@ public class TankMovement : MonoBehaviour
         {
             BaseMovement(actionAsset.Player.Move.ReadValue<Vector2>());
             EngineRev(actionAsset.Player.Move.ReadValue<Vector2>());
-            MovementAnimations(actionAsset.Player.Move.ReadValue<Vector2>());
+            //MovementAnimations(actionAsset.Player.Move.ReadValue<Vector2>());
         }
         VolumeManager();
         PropellerSpin();
@@ -129,7 +129,7 @@ public class TankMovement : MonoBehaviour
         }
     }
 
-    private void MovementAnimations(Vector2 input)
+    /*private void MovementAnimations(Vector2 input)
     {
         if(input.y > 1)
         {
@@ -139,7 +139,11 @@ public class TankMovement : MonoBehaviour
         {
             tankAnimationScript.MoveBackwardAnim();
         }
-    }
+        else
+        {
+            tankAnimationScript.IdleAnim();
+        }
+    }*/
 
     private void VolumeManager()
     {

@@ -9,6 +9,7 @@ public class TankShoot : MonoBehaviour
     ActionAsset actionAsset;
     [SerializeField] private Tank tankScript;
     [SerializeField] private TankAudio tankAudioScript;
+    [SerializeField] private TankAnimation tankAnimationScript;
     private bool gunActive;
     private bool launchActive;
     private float chargeStrength;
@@ -82,6 +83,7 @@ public class TankShoot : MonoBehaviour
                 projectile.GetComponentInChildren<Shell>().Init(chargeStrength, tankScript);
                 chargeStrength = 0;
                 Tank.OnTankFire?.Invoke(tankScript); // Fires of OnTankFire event
+                //tankAnimationScript.ShootAnim();
                 launchActive = false;
             }
             
