@@ -9,7 +9,11 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(PlayerInputManager))]
 public class Game : MonoBehaviour
 {
-    //[Header("Game properties")]
+    [Header("Game properties")]
+    [SerializeField] private Widget MainMenuWidget   = null;
+    [SerializeField] private Widget PauseWidget      = null;
+    [SerializeField] private Widget MatchWidget      = null;
+                     private ActionAsset actionAsset = null;
     [Header("Static Setters")]
     [SerializeField] private List<Color> playerColors = new List<Color>(4);
 
@@ -17,7 +21,7 @@ public class Game : MonoBehaviour
     [SerializeField] private UnityEvent onStartMatch;
     [SerializeField] private UnityEvent onWinMatch;
     [SerializeField] private UnityEvent onStartLobby;
-
+    
     public static event Action       OnStartMatch = () => Instance.onStartMatch.Invoke();
     public static event Action<Tank> OnWinMatch   = wn => Instance.onWinMatch  .Invoke();
     public static event Action       OnStartLobby = () => Instance.onStartLobby.Invoke();
@@ -26,15 +30,16 @@ public class Game : MonoBehaviour
     public static event Action<PlayerInput> OnPlayerLeft = player => PlayerLeft(player, player.GetComponent<Tank>());
 
     
-    public static List<Tank>             PlayerList    = new List<Tank>();
-    public static List<Tank>             AliveList     = new List<Tank>();
-    public static List<Color>            PlayerColors  = new List<Color>();
-    public static GameState              State         = GameState.Empty;
+    public static List<Tank>             PlayerList     = new List<Tank>();
+    public static List<Tank>             AliveList      = new List<Tank>();
+    public static List<Color>            PlayerColors   = new List<Color>();
+    public static GameState              State          = GameState.Empty;
+    public static bool                   Paused         = false;
 
-    public static Camera                 Camera        = null;
-    public static PlayerInputManager     InputManager  = null;
-    public static Game                   Instance      = null;
-    public static CinemachineTargetGroup CameraTargets = null;
+    public static Camera                 Camera         = null;
+    public static PlayerInputManager     InputManager   = null;
+    public static Game                   Instance       = null;
+    public static CinemachineTargetGroup CameraTargets  = null;
 
     public enum GameState
     {
@@ -63,23 +68,33 @@ public class Game : MonoBehaviour
         CameraTargets = GetComponentInChildren<CinemachineTargetGroup>();
         Camera        = GetComponentInChildren<Camera>();
 
-        // 4. EVENT SUBSCRIPTION
+        // 4. INPUT SETUP
+        actionAsset = new ActionAsset();
+        actionAsset.IngameUI.Enable();
 
+        // 5. EVENT SUBSCRIPTION
         InputManager.onPlayerJoined += OnPlayerJoin;
         InputManager.onPlayerLeft   += OnPlayerLeft;
     }
+    private void Start()
+    {
+        Widget.SetSelected(MainMenuWidget);
+    }
     
-    
-    
+
+
+
+//  PLAYER LOGIC
     public static void PlayerJoin(PlayerInput player, Tank tank)
     {
-        PlayerList.Add(tank);
+        
     }
     public static void PlayerLeft(PlayerInput player, Tank tank)
     {
-        PlayerList.Add(tank);
+        
     }
 
+//  GAMEMODE LOGIC
     public static void SpawnTank(Tank tank, float delay = 0f)
     {
         Instance.StartCoroutine(Spawn());
@@ -171,7 +186,31 @@ public class Game : MonoBehaviour
         }
     }
     
+//  MENU LOGIC
+    public static void SelectWidget(Widget widget)
+    {
+        Widget.SetSelected(widget);
+    }
+    public static void PauseGame()
+    {
+        if (Game.State != GameState.Match) return;
+        if (Paused) return;
 
+        SelectWidget(Game.Instance.PauseWidget);
+
+        Time.timeScale = 0;
+    }
+    public static void ResumeGame()
+    {
+        if (Game.State != GameState.Match) return;
+        if (!Paused) return;
+
+        SelectWidget(Game.Instance.MatchWidget);
+
+        Time.timeScale = 1;
+    }
+
+//  MATCH LOGIC
     public static void StartMatch()
     {
         OnStartMatch?.Invoke();
@@ -197,6 +236,7 @@ public class Game : MonoBehaviour
         OnWinMatch(winner);
     }
     
+//  APPLICATION LOGIC
     public static void Exit()
     {
         Debug.Log("Quitting...");
