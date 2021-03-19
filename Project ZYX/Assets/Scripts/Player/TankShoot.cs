@@ -51,7 +51,7 @@ public class TankShoot : MonoBehaviour
     #endregion
     private void ChargeFunction()
     {
-        if (timer2 < 0)
+        if (timer2 <= 0)
         {
             timer2 -= Time.deltaTime;
             if (chargeStrength <= 30)
@@ -59,7 +59,7 @@ public class TankShoot : MonoBehaviour
                 chargeStrength = chargeStrength + 10 * (Time.deltaTime * 6);
             }
         }
-        else if (timer2 > 0)
+        else if (timer2 >= 0)
         {
             timer2 -= Time.deltaTime;
             if (chargeStrength <= 30)
@@ -72,7 +72,7 @@ public class TankShoot : MonoBehaviour
     }
     private void LaunchFunction()
     {
-        if (timer > 0)
+        if (timer >= 0)
         {
             timer -= Time.deltaTime;
             for (int i = 0; i <= 2; i++)
@@ -80,13 +80,13 @@ public class TankShoot : MonoBehaviour
                 tankAudioScript.CannonFire();
                 var projectile = Instantiate(bullet, bulletPoint.position, bulletPoint.rotation);
                 projectile.GetComponentInChildren<Shell>().Init(chargeStrength, tankScript);
-               
+                chargeStrength = 0;
+                Tank.OnTankFire?.Invoke(tankScript); // Fires of OnTankFire event
+                launchActive = false;
             }
-            chargeStrength = 0;
-            Tank.OnTankFire?.Invoke(tankScript); // Fires of OnTankFire event
-            launchActive = false;
+            
         }
-        else if (timer < 0)
+        else if (timer <= 0)
         {
             timer -= Time.deltaTime;
             tankAudioScript.CannonFire();
