@@ -16,13 +16,19 @@ public class Tank : MonoBehaviour, IDamageable
     public float health;
     public bool  alive = false;
     [Header("REFERENCES")]
-    public CharacterController Controller      = null;
-    public PlayerInput         PlayerInput     = null; 
+    public TankMovement        TankMovement = null;
+    public TankShoot           TankShoot    = null;
+    public TankTurret          TankTurret   = null;
+    public CharacterController Controller   = null;
+    public PlayerInput         PlayerInput  = null; 
+
     [SerializeField]
     private Image[] imagesToColor = null;
 
     public static       Action<Tank> OnTankFire;
     public static event Action<Tank> OnTankDeath = tank => tank.Die();
+    public static       MultiplayerEventSystem EventSystem = null;
+
     /*
     public static MultiplayerEventSystem EventSystem 
     {
@@ -52,8 +58,18 @@ public class Tank : MonoBehaviour, IDamageable
 
     public void Awake()
     {
+        // 1. REFERENCES
+        if (!EventSystem) EventSystem = GetComponent<MultiplayerEventSystem>();
+
+        this.TankMovement = GetComponent<TankMovement>();
+        this.TankShoot    = GetComponent<TankShoot>();
+        this.TankTurret   = GetComponent<TankTurret>();
+
+        // 2. SETUP
         gameObject.name = name = $"Player {PlayerInput.playerIndex+1}";
         health = maxHealth;
+
+        
 
         /*
         foreach (var i in GetComponentsInChildren<MeshRenderer>())
@@ -68,16 +84,7 @@ public class Tank : MonoBehaviour, IDamageable
     
         Game.PlayerList.Add(this);
     }
-    public void OnDestroy()
-    {
-        Disable();
-        Game.PlayerList.Remove(this);
-    }
 
-    private void Start()
-    {
-        //Debug.Log(EventSystem.name);
-    }
     
     public float TakeDamage(float damage, DamageInfo info, MonoBehaviour dealer)
     {

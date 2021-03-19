@@ -851,6 +851,52 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Ingame UI",
+            "id": "63d4fec5-4f94-4b6c-8057-2f37eb50e817",
+            "actions": [
+                {
+                    "name": "Pause",
+                    "type": "Button",
+                    "id": "999173d7-c9cd-4601-a6be-95ebaf29317e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Resume",
+                    "type": "Button",
+                    "id": "dd5a5582-a401-48f1-9d5a-a390be29b537",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "1ac8be55-0fef-4f5c-96ea-bcae337c7798",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d5a9d066-f592-4307-98be-073c5490ddf3",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Resume",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [
