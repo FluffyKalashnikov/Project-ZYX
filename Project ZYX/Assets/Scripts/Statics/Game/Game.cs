@@ -5,30 +5,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Users;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(PlayerInputManager))]
 public class Game : MonoBehaviour
 {
-    [Header("Game properties")]
     public static int ReadyCount = 0;
-
     private ActionAsset actionAsset = null;
-    [Header("Static Setters")]
-    [SerializeField] private List<Color> playerColors = new List<Color>(4);
+
 
     public static event Action       OnStartMatch;
-    public static event Action       OnEndMatch = () => MatchCleanup();
-    public static event Action       OnStartLobby;
-    public static event Action       OnEndLobby;
- 
-    public static event Action<PlayerInput> OnPlayerJoin = player => PlayerJoin(player, player.GetComponent<Tank>());
-    public static event Action<PlayerInput> OnPlayerLeft = player => PlayerLeft(player, player.GetComponent<Tank>());
-
+    public static event Action       OnEndMatch   = () => MatchCleanup();
+    public static event Action       OnStartLobby;// = () => InputManager.EnableJoining();
+    public static event Action       OnEndLobby;//   = () => InputManager.DisableJoining();
     
     public static List<Tank>         PlayerList     = new List<Tank>();
     public static List<Tank>         AliveList      = new List<Tank>();
-    public static List<Color>        PlayerColors   = new List<Color>();
+    public        List<Color>        PlayerColors   = new List<Color>(4);
     public static GameState          State          = GameState.Empty;
     public static bool               Paused         = false;
     public static Camera             Camera         = null;
@@ -66,10 +60,7 @@ public class Game : MonoBehaviour
             return;
         }
 
-        // 2. STATIC SETTERS
-        PlayerColors = playerColors;
-
-        // 3. REFERENCES
+        // 2. REFERENCES
         InputManager  = GetComponent<PlayerInputManager>();
         Camera        = GetComponentInChildren<Camera>();
         CameraTargets = GetComponentInChildren<CinemachineTargetGroup>(); 
@@ -86,8 +77,7 @@ public class Game : MonoBehaviour
             PauseWidget    = i[3];
         }
 
-
-        // 4. INPUT SETUP
+        // 3. INPUT SETUP
         actionAsset = new ActionAsset();
         actionAsset.IngameUI.Enable();
 
@@ -102,32 +92,20 @@ public class Game : MonoBehaviour
                 default:    PauseReset(); return;
             }
         };
-        
 
-        // 5. EVENT SUBSCRIPTION
-        InputManager.onPlayerJoined += OnPlayerJoin;
-        InputManager.onPlayerLeft   += OnPlayerLeft;
-
+        // 4. EVENT SUBSCRIPTION
         buttonMainMenuStart    .onClick.AddListener(() => SetGameState(GameState.Lobby));
         buttonPauseMenuContinue.onClick.AddListener(() => PauseReset());
         buttonPauseMenuLobby   .onClick.AddListener(() => SetGameState(GameState.Lobby));
-
     }
     private void Start()
     {
+        InputManager.JoinPlayer();
         Widget.SetSelectedWidget(MainMenuWidget);
     }
     
 
 //  PLAYER LOGIC
-    public static void PlayerJoin(PlayerInput player, Tank tank)
-    {
-        
-    }
-    public static void PlayerLeft(PlayerInput player, Tank tank)
-    {
-        
-    }
     public static void UpdateReady(Tank tank)
     {
         // 1. UPDATE COUNT
@@ -300,6 +278,7 @@ public class Game : MonoBehaviour
         SelectWidget(LobbyWidget);
         SetActiveCamera(LobbyCamera);
         PauseReset();
+        DisableTanks();
 
         Debug.Log("Lobby Started!");
     }

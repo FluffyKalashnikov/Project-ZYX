@@ -118,7 +118,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 378456678}
-  m_LocalRotation: {x: 0.38268346, y: 1e-45, z: -0, w: 0.92387956}
+  m_LocalRotation: {x: 0.38268346, y: -1e-45, z: -0, w: 0.92387956}
   m_LocalPosition: {x: 0, y: 15, z: -15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -235,7 +235,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 868862679}
-  m_LocalRotation: {x: 0.32844803, y: -0.35768375, z: 0.13604763, w: 0.863525}
+  m_LocalRotation: {x: 0.32844803, y: -0.35768375, z: 0.13604765, w: 0.8635249}
   m_LocalPosition: {x: 9, y: 11.32, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -430,7 +430,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1350783314}
-  m_LocalRotation: {x: 0.32844803, y: -0.35768375, z: 0.13604762, w: 0.863525}
+  m_LocalRotation: {x: 0.32844803, y: -0.35768375, z: 0.13604765, w: 0.8635249}
   m_LocalPosition: {x: 9, y: 11.32, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -718,7 +718,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_NotificationBehavior: 3
   m_MaxPlayerCount: 4
-  m_AllowJoining: 0
+  m_AllowJoining: 1
   m_JoinBehavior: 0
   m_PlayerJoinedEvent:
     m_PersistentCalls:
@@ -759,11 +759,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2248a33ac0cfd448a0d7ddc45cf088e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerColors:
-  - {r: 0.09692062, g: 0.18834981, b: 0.6226415, a: 1}
-  - {r: 0.8207547, g: 0.112273075, b: 0.112273075, a: 1}
-  - {r: 0.35905847, g: 0.7075472, b: 0.07676221, a: 1}
-  - {r: 0.8679245, g: 0.65480155, b: 0.0040939935, a: 1}
+  PlayerColors:
+  - {r: 0.08962262, g: 0.35469514, b: 1, a: 1}
+  - {r: 1, g: 0.13679248, b: 0.13679248, a: 1}
+  - {r: 1, g: 0.87318784, b: 0.07075471, a: 1}
+  - {r: 0.31487498, g: 1, b: 0.1462264, a: 1}
   buttonMainMenuStart: {fileID: 1815347908642706275}
   buttonPauseMenuContinue: {fileID: 5617941344905632672}
   buttonPauseMenuLobby: {fileID: 8925674031943752464}
@@ -1743,7 +1743,7 @@ Canvas:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6768764608379681458}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_RenderMode: 1
   m_Camera: {fileID: 868862681}

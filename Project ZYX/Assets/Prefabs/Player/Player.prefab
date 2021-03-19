@@ -1561,6 +1561,7 @@ MonoBehaviour:
   Controller: {fileID: 838318968599533941}
   PlayerInput: {fileID: 838318969809300763}
   EventSystem: {fileID: 0}
+  TankRenderers: []
   imagesToColor:
   - {fileID: 838318968801682502}
   OnEnable:
