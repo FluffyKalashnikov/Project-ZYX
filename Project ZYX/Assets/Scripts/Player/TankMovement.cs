@@ -6,13 +6,12 @@ using System;
 
 public class TankMovement : MonoBehaviour
 {
-    #region Setup Var
     ActionAsset actionAsset;
     [SerializeField] private Tank tankScript;
     [SerializeField] private TankAudio tankAudioScript;
+    [SerializeField] private TankAnimation tankAnimationScript;
 
     public bool moveable = false;
-    #endregion
 
     #region Stats
     [Header("Force Values")]
@@ -30,16 +29,12 @@ public class TankMovement : MonoBehaviour
     [SerializeField] float velocityMax;
     #endregion
 
-    #region Vectors
     private Vector3 driveForce;
     private Vector3 currentVel;
     private Vector3 direction;
     private Vector3 propellerVector;
-    #endregion
 
-    #region Audio Bools
     private bool ifReving = false;
-    #endregion
 
     public float Timer;
 
@@ -60,6 +55,7 @@ public class TankMovement : MonoBehaviour
         {
             BaseMovement(actionAsset.Player.Move.ReadValue<Vector2>());
             EngineRev(actionAsset.Player.Move.ReadValue<Vector2>());
+            MovementAnimations(actionAsset.Player.Move.ReadValue<Vector2>());
         }
         VolumeManager();
         PropellerSpin();
@@ -77,7 +73,6 @@ public class TankMovement : MonoBehaviour
     }
     #endregion
 
-    #region Movement Functions
     private void BaseMovement(Vector2 input)
     {
         #region Actual Movement
@@ -100,9 +95,7 @@ public class TankMovement : MonoBehaviour
         tankScript.Controller.Move(direction);
         #endregion
     }
-    #endregion
 
-    #region EngineRev
     private void EngineRev(Vector2 input)
     {
         if (input.y > 0 && input.y <= 0.3 && !ifReving || input.y < 0 && input.y >= -0.3 && !ifReving)
@@ -135,9 +128,19 @@ public class TankMovement : MonoBehaviour
             ifReving = false;
         }
     }
-    #endregion
 
-    #region Audio Manager
+    private void MovementAnimations(Vector2 input)
+    {
+        if(input.y > 1)
+        {
+            tankAnimationScript.MoveForwardAnim();
+        }
+        else if(input.y < 1)
+        {
+            tankAnimationScript.MoveBackwardAnim();
+        }
+    }
+
     private void VolumeManager()
     {
         //Absolutes currentVel
@@ -146,7 +149,6 @@ public class TankMovement : MonoBehaviour
 
         tankAudioScript.EngineSounds(velocityScale);
     }
-    #endregion
 
     private void PropellerSpin()
     {
@@ -156,7 +158,7 @@ public class TankMovement : MonoBehaviour
         propellerBlades.transform.Rotate(multipliedPropellerValue);
     }
 
-    public void enableTankMovement()
+    public void EnableTankMovement()
     {
         moveable = true;
     }
