@@ -49,14 +49,6 @@ public class @ActionAsset : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
-                },
-                {
-                    ""name"": ""Pause"",
-                    ""type"": ""Button"",
-                    ""id"": ""dc0ee5f4-2509-48d2-8d77-b109147fbc8b"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -323,28 +315,6 @@ public class @ActionAsset : IInputActionCollection, IDisposable
                     ""action"": ""Turret"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""17aad7fe-7295-492c-9234-c451a489524c"",
-                    ""path"": ""<Keyboard>/escape"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Pause"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""18fb7d5f-eab8-48ed-b255-d3bf8c2def74"",
-                    ""path"": ""<Gamepad>/start"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Pause"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -876,14 +846,6 @@ public class @ActionAsset : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
-                },
-                {
-                    ""name"": ""Resume"",
-                    ""type"": ""Button"",
-                    ""id"": ""dd5a5582-a401-48f1-9d5a-a390be29b537"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -895,17 +857,6 @@ public class @ActionAsset : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Pause"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""d5a9d066-f592-4307-98be-073c5490ddf3"",
-                    ""path"": ""<Keyboard>/escape"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Resume"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -981,7 +932,6 @@ public class @ActionAsset : IInputActionCollection, IDisposable
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
         m_Player_Turret = m_Player.FindAction("Turret", throwIfNotFound: true);
-        m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -997,7 +947,6 @@ public class @ActionAsset : IInputActionCollection, IDisposable
         // Ingame UI
         m_IngameUI = asset.FindActionMap("Ingame UI", throwIfNotFound: true);
         m_IngameUI_Pause = m_IngameUI.FindAction("Pause", throwIfNotFound: true);
-        m_IngameUI_Resume = m_IngameUI.FindAction("Resume", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1051,7 +1000,6 @@ public class @ActionAsset : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_Fire;
     private readonly InputAction m_Player_Turret;
-    private readonly InputAction m_Player_Pause;
     public struct PlayerActions
     {
         private @ActionAsset m_Wrapper;
@@ -1060,7 +1008,6 @@ public class @ActionAsset : IInputActionCollection, IDisposable
         public InputAction @Look => m_Wrapper.m_Player_Look;
         public InputAction @Fire => m_Wrapper.m_Player_Fire;
         public InputAction @Turret => m_Wrapper.m_Player_Turret;
-        public InputAction @Pause => m_Wrapper.m_Player_Pause;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1082,9 +1029,6 @@ public class @ActionAsset : IInputActionCollection, IDisposable
                 @Turret.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTurret;
                 @Turret.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTurret;
                 @Turret.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTurret;
-                @Pause.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
-                @Pause.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
-                @Pause.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1101,9 +1045,6 @@ public class @ActionAsset : IInputActionCollection, IDisposable
                 @Turret.started += instance.OnTurret;
                 @Turret.performed += instance.OnTurret;
                 @Turret.canceled += instance.OnTurret;
-                @Pause.started += instance.OnPause;
-                @Pause.performed += instance.OnPause;
-                @Pause.canceled += instance.OnPause;
             }
         }
     }
@@ -1218,13 +1159,11 @@ public class @ActionAsset : IInputActionCollection, IDisposable
     private readonly InputActionMap m_IngameUI;
     private IIngameUIActions m_IngameUIActionsCallbackInterface;
     private readonly InputAction m_IngameUI_Pause;
-    private readonly InputAction m_IngameUI_Resume;
     public struct IngameUIActions
     {
         private @ActionAsset m_Wrapper;
         public IngameUIActions(@ActionAsset wrapper) { m_Wrapper = wrapper; }
         public InputAction @Pause => m_Wrapper.m_IngameUI_Pause;
-        public InputAction @Resume => m_Wrapper.m_IngameUI_Resume;
         public InputActionMap Get() { return m_Wrapper.m_IngameUI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1237,9 +1176,6 @@ public class @ActionAsset : IInputActionCollection, IDisposable
                 @Pause.started -= m_Wrapper.m_IngameUIActionsCallbackInterface.OnPause;
                 @Pause.performed -= m_Wrapper.m_IngameUIActionsCallbackInterface.OnPause;
                 @Pause.canceled -= m_Wrapper.m_IngameUIActionsCallbackInterface.OnPause;
-                @Resume.started -= m_Wrapper.m_IngameUIActionsCallbackInterface.OnResume;
-                @Resume.performed -= m_Wrapper.m_IngameUIActionsCallbackInterface.OnResume;
-                @Resume.canceled -= m_Wrapper.m_IngameUIActionsCallbackInterface.OnResume;
             }
             m_Wrapper.m_IngameUIActionsCallbackInterface = instance;
             if (instance != null)
@@ -1247,9 +1183,6 @@ public class @ActionAsset : IInputActionCollection, IDisposable
                 @Pause.started += instance.OnPause;
                 @Pause.performed += instance.OnPause;
                 @Pause.canceled += instance.OnPause;
-                @Resume.started += instance.OnResume;
-                @Resume.performed += instance.OnResume;
-                @Resume.canceled += instance.OnResume;
             }
         }
     }
@@ -1305,7 +1238,6 @@ public class @ActionAsset : IInputActionCollection, IDisposable
         void OnLook(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
         void OnTurret(InputAction.CallbackContext context);
-        void OnPause(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
@@ -1323,6 +1255,5 @@ public class @ActionAsset : IInputActionCollection, IDisposable
     public interface IIngameUIActions
     {
         void OnPause(InputAction.CallbackContext context);
-        void OnResume(InputAction.CallbackContext context);
     }
 }

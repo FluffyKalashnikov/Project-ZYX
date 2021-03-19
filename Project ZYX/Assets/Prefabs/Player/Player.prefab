@@ -1498,7 +1498,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 838318969809300743}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 2.0772567, y: 0.049999952, z: -1.4857457}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1554,28 +1554,18 @@ MonoBehaviour:
   maxHealth: 100
   health: 0
   alive: 0
+  Ready: 0
   TankMovement: {fileID: 0}
   TankShoot: {fileID: 0}
   TankTurret: {fileID: 0}
   Controller: {fileID: 838318968599533941}
   PlayerInput: {fileID: 838318969809300763}
+  EventSystem: {fileID: 0}
   imagesToColor:
   - {fileID: 838318968801682502}
   OnEnable:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
       - m_Target: {fileID: 838318969809300761}
         m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
         m_MethodName: set_enabled
@@ -1612,18 +1602,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
       - m_Target: {fileID: 3400617935488204239}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
@@ -1639,18 +1617,6 @@ MonoBehaviour:
   OnDisable:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 838318969809300761}
         m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
         m_MethodName: set_enabled
@@ -1818,7 +1784,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxNameLength: 18
-  owner: {fileID: 838318969809300762}
+  Owner: {fileID: 838318969809300762}
   previewRoot: {fileID: 838318970172816030}
   previewTexture: {fileID: 0}
   previewCamera: {fileID: 838318970324277826}
@@ -1828,7 +1794,7 @@ MonoBehaviour:
   buttonRGT: {fileID: 838318969016376507}
   buttonLFT: {fileID: 838318968907998176}
   nameField: {fileID: 838318969440597545}
-  eventSystem: {fileID: 838318969809300764}
+  EventSystem: {fileID: 838318969809300764}
 --- !u!114 &838318969809300764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1844,7 +1810,7 @@ MonoBehaviour:
   m_FirstSelected: {fileID: 838318970108082351}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
-  m_PlayerRoot: {fileID: 838318969809300743}
+  m_PlayerRoot: {fileID: 0}
 --- !u!114 &838318969809300739
 MonoBehaviour:
   m_ObjectHideFlags: 0

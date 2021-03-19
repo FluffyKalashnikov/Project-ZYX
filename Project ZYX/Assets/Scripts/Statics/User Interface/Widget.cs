@@ -7,11 +7,12 @@ using UnityEngine.EventSystems;
 public class Widget : MonoBehaviour
 {
     [Header("REFERENCES")]
-    [SerializeField] private Canvas      canvas         = null;
-    [SerializeField] private GameObject  defaultElement = null;
-    [SerializeField] private GameObject  currentElement = null;
+    public Canvas      canvas         = null;
+    public GameObject  defaultElement = null;
+    public GameObject  currentElement = null;
     
-    private static IEnumerator IE_SetSelected = null;
+    private static IEnumerator  IE_SetSelected = null;
+    private static List<Widget> OverlayWidgets = new List<Widget>();
 
     private void Awake()
     {
@@ -27,15 +28,19 @@ public class Widget : MonoBehaviour
     public void Enable()
     {
         canvas.enabled = true;
-        SetSelected(defaultElement);
+        SetSelectedElement(defaultElement);
     }
     public void Disable()
     {
         canvas.enabled = false;
     }
+    public bool ShownFirst()
+    {
+        return transform.GetSiblingIndex() == 0;
+    }
 
     // WIDGET SELECTION
-    public void SetSelected(GameObject element, bool ignoreNull = true)
+    public void SetSelectedElement(GameObject element, bool ignoreNull = true)
     {
         if (ignoreNull && element == null) return;
 
@@ -47,12 +52,12 @@ public class Widget : MonoBehaviour
         // 2. SET ELEMENT WHEN EXISTS
         IEnumerator Logic()
         {
-            yield return new WaitUntil(() => defaultElement.activeInHierarchy && Tank.EventSystem);
+            yield return new WaitUntil(() => canvas.enabled && Tank.MainEventSystem);
 
-            Tank.EventSystem.SetSelectedGameObject(defaultElement);
+            Tank.MainEventSystem.SetSelectedGameObject(defaultElement);
         }
     }
-    public static void SetSelected(Widget widget, bool ignoreNull = false)
+    public static void SetSelectedWidget(Widget widget, bool ignoreNull = false)
     {
         if (widget == null && !ignoreNull)
         {
@@ -72,15 +77,32 @@ public class Widget : MonoBehaviour
     // WIDGET ORDER
     public static void AddWidget(Widget widget)
     {
-        widget.Enable();
+        // 1. ENABLE
         widget.ShowFirst();
+        widget.Enable();
+
+        // 2. ADD TO LIST
+        if (!OverlayWidgets.Contains(widget))
+        OverlayWidgets.Add(widget);
     }
     public static void RemoveWidget(Widget widget)
     {
-        widget.Disable();
+        // 1. DISABLE
         widget.ShowLast();
+        widget.Disable();
+
+        // 2. REMOVE FROM LIST
+        if (OverlayWidgets.Contains(widget))
+        OverlayWidgets.Remove(widget);
     }
-    
+    public static void RemoveOverlays()
+    {
+        for (int i = OverlayWidgets.Count-1; i>=0; i--)
+        {
+            RemoveWidget(OverlayWidgets[i]);
+        }
+    }
+
     public void SetOrder(int order)
     {
         Transform root = Game.Instance.transform.Find("UI");
