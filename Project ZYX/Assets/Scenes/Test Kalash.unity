@@ -10486,11 +10486,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 868862682, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.8635249
+      value: 0.863525
       objectReference: {fileID: 0}
     - target: {fileID: 868862682, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.13604765
+      value: 0.13604762
       objectReference: {fileID: 0}
     - target: {fileID: 868862684, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
       propertyPath: m_RenderPostProcessing
@@ -10498,11 +10498,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1350783316, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.8635249
+      value: 0.863525
       objectReference: {fileID: 0}
     - target: {fileID: 1350783316, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.13604765
+      value: 0.13604762
       objectReference: {fileID: 0}
     - target: {fileID: 821787623625406256, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
       propertyPath: m_RootOrder
@@ -12242,6 +12242,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 496209300}
     m_Modifications:
+    - target: {fileID: 3246489726688526056, guid: 1f9112b41dae3fb46afd4f82633e4ede, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 3246489726688526056, guid: 1f9112b41dae3fb46afd4f82633e4ede, type: 3}
+      propertyPath: InitialModule.startSize.minScalar
+      value: 0.01
+      objectReference: {fileID: 0}
     - target: {fileID: 3443021348316430237, guid: 1f9112b41dae3fb46afd4f82633e4ede, type: 3}
       propertyPath: m_Name
       value: Dust Effect
