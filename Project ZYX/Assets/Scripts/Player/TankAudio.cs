@@ -102,18 +102,19 @@ public class TankAudio : MonoBehaviour
         spinStart.Play(spinStartSource);
         barrelLoop.Play(barrelLoopSource);
     }
+    //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    public void BarrelStuckPlay()
+    {
+        barrelLoopSource.Stop();
+        barrelStuckStart.Play(barrelStuckStartSource);
+        barrelStuckLoop.Play(barrelStuckLoopSource);
+    }
+    //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     public void BarrelSoundStop()
     {
         barrelLoopSource.Stop();
         barrelStuckLoopSource.Stop();
         spinStop.Play(spinStopSource);
-    }
-    //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    public void BarrelStuckPlay()
-    {
-        spinLoopSource.Stop();
-        barrelStuckStart.Play(barrelStuckStartSource);
-        barrelStuckLoop.Play(barrelStuckLoopSource);
     }
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     public void CannonFire()
