@@ -52,10 +52,13 @@ public class Widget : MonoBehaviour
             Tank.EventSystem.SetSelectedGameObject(defaultElement);
         }
     }
-    public static void SetSelected(Widget widget, bool ignoreNull = true)
+    public static void SetSelected(Widget widget, bool ignoreNull = false)
     {
-        if (ignoreNull && widget == null) return;
-
+        if (widget == null && !ignoreNull)
+        {
+            Debug.LogError("Null Widget detected!");
+        }
+        
         // 1. STORE ALL WIDGETS
         Widget[] widgets = FindObjectsOfType<Widget>();
 
@@ -63,7 +66,7 @@ public class Widget : MonoBehaviour
         foreach (var i in widgets) i.Disable();
         
         // 3. ENABLE SELECTED WIDGET
-        widget.Enable();
+        widget?.Enable();
     }
     
     // WIDGET ORDER

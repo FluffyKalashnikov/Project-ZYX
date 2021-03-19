@@ -10,44 +10,42 @@ using UnityEngine.InputSystem;
 public class Game : MonoBehaviour
 {
     [Header("Game properties")]
-    [SerializeField] private Widget MainMenuWidget   = null;
-    [SerializeField] private Widget PauseWidget      = null;
-    [SerializeField] private Widget MatchWidget      = null;
+    private static Widget MainMenuWidget = null;
+    private static Widget PauseWidget    = null;
+    private static Widget MatchWidget    = null;
+    private static Widget LobbyWidget    = null;
+
                      private ActionAsset actionAsset = null;
     [Header("Static Setters")]
     [SerializeField] private List<Color> playerColors = new List<Color>(4);
 
-    [Header("Unity Events")]
-    [SerializeField] private UnityEvent onStartMatch;
-    [SerializeField] private UnityEvent onWinMatch;
-    [SerializeField] private UnityEvent onStartLobby;
-    
-    public static event Action       OnStartMatch = () => Instance.onStartMatch.Invoke();
-    public static event Action<Tank> OnWinMatch   = wn => Instance.onWinMatch  .Invoke();
-    public static event Action       OnStartLobby = () => Instance.onStartLobby.Invoke();
+    public static event Action       OnStartMatch;
+    public static event Action<Tank> OnWinMatch;
+    public static event Action       OnStartLobby;
 
     public static event Action<PlayerInput> OnPlayerJoin = player => PlayerJoin(player, player.GetComponent<Tank>());
     public static event Action<PlayerInput> OnPlayerLeft = player => PlayerLeft(player, player.GetComponent<Tank>());
 
     
-    public static List<Tank>             PlayerList     = new List<Tank>();
-    public static List<Tank>             AliveList      = new List<Tank>();
-    public static List<Color>            PlayerColors   = new List<Color>();
-    public static GameState              State          = GameState.Empty;
-    public static bool                   Paused         = false;
+    public static List<Tank>         PlayerList     = new List<Tank>();
+    public static List<Tank>         AliveList      = new List<Tank>();
+    public static List<Color>        PlayerColors   = new List<Color>();
+    public static GameState          State          = GameState.Empty;
+    public static bool               Paused         = false;
+    public static Camera             Camera         = null;
+    public static PlayerInputManager InputManager   = null;
+    public static Game               Instance       = null;
 
-    public static Camera                 Camera         = null;
-    public static PlayerInputManager     InputManager   = null;
-    public static Game                   Instance       = null;
-    public static CinemachineTargetGroup CameraTargets  = null;
+    public static CinemachineTargetGroup   CameraTargets = null;
+    public static CinemachineVirtualCamera MatchCamera   = null;
+    public static CinemachineVirtualCamera LobbyCamera   = null;
 
     public enum GameState
     {
         Empty,
         Match,
         Lobby,
-        Menu,
-        Paused
+        Menu
     }
 
     private void Awake()
@@ -65,8 +63,21 @@ public class Game : MonoBehaviour
 
         // 3. REFERENCES
         InputManager  = GetComponent<PlayerInputManager>();
-        CameraTargets = GetComponentInChildren<CinemachineTargetGroup>();
         Camera        = GetComponentInChildren<Camera>();
+        CameraTargets = GetComponentInChildren<CinemachineTargetGroup>(); 
+        {
+            var i = GetComponentsInChildren<CinemachineVirtualCamera>();
+            MatchCamera = i[0];
+            LobbyCamera = i[1];
+        }
+        {
+            var i = GetComponentsInChildren<Widget>();
+            MatchWidget    = i[0];
+            LobbyWidget    = i[1];
+            MainMenuWidget = i[2];
+            PauseWidget    = i[3];
+        }
+
 
         // 4. INPUT SETUP
         actionAsset = new ActionAsset();
@@ -185,18 +196,42 @@ public class Game : MonoBehaviour
             tank.Disable();
         }
     }
-    
-//  MENU LOGIC
-    public static void SelectWidget(Widget widget)
+    public static void SetGameState(GameState State)
     {
-        Widget.SetSelected(widget);
+        // 1. CHECK NEW STATE
+        if (Game.State == State)
+        return;
+
+        // 2. END OLD LOGIC
+        switch(Game.State)
+        {
+            case GameState.Match: OnEndMatch(); break;
+            case GameState.Lobby: OnEndLobby(); break;
+            case GameState.Menu:  break;
+            default: Debug.LogError($"GameState \"{State}\" is not supported!"); return;
+        }
+
+        // 3. BEGIN NEW LOGIC
+        switch(Game.State = State)
+        {
+            case GameState.Match: StartMatch(); break;
+            case GameState.Lobby: StartLobby(); break;
+            case GameState.Menu:  break;
+            default: Debug.LogError($"GameState \"{State}\" is not supported!"); return;
+        }
+    }
+
+//  MENU LOGIC
+    public static void SelectWidget(Widget widget, bool ignoreNull = false)
+    {
+        Widget.SetSelected(widget, ignoreNull);
     }
     public static void PauseGame()
     {
         if (Game.State != GameState.Match) return;
         if (Paused) return;
 
-        SelectWidget(Game.Instance.PauseWidget);
+        SelectWidget(PauseWidget);
 
         Time.timeScale = 0;
     }
@@ -205,7 +240,7 @@ public class Game : MonoBehaviour
         if (Game.State != GameState.Match) return;
         if (!Paused) return;
 
-        SelectWidget(Game.Instance.MatchWidget);
+        SelectWidget(MatchWidget);
 
         Time.timeScale = 1;
     }
@@ -214,16 +249,31 @@ public class Game : MonoBehaviour
     public static void StartMatch()
     {
         OnStartMatch?.Invoke();
-        State = GameState.Match;
+        SetGameState(GameState.Match);
 
+        SelectWidget(MatchWidget);
+        SetActiveCamera(MatchCamera);
         SpawnTanks();
 
         Debug.Log("Match Started!");
     }
+    public static void OnEndMatch()
+    {
+        MatchCleanup();
+    }
     public static void StartLobby()
     {
         OnStartLobby?.Invoke();
-        State = GameState.Lobby;
+        SetGameState(GameState.Match);
+
+        SelectWidget(LobbyWidget);
+        SetActiveCamera(LobbyCamera);
+
+        Debug.Log("Lobby Started!");
+    }
+    public static void OnEndLobby()
+    {
+
     }
     public static void MatchCleanup()
     {
@@ -236,6 +286,12 @@ public class Game : MonoBehaviour
         OnWinMatch(winner);
     }
     
+//  CAMERA LOGIC
+    public static void SetActiveCamera(CinemachineVirtualCamera Camera)
+    {
+        Cam.SetActiveCamera(Camera);
+    }
+
 //  APPLICATION LOGIC
     public static void Exit()
     {
