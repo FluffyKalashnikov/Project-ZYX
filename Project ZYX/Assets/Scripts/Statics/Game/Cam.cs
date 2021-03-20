@@ -6,7 +6,7 @@ public class Cam : MonoBehaviour
     public static Camera Camera = null;
     public static CinemachineTargetGroup Target = null;
     public static CinemachineVirtualCamera MatchCamera = null;
-    public static CinemachineVirtualCamera SelectCamera = null;
+    public static CinemachineVirtualCamera LobbyCamera = null;
     public static Cam Instance = null;
 
 
@@ -26,16 +26,19 @@ public class Cam : MonoBehaviour
         Target    = GetComponentInChildren<CinemachineTargetGroup>();
         ShakeComp = GetComponentInChildren<CinemachineBasicMultiChannelPerlin>();
 
-        MatchCamera  = transform.Find("VC MatchMode").GetComponent<CinemachineVirtualCamera>();
-        SelectCamera = transform.Find("VC LobbyMode").GetComponent<CinemachineVirtualCamera>();
+        MatchCamera = transform.Find("VC MatchMode").GetComponent<CinemachineVirtualCamera>();
+        LobbyCamera = transform.Find("VC LobbyMode").GetComponent<CinemachineVirtualCamera>();
 
-        if (!Camera)        Debug.LogError("No Camera found!",          this);
-        if (!Target)        Debug.LogError("No Target found!",          this);
-        if (!ShakeComp)     Debug.LogError("No Shake Component found!", this);
-        if (!MatchCamera)   Debug.LogError("No Match Camera found!",    this);
-        if (!SelectCamera)  Debug.LogError("No Lobby Camera found!",    this);
+    #if UNITY_EDITOR
+        if (!Camera)      Debug.LogError("No Camera found!",          this);
+        if (!Target)      Debug.LogError("No Target found!",          this);
+        if (!ShakeComp)   Debug.LogError("No Shake Component found!", this);
+        if (!MatchCamera) Debug.LogError("No Match Camera found!",    this);
+        if (!LobbyCamera) Debug.LogError("No Lobby Camera found!",    this);
+    #endif
     }
     
+//  SHAKE FUNCTIONS
     public static void Shake(float amplitude, float frequency, float time = 1f)
     {
         if (Instance.IE_Shake != null)
@@ -78,5 +81,15 @@ public class Cam : MonoBehaviour
 
         Instance.ShakeComp.m_AmplitudeGain = constAmpl = 0f;
         Instance.ShakeComp.m_FrequencyGain = constFreq = 0f;
+    }
+
+//  CAMERA FUNCTIONS
+    public static void SetActiveCamera(CinemachineVirtualCamera Camera)
+    {
+        foreach (var i in FindObjectsOfType<CinemachineVirtualCamera>())
+        {
+            i.gameObject.SetActive(false);
+        }
+        Camera.gameObject.SetActive(true);
     }
 }

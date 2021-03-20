@@ -3,51 +3,70 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Users;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(PlayerInputManager))]
 public class Game : MonoBehaviour
 {
-    [Header("Game properties")]
-    [SerializeField] private Widget MainMenuWidget   = null;
-    [SerializeField] private Widget PauseWidget      = null;
-    [SerializeField] private Widget MatchWidget      = null;
-                     private ActionAsset actionAsset = null;
-    [Header("Static Setters")]
-    [SerializeField] private List<Color> playerColors = new List<Color>(4);
+    public HorizontalLayoutGroup PreviewRootUI = null;
 
-    [Header("Unity Events")]
-    [SerializeField] private UnityEvent onStartMatch;
-    [SerializeField] private UnityEvent onWinMatch;
-    [SerializeField] private UnityEvent onStartLobby;
+
+
+    public static int ReadyCount = 0;
+    private ActionAsset actionAsset = null;
+
+
+    public static event Action       OnStartMatch;
+    public static event Action       OnEndMatch   = () => MatchCleanup();
+    public static event Action       OnStartLobby = () => InputManager.EnableJoining();
+    public static event Action       OnEndLobby   = () => InputManager.DisableJoining();
+    public static event Action       OnPause;
+    public static event Action       OnUnpause;
     
-    public static event Action       OnStartMatch = () => Instance.onStartMatch.Invoke();
-    public static event Action<Tank> OnWinMatch   = wn => Instance.onWinMatch  .Invoke();
-    public static event Action       OnStartLobby = () => Instance.onStartLobby.Invoke();
+    public static List<Tank>         PlayerList     = new List<Tank>();
+    public static List<Tank>         AliveList      = new List<Tank>();
+    public        List<Color>        PlayerColors   = new List<Color>(4);
+    public static EGameState         GameState      = EGameState.Menu;
+    public static EInputMode         InputMode      = EInputMode.MenuUI;
+    public static bool               Paused         = false;
+    public static Camera             Camera         = null;
+    public static PlayerInputManager InputManager   = null;
+    public static Game               Instance       = null;
 
-    public static event Action<PlayerInput> OnPlayerJoin = player => PlayerJoin(player, player.GetComponent<Tank>());
-    public static event Action<PlayerInput> OnPlayerLeft = player => PlayerLeft(player, player.GetComponent<Tank>());
+    private static Widget MainMenuWidget = null;
+    private static Widget PauseWidget    = null;
+    private static Widget MatchWidget    = null;
+    private static Widget LobbyWidget    = null;
 
-    
-    public static List<Tank>             PlayerList     = new List<Tank>();
-    public static List<Tank>             AliveList      = new List<Tank>();
-    public static List<Color>            PlayerColors   = new List<Color>();
-    public static GameState              State          = GameState.Empty;
-    public static bool                   Paused         = false;
+    [SerializeField] private Button buttonMainMenuStart     = null;
+    [SerializeField] private Button buttonPauseMenuContinue = null;
+    [SerializeField] private Button buttonPauseMenuLobby    = null;
 
-    public static Camera                 Camera         = null;
-    public static PlayerInputManager     InputManager   = null;
-    public static Game                   Instance       = null;
-    public static CinemachineTargetGroup CameraTargets  = null;
+    public static CinemachineTargetGroup   CameraTargets = null;
+    public static CinemachineVirtualCamera MatchCamera   = null;
+    public static CinemachineVirtualCamera LobbyCamera   = null;
 
-    public enum GameState
+    public enum EGameState
     {
-        Empty,
+        Match,
+        Lobby,
+        Menu
+    }
+    public enum EInputMode
+    {
+        LobbyUI,
+        MatchUI,
+        MenuUI
+    }
+    public enum EGameFocus
+    {
         Match,
         Lobby,
         Menu,
-        Paused
+        Pause
     }
 
     private void Awake()
@@ -60,38 +79,74 @@ public class Game : MonoBehaviour
             return;
         }
 
-        // 2. STATIC SETTERS
-        PlayerColors = playerColors;
-
-        // 3. REFERENCES
+        // 2. REFERENCES
         InputManager  = GetComponent<PlayerInputManager>();
-        CameraTargets = GetComponentInChildren<CinemachineTargetGroup>();
         Camera        = GetComponentInChildren<Camera>();
+        CameraTargets = GetComponentInChildren<CinemachineTargetGroup>(); 
+        {
+            var i = GetComponentsInChildren<CinemachineVirtualCamera>();
+            MatchCamera = i[0];
+            LobbyCamera = i[1];
+        }
+        {
+            var i = GetComponentsInChildren<Widget>();
+            MatchWidget    = i[0];
+            LobbyWidget    = i[1];
+            MainMenuWidget = i[2];
+            PauseWidget    = i[3];
+        }
 
-        // 4. INPUT SETUP
+        // 3. INPUT SETUP
         actionAsset = new ActionAsset();
         actionAsset.IngameUI.Enable();
 
-        // 5. EVENT SUBSCRIPTION
-        InputManager.onPlayerJoined += OnPlayerJoin;
-        InputManager.onPlayerLeft   += OnPlayerLeft;
+        actionAsset.IngameUI.Pause.performed += ctx => 
+        { 
+            if (GameState != EGameState.Match)
+            return;
+            switch(Paused = !Paused)
+            {
+                case true:  PauseGame();  return;
+                default:    PauseReset(); return;
+            }
+        };
+
+        // 4. EVENT SUBSCRIPTION
+        buttonMainMenuStart    .onClick.AddListener(() => SwitchGameState(EGameState.Lobby));
+        buttonPauseMenuContinue.onClick.AddListener(() => PauseReset());
+        buttonPauseMenuLobby   .onClick.AddListener(() => SwitchGameState(EGameState.Lobby));
     }
     private void Start()
     {
-        Widget.SetSelected(MainMenuWidget);
+        Widget.SetSelectedWidget(MainMenuWidget);
     }
     
 
-
-
 //  PLAYER LOGIC
-    public static void PlayerJoin(PlayerInput player, Tank tank)
+    public static void UpdateReady(Tank tank)
     {
-        
+        // 1. UPDATE COUNT
+        switch(tank.Ready = !tank.Ready)
+        {
+            case true:  ReadyCount++; break;
+            case false: ReadyCount--; break;
+        }
+
+        // 2. CHECK COUNT
+        if (ReadyCount >= PlayerList.Count)
+        {
+            StartMatch();
+        }
     }
-    public static void PlayerLeft(PlayerInput player, Tank tank)
+    public static void AliveListAddPlayer(Tank tank)
     {
-        
+        if (!AliveList.Contains(tank))
+        AliveList.Add(tank);
+    }
+    public static void AliveListRemovePlayer(Tank tank)
+    {
+        if (AliveList.Contains(tank))
+        AliveList.Remove(tank);
     }
 
 //  GAMEMODE LOGIC
@@ -100,10 +155,10 @@ public class Game : MonoBehaviour
         Instance.StartCoroutine(Spawn());
         IEnumerator Spawn()
         {
-            tank.Disable();
+            tank.DisableTank();
             yield return new WaitForSeconds(delay);
             tank.Controller.transform.position = RespawnPosition();
-            tank.Enable();
+            tank.EnableTank();
 
             Vector3 RespawnPosition()
             {
@@ -175,55 +230,89 @@ public class Game : MonoBehaviour
     {
         foreach (Tank tank in FindObjectsOfType<Tank>())
         {
-            tank.Enable();
+            tank.EnableTank();
         }
     }
     public static void DisableTanks()
     {
         foreach (Tank tank in FindObjectsOfType<Tank>())
         {
-            tank.Disable();
+            tank.DisableTank();
         }
     }
-    
-//  MENU LOGIC
-    public static void SelectWidget(Widget widget)
+    public static void SwitchGameState(EGameState GameState)
     {
-        Widget.SetSelected(widget);
+        // 1. CHECK NEW STATE
+        if (Game.GameState == GameState)
+        return;
+
+        // 2. END OLD LOGIC
+        switch(Game.GameState)
+        {
+            case EGameState.Match:  OnEndMatch(); break;
+            case EGameState.Lobby:  OnEndLobby(); break;
+            case EGameState.Menu:   break;
+        }
+
+        // 3. BEGIN NEW LOGIC
+        switch(Game.GameState = GameState)
+        {
+            case EGameState.Match:  StartMatch(); break;
+            case EGameState.Lobby:  StartLobby(); break;
+            case EGameState.Menu:   break;
+        }
+    }
+
+//  MENU LOGIC
+    public static void SelectWidget(Widget widget, bool ignoreNull = false)
+    {
+        Widget.SetSelectedWidget(widget, ignoreNull);
     }
     public static void PauseGame()
     {
-        if (Game.State != GameState.Match) return;
-        if (Paused) return;
-
-        SelectWidget(Game.Instance.PauseWidget);
-
-        Time.timeScale = 0;
+        Paused = true;
+        Widget.AddWidget(PauseWidget);
+        PauseWidget.SetSelectedElement(PauseWidget.defaultElement);
+        OnPause?.Invoke();
     }
-    public static void ResumeGame()
+    public static void PauseReset()
     {
-        if (Game.State != GameState.Match) return;
-        if (!Paused) return;
-
-        SelectWidget(Game.Instance.MatchWidget);
-
-        Time.timeScale = 1;
+        Paused = false;
+        Widget.RemoveOverlays();
+        OnUnpause?.Invoke();
+    }
+    
+//  INPUT LOGIC
+    public static void SwitchInputMode(Tank.EInputMode InputMode)
+    {
+        foreach (var i in PlayerList)
+        i.SwitchInputMode(InputMode);
     }
 
 //  MATCH LOGIC
     public static void StartMatch()
     {
         OnStartMatch?.Invoke();
-        State = GameState.Match;
+        SwitchGameState(EGameState.Match);
 
+        SelectWidget(MatchWidget);
+        SetActiveCamera(MatchCamera);
         SpawnTanks();
+        PauseReset();
 
         Debug.Log("Match Started!");
     }
     public static void StartLobby()
     {
         OnStartLobby?.Invoke();
-        State = GameState.Lobby;
+        SwitchGameState(EGameState.Lobby);
+
+        SelectWidget(LobbyWidget);
+        SetActiveCamera(LobbyCamera);
+        PauseReset();
+        DisableTanks();
+
+        Debug.Log("Lobby Started!");
     }
     public static void MatchCleanup()
     {
@@ -231,11 +320,23 @@ public class Game : MonoBehaviour
 
         Debug.Log($"Cleanup Finished!");
     }
-    public static void WinMatch(Tank winner)
+    public static void SwitchGameFocus(EGameFocus GameFocus)
     {
-        OnWinMatch(winner);
+        switch(GameFocus)
+        {
+            case EGameFocus.Lobby: break;
+            case EGameFocus.Match: break;
+            case EGameFocus.Menu:  break;
+            case EGameFocus.Pause: break;
+        }
     }
-    
+
+//  CAMERA LOGIC
+    public static void SetActiveCamera(CinemachineVirtualCamera Camera)
+    {
+        Cam.SetActiveCamera(Camera);
+    }
+
 //  APPLICATION LOGIC
     public static void Exit()
     {
