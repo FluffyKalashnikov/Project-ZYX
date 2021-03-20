@@ -117,7 +117,8 @@ public class Game : MonoBehaviour
         buttonPauseMenuLobby   .onClick.AddListener(() => SwitchGameState(EGameState.Lobby));
     }
     private void Start()
-    {
+    {   
+        SwitchInputMode(Tank.EInputMode.Menu);
         Widget.SetSelectedWidget(MainMenuWidget);
     }
     
@@ -222,23 +223,18 @@ public class Game : MonoBehaviour
     public static void SpawnTanks(float delay = 0f)
     {
         foreach (Tank tank in FindObjectsOfType<Tank>())
-        {
-            SpawnTank(tank, delay);
-        }
+        SpawnTank(tank, delay);
+        
     }
     public static void EnableTanks()
     {
         foreach (Tank tank in FindObjectsOfType<Tank>())
-        {
-            tank.EnableTank();
-        }
+        tank.EnableTank();
     }
     public static void DisableTanks()
     {
         foreach (Tank tank in FindObjectsOfType<Tank>())
-        {
-            tank.DisableTank();
-        }
+        tank.DisableTank();
     }
     public static void SwitchGameState(EGameState GameState)
     {
@@ -285,18 +281,20 @@ public class Game : MonoBehaviour
 //  INPUT LOGIC
     public static void SwitchInputMode(Tank.EInputMode InputMode)
     {
-        foreach (var i in PlayerList)
-        i.SwitchInputMode(InputMode);
+        Tank.SwitchInputMode(InputMode);
     }
 
 //  MATCH LOGIC
     public static void StartMatch()
     {
+        // 1. SET INPUT/STATE
         OnStartMatch?.Invoke();
         SwitchGameState(EGameState.Match);
+        SwitchInputMode(Tank.EInputMode.Game);
 
+        // 2. MATCH LOGIC
         SelectWidget(MatchWidget);
-        SetActiveCamera(MatchCamera);
+        Cam.SetActiveCamera(MatchCamera);
         SpawnTanks();
         PauseReset();
 
@@ -304,11 +302,14 @@ public class Game : MonoBehaviour
     }
     public static void StartLobby()
     {
+        // 1. SET INPUT/STATE
         OnStartLobby?.Invoke();
         SwitchGameState(EGameState.Lobby);
+        SwitchInputMode(Tank.EInputMode.Lobby);
 
+        // 2. LOBBY LOGIC
         SelectWidget(LobbyWidget);
-        SetActiveCamera(LobbyCamera);
+        Cam.SetActiveCamera(LobbyCamera);
         PauseReset();
         DisableTanks();
 
@@ -329,12 +330,6 @@ public class Game : MonoBehaviour
             case EGameFocus.Menu:  break;
             case EGameFocus.Pause: break;
         }
-    }
-
-//  CAMERA LOGIC
-    public static void SetActiveCamera(CinemachineVirtualCamera Camera)
-    {
-        Cam.SetActiveCamera(Camera);
     }
 
 //  APPLICATION LOGIC
