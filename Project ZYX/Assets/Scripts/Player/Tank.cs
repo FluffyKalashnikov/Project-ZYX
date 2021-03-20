@@ -13,19 +13,22 @@ using TMPro;
 public class Tank : MonoBehaviour, IDamageable
 {
     [Header("Variables")]
-    public string Name          = "Player 1";
-    public int    MaxNameLength = 18;
-    public float  MaxHealth     = 100f;
-    public float  Health        = 0;
-    
-    public bool   Alive         = true;
-    public bool   Ready         = false;
-    public Color  Color 
+    public float      Health        = 0;
+    public float      MaxHealth     = 100f;
+    [Header("Player Stuff")]
+    public bool       Alive         = true;
+    public bool       Ready         = false;
+    public Color      Color 
     {
         get {return Game.Instance.PlayerColors[PlayerInput.playerIndex];}
     }
-    
+    [Header("Naming properties")]
+    public string     Name          = "Player 1";
+    public int        MaxNameLength = 18;
+    public List<char> SpecialChars  = new List<char>();
+
     [Header("REFERENCES")]
+    #region references
     public TankMovement           TankMovement       = null;
     public TankShoot              TankShoot          = null;
     public TankTurret             TankTurret         = null;
@@ -45,11 +48,9 @@ public class Tank : MonoBehaviour, IDamageable
     public TMP_InputField         PreviewNameField   = null;
     public RawImage               PreviewTankImage   = null;
     public Image                  PreviewBackground  = null;
-    
-    IEnumerator IE_ResetSelect = null;
+    #endregion
 
-    [SerializeField]
-    private Image[] imagesToColor = null;
+    IEnumerator IE_ResetSelect = null;
 
     public static       Action<Tank> OnTankFire;
     public static event Action<Tank> OnTankDeath = tank => tank.Die();
@@ -240,6 +241,7 @@ public class Tank : MonoBehaviour, IDamageable
 
         IEnumerator Logic()
         {
+            LocalEventSystem.SetSelectedGameObject(null);
             yield return new WaitUntil(() => PreviewButtonReady != null && PreviewButtonReady.enabled);
             LocalEventSystem.SetSelectedGameObject(PreviewButtonReady.gameObject);
             PreviewNameField.DeactivateInputField(false);
@@ -251,10 +253,13 @@ public class Tank : MonoBehaviour, IDamageable
         // 1. RETURN NULL IF TOO LONG
         if (text.Length >= MaxNameLength)
             return '\0';
-        // 2. RETURN CHAR IF VALID
-        if (char.IsLetterOrDigit(addedChar) || addedChar == ' ' || addedChar == '_')
+        // 2. RETURN CHAR IF NORMAL
+        if (char.IsLetterOrDigit(addedChar))
             return addedChar;
-        // 3. ELSE RETURN TERMINATION CHAR
+        // 3. RETURN IF SPECIAL CHAR
+        if (SpecialChars.Contains(addedChar))
+            return addedChar;
+        // 4. ELSE RETURN TERMINATION CHAR
         return '\0';
     }
     private void NameSubmit(string text)
@@ -282,39 +287,48 @@ public class Tank : MonoBehaviour, IDamageable
         Health = MaxHealth;
         Game.PlayerList.Add(this);
     }
-    public void SwitchInputMode(EInputMode InputMode)
+    public static void SwitchInputMode(EInputMode InputMode)
     {
         switch(InputMode)
         {
             case EInputMode.Game: 
-                PlayerInput.SwitchCurrentActionMap("Player");
+                foreach (var i in Game.PlayerList)
+                i.PlayerInput.SwitchCurrentActionMap("Player");
                 // GLOBAL
                 EventSystem.current.SetSelectedGameObject(null);
                 EventSystem.current.sendNavigationEvents = false;
                 // LOCAL
-                LocalEventSystem.SetSelectedGameObject(null);
-                LocalEventSystem.sendNavigationEvents = false;
+                foreach (var i in Game.PlayerList)
+                i.LocalEventSystem.SetSelectedGameObject(null);
+                foreach (var i in Game.PlayerList)
+                i.LocalEventSystem.sendNavigationEvents = false;
 
             break;
             
             case EInputMode.Lobby:
-                PlayerInput.SwitchCurrentActionMap("UI");
+                foreach (var i in Game.PlayerList)
+                i.PlayerInput.SwitchCurrentActionMap("UI");
                 // GLOBAL
                 EventSystem.current.SetSelectedGameObject(null);
                 EventSystem.current.sendNavigationEvents = false;
                 // LOCAL
-                ResetPreviewSelection();
-                LocalEventSystem.sendNavigationEvents = true;
+                foreach (var i in Game.PlayerList)
+                i.ResetPreviewSelection();
+                foreach (var i in Game.PlayerList)
+                i.LocalEventSystem.sendNavigationEvents = true;
             break;
 
             case EInputMode.Menu:
-                PlayerInput.SwitchCurrentActionMap("UI");
+                foreach (var i in Game.PlayerList)
+                i.PlayerInput.SwitchCurrentActionMap("UI");
                 // GLOBAL
                 EventSystem.current.SetSelectedGameObject(null);
                 EventSystem.current.sendNavigationEvents = true;
                 // LOCAL
-                LocalEventSystem.SetSelectedGameObject(null);
-                LocalEventSystem.sendNavigationEvents = false;
+                foreach (var i in Game.PlayerList)
+                i.LocalEventSystem.SetSelectedGameObject(null);
+                foreach (var i in Game.PlayerList)
+                i.LocalEventSystem.sendNavigationEvents = false;
 
             break;
         }

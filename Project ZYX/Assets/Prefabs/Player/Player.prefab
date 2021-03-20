@@ -733,12 +733,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5090454c187f024c9a37f5b2edf566e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Name: Player 1
-  MaxNameLength: 18
-  MaxHealth: 100
   Health: 0
+  MaxHealth: 100
   Alive: 1
   Ready: 0
+  Name: Player 1
+  MaxNameLength: 18
+  SpecialChars: 20005f00220023002d005b005d003d00
   TankMovement: {fileID: 0}
   TankShoot: {fileID: 0}
   TankTurret: {fileID: 0}
@@ -754,8 +755,6 @@ MonoBehaviour:
   PreviewNameField: {fileID: 0}
   PreviewTankImage: {fileID: 0}
   PreviewBackground: {fileID: 0}
-  imagesToColor:
-  - {fileID: 0}
   OnEnable:
     m_PersistentCalls:
       m_Calls:

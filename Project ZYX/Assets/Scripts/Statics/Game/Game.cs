@@ -117,7 +117,8 @@ public class Game : MonoBehaviour
         buttonPauseMenuLobby   .onClick.AddListener(() => SwitchGameState(EGameState.Lobby));
     }
     private void Start()
-    {
+    {   
+        SwitchInputMode(Tank.EInputMode.Menu);
         Widget.SetSelectedWidget(MainMenuWidget);
     }
     
@@ -280,16 +281,18 @@ public class Game : MonoBehaviour
 //  INPUT LOGIC
     public static void SwitchInputMode(Tank.EInputMode InputMode)
     {
-        foreach (var i in PlayerList)
-        i.SwitchInputMode(InputMode);
+        Tank.SwitchInputMode(InputMode);
     }
 
 //  MATCH LOGIC
     public static void StartMatch()
     {
+        // 1. SET INPUT/STATE
         OnStartMatch?.Invoke();
         SwitchGameState(EGameState.Match);
+        SwitchInputMode(Tank.EInputMode.Game);
 
+        // 2. MATCH LOGIC
         SelectWidget(MatchWidget);
         Cam.SetActiveCamera(MatchCamera);
         SpawnTanks();
@@ -299,9 +302,12 @@ public class Game : MonoBehaviour
     }
     public static void StartLobby()
     {
+        // 1. SET INPUT/STATE
         OnStartLobby?.Invoke();
         SwitchGameState(EGameState.Lobby);
+        SwitchInputMode(Tank.EInputMode.Lobby);
 
+        // 2. LOBBY LOGIC
         SelectWidget(LobbyWidget);
         Cam.SetActiveCamera(LobbyCamera);
         PauseReset();
