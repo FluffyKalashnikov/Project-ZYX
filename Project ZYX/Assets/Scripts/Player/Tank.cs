@@ -266,6 +266,8 @@ public class Tank : MonoBehaviour, IDamageable
         PreviewNameField.SetTextWithoutNotify(Name);
         PreviewNameField.DeactivateInputField();
         PreviewNameField.caretWidth = 0;
+        EventSystem.current.SetSelectedGameObject(null);
+        LocalEventSystem.SetSelectedGameObject(null);
         ResetPreviewSelection();
     }
     private void NameSelect(string text)
