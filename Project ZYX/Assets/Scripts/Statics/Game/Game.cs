@@ -115,6 +115,8 @@ public class Game : MonoBehaviour
         buttonMainMenuStart    .onClick.AddListener(() => SwitchGameState(EGameState.Lobby));
         buttonPauseMenuContinue.onClick.AddListener(() => PauseReset());
         buttonPauseMenuLobby   .onClick.AddListener(() => SwitchGameState(EGameState.Lobby));
+
+        OnStartMatch += ResetReady;
     }
     private void Start()
     {   
@@ -277,7 +279,13 @@ public class Game : MonoBehaviour
         Widget.RemoveOverlays();
         OnUnpause?.Invoke();
     }
-    
+    public static void ResetReady()
+    {
+        ReadyCount = 0;
+        foreach (var i in PlayerList)
+        i.Ready = false;
+    }
+
 //  INPUT LOGIC
     public static void SwitchInputMode(Tank.EInputMode InputMode)
     {
