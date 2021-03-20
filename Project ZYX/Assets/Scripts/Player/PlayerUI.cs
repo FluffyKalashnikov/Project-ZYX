@@ -64,12 +64,6 @@ public class PlayerUI : MonoBehaviour
         buttonRDY.onClick.AddListener(() => Game.UpdateReady(Owner));
         Game.OnStartMatch += () => Owner.Ready = false;
     }
-    private void Start()
-    {
-        if (Owner.EventSystem == Tank.MainEventSystem)
-        Game.OnEndLobby   += () => EventSystem.playerRoot = null;
-        Game.OnStartLobby += () => EventSystem.playerRoot = previewRoot;
-    }
     
 
 

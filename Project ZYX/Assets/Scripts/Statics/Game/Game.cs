@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Users;
 using UnityEngine.UI;
@@ -11,19 +11,26 @@ using UnityEngine.UI;
 [RequireComponent(typeof(PlayerInputManager))]
 public class Game : MonoBehaviour
 {
+    public HorizontalLayoutGroup PreviewRootUI = null;
+
+
+
     public static int ReadyCount = 0;
     private ActionAsset actionAsset = null;
 
 
     public static event Action       OnStartMatch;
     public static event Action       OnEndMatch   = () => MatchCleanup();
-    public static event Action       OnStartLobby;// = () => InputManager.EnableJoining();
-    public static event Action       OnEndLobby;//   = () => InputManager.DisableJoining();
+    public static event Action       OnStartLobby = () => InputManager.EnableJoining();
+    public static event Action       OnEndLobby   = () => InputManager.DisableJoining();
+    public static event Action       OnPause;
+    public static event Action       OnUnpause;
     
     public static List<Tank>         PlayerList     = new List<Tank>();
     public static List<Tank>         AliveList      = new List<Tank>();
     public        List<Color>        PlayerColors   = new List<Color>(4);
-    public static GameState          State          = GameState.Empty;
+    public static EGameState         GameState      = EGameState.Menu;
+    public static EInputMode         InputMode      = EInputMode.MenuUI;
     public static bool               Paused         = false;
     public static Camera             Camera         = null;
     public static PlayerInputManager InputManager   = null;
@@ -42,12 +49,24 @@ public class Game : MonoBehaviour
     public static CinemachineVirtualCamera MatchCamera   = null;
     public static CinemachineVirtualCamera LobbyCamera   = null;
 
-    public enum GameState
+    public enum EGameState
     {
-        Empty,
         Match,
         Lobby,
         Menu
+    }
+    public enum EInputMode
+    {
+        LobbyUI,
+        MatchUI,
+        MenuUI
+    }
+    public enum EGameFocus
+    {
+        Match,
+        Lobby,
+        Menu,
+        Pause
     }
 
     private void Awake()
@@ -83,8 +102,7 @@ public class Game : MonoBehaviour
 
         actionAsset.IngameUI.Pause.performed += ctx => 
         { 
-            Debug.Log($"Paused: {Paused}");
-            if (State != GameState.Match)
+            if (GameState != EGameState.Match)
             return;
             switch(Paused = !Paused)
             {
@@ -94,13 +112,12 @@ public class Game : MonoBehaviour
         };
 
         // 4. EVENT SUBSCRIPTION
-        buttonMainMenuStart    .onClick.AddListener(() => SetGameState(GameState.Lobby));
+        buttonMainMenuStart    .onClick.AddListener(() => SwitchGameState(EGameState.Lobby));
         buttonPauseMenuContinue.onClick.AddListener(() => PauseReset());
-        buttonPauseMenuLobby   .onClick.AddListener(() => SetGameState(GameState.Lobby));
+        buttonPauseMenuLobby   .onClick.AddListener(() => SwitchGameState(EGameState.Lobby));
     }
     private void Start()
     {
-        InputManager.JoinPlayer();
         Widget.SetSelectedWidget(MainMenuWidget);
     }
     
@@ -121,6 +138,16 @@ public class Game : MonoBehaviour
             StartMatch();
         }
     }
+    public static void AliveListAddPlayer(Tank tank)
+    {
+        if (!AliveList.Contains(tank))
+        AliveList.Add(tank);
+    }
+    public static void AliveListRemovePlayer(Tank tank)
+    {
+        if (AliveList.Contains(tank))
+        AliveList.Remove(tank);
+    }
 
 //  GAMEMODE LOGIC
     public static void SpawnTank(Tank tank, float delay = 0f)
@@ -128,10 +155,10 @@ public class Game : MonoBehaviour
         Instance.StartCoroutine(Spawn());
         IEnumerator Spawn()
         {
-            tank.Disable();
+            tank.DisableTank();
             yield return new WaitForSeconds(delay);
             tank.Controller.transform.position = RespawnPosition();
-            tank.Enable();
+            tank.EnableTank();
 
             Vector3 RespawnPosition()
             {
@@ -203,36 +230,36 @@ public class Game : MonoBehaviour
     {
         foreach (Tank tank in FindObjectsOfType<Tank>())
         {
-            tank.Enable();
+            tank.EnableTank();
         }
     }
     public static void DisableTanks()
     {
         foreach (Tank tank in FindObjectsOfType<Tank>())
         {
-            tank.Disable();
+            tank.DisableTank();
         }
     }
-    public static void SetGameState(GameState State)
+    public static void SwitchGameState(EGameState GameState)
     {
         // 1. CHECK NEW STATE
-        if (Game.State == State)
+        if (Game.GameState == GameState)
         return;
 
         // 2. END OLD LOGIC
-        switch(Game.State)
+        switch(Game.GameState)
         {
-            case GameState.Match:  OnEndMatch(); break;
-            case GameState.Lobby:  OnEndLobby(); break;
-            case GameState.Menu:   break;
+            case EGameState.Match:  OnEndMatch(); break;
+            case EGameState.Lobby:  OnEndLobby(); break;
+            case EGameState.Menu:   break;
         }
 
         // 3. BEGIN NEW LOGIC
-        switch(Game.State = State)
+        switch(Game.GameState = GameState)
         {
-            case GameState.Match:  StartMatch(); break;
-            case GameState.Lobby:  StartLobby(); break;
-            case GameState.Menu:   break;
+            case EGameState.Match:  StartMatch(); break;
+            case EGameState.Lobby:  StartLobby(); break;
+            case EGameState.Menu:   break;
         }
     }
 
@@ -244,24 +271,29 @@ public class Game : MonoBehaviour
     public static void PauseGame()
     {
         Paused = true;
-
-        Debug.Log("Pausing...");
         Widget.AddWidget(PauseWidget);
         PauseWidget.SetSelectedElement(PauseWidget.defaultElement);
+        OnPause?.Invoke();
     }
     public static void PauseReset()
     {
         Paused = false;
-
-        Debug.Log("Resuming...");
         Widget.RemoveOverlays();
+        OnUnpause?.Invoke();
+    }
+    
+//  INPUT LOGIC
+    public static void SwitchInputMode(Tank.EInputMode InputMode)
+    {
+        foreach (var i in PlayerList)
+        i.SwitchInputMode(InputMode);
     }
 
 //  MATCH LOGIC
     public static void StartMatch()
     {
         OnStartMatch?.Invoke();
-        SetGameState(GameState.Match);
+        SwitchGameState(EGameState.Match);
 
         SelectWidget(MatchWidget);
         SetActiveCamera(MatchCamera);
@@ -273,7 +305,7 @@ public class Game : MonoBehaviour
     public static void StartLobby()
     {
         OnStartLobby?.Invoke();
-        SetGameState(GameState.Lobby);
+        SwitchGameState(EGameState.Lobby);
 
         SelectWidget(LobbyWidget);
         SetActiveCamera(LobbyCamera);
@@ -287,6 +319,16 @@ public class Game : MonoBehaviour
         DisableTanks();
 
         Debug.Log($"Cleanup Finished!");
+    }
+    public static void SwitchGameFocus(EGameFocus GameFocus)
+    {
+        switch(GameFocus)
+        {
+            case EGameFocus.Lobby: break;
+            case EGameFocus.Match: break;
+            case EGameFocus.Menu:  break;
+            case EGameFocus.Pause: break;
+        }
     }
 
 //  CAMERA LOGIC

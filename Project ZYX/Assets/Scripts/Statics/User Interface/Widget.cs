@@ -52,9 +52,9 @@ public class Widget : MonoBehaviour
         // 2. SET ELEMENT WHEN EXISTS
         IEnumerator Logic()
         {
-            yield return new WaitUntil(() => canvas.enabled && Tank.MainEventSystem);
+            yield return new WaitUntil(() => canvas.enabled);
 
-            Tank.MainEventSystem.SetSelectedGameObject(defaultElement);
+            EventSystem.current.SetSelectedGameObject(defaultElement);
         }
     }
     public static void SetSelectedWidget(Widget widget, bool ignoreNull = false)
