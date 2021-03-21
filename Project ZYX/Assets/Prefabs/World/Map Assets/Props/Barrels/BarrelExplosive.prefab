@@ -205,7 +205,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   barrelModel: {fileID: 4226658418116162004}
-  barrelAmbienceSFX: {fileID: 0}
+  barrelAmbienceSFX: {fileID: 11400000, guid: a62693e3af80da14ba0b97c33d325924, type: 2}
   barrelAmbienceSource: {fileID: 1382562439761642860}
   barrelCollisionSFX: {fileID: 11400000, guid: 7afc107683514ef4ba848020767e9df9, type: 2}
   barrelCollisionSource: {fileID: 684838868514887474}
