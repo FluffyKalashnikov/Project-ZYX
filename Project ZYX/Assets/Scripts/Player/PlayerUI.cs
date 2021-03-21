@@ -15,7 +15,7 @@ public class PlayerUI : MonoBehaviour
     IEnumerator IE_ResetSelect = null;
 
     [Header("REFERENCES")]
-    [SerializeField] private Tank          owner = null;
+    [SerializeField] private Tank          Owner = null;
     [Space(10)]
     [SerializeField] private GameObject    previewRoot  = null;
     [SerializeField] private RenderTexture previewTexture = null;
@@ -28,7 +28,7 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private Button         buttonLFT = null;
     [SerializeField] private TMP_InputField nameField = null;
     [Space(10)]
-    [SerializeField] private MultiplayerEventSystem eventSystem = null;
+    [SerializeField] private MultiplayerEventSystem EventSystem = null;
 
 
 
@@ -36,7 +36,7 @@ public class PlayerUI : MonoBehaviour
     {
         // 1. CHECK REFERENCES
         #if UNITY_EDITOR
-        if (!owner)         Debug.LogError("Tank Owner has not been assigned.",     this);
+        if (!Owner)         Debug.LogError("Tank Owner has not been assigned.",     this);
         if (!previewRoot)   Debug.LogError("Preview Root has not been assigned.",   this);
         if (!previewCamera) Debug.LogError("Preview Camera has not been assigned.", this);
         if (!previewImage)  Debug.LogError("Preview Image has not been assigned.",  this);
@@ -44,7 +44,7 @@ public class PlayerUI : MonoBehaviour
         if (!buttonRDY)     Debug.LogError("Ready Buttonhas not been assigned.",    this);
         if (!buttonRGT)     Debug.LogError("Right Button has not been assigned.",   this);
         if (!buttonLFT)     Debug.LogError("Left Button has not been assigned.",    this);
-        if (!eventSystem)   Debug.LogError("Event System has not been assigned.",   this);
+        if (!EventSystem)   Debug.LogError("Event System has not been assigned.",   this);
         if (!nameField)     Debug.LogError("Name Field has not been assigned.",     this);
         #endif
 
@@ -60,14 +60,14 @@ public class PlayerUI : MonoBehaviour
         nameField.onValidateInput += NameValidation;
         nameField.onSubmit.AddListener(NameSubmit);
         nameField.onSelect.AddListener(NameSelect);
-        
-        // 4. INITIALIZE
-        EnablePreview();
+
+        buttonRDY.onClick.AddListener(() => Game.UpdateReady(Owner));
+        Game.OnStartMatch += () => Owner.Ready = false;
     }
     
 
 
-    // NAME INPUT FIELD
+//  NAME INPUT FIELD
     private char NameValidation(string text, int charIndex, char addedChar)
     {
         // 1. RETURN NULL IF TOO LONG
@@ -82,10 +82,10 @@ public class PlayerUI : MonoBehaviour
     private void NameSubmit(string text)
     {
         // 1. UPDATE PLAYER NAME
-        owner.name = text.Trim();
+        Owner.name = text.Trim();
 
         // 2. UNSELECT INPUT FIELD
-        nameField.SetTextWithoutNotify(owner.name);
+        nameField.SetTextWithoutNotify(Owner.name);
         nameField.DeactivateInputField();
         nameField.caretWidth = 0;
         ResetPreviewSelection();
@@ -95,7 +95,7 @@ public class PlayerUI : MonoBehaviour
         nameField.caretWidth = 1;
     }
     
-    // USER INTERFACE
+//  USER INTERFACE
     public void ResetPreviewSelection()
     {
         if (IE_ResetSelect != null)
@@ -105,8 +105,7 @@ public class PlayerUI : MonoBehaviour
         IEnumerator Logic()
         {
             yield return new WaitUntil(() => buttonRDY.enabled || buttonRDY != null);
-            eventSystem.        SetSelectedGameObject(buttonRDY.gameObject);
-            EventSystem.current.SetSelectedGameObject(buttonRDY.gameObject);
+            EventSystem.SetSelectedGameObject(buttonRDY.gameObject);
             nameField.DeactivateInputField(false);
         }
     }

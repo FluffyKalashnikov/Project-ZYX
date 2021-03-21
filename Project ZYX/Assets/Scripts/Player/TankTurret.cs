@@ -7,10 +7,11 @@ public class TankTurret : MonoBehaviour
     #region Setup Var
     ActionAsset actionAsset;
     [SerializeField] private Tank tankScript;
+    [SerializeField] private TankAudio tankAudioScript;
     #endregion
 
     #region Audio
-    [Header("Audio Objects")]
+    /*[Header("Audio Objects")]
     [SerializeField] private AudioEvent spinStart;
     [SerializeField] private AudioSource spinStartSource;
 
@@ -27,7 +28,7 @@ public class TankTurret : MonoBehaviour
     [SerializeField] private AudioSource barrelStuckStartSource;
 
     [SerializeField] private AudioEvent barrelStuckLoop;
-    [SerializeField] private AudioSource barrelStuckLoopSource;
+    [SerializeField] private AudioSource barrelStuckLoopSource;*/
     #endregion
 
     #region Stats
@@ -59,7 +60,6 @@ public class TankTurret : MonoBehaviour
     void Start()
     {
         actionAsset.Player.Enable();
-
     }
     private void Update()
     {
@@ -78,14 +78,12 @@ public class TankTurret : MonoBehaviour
         #region Audio
         if (input.x != 0 && !spinningBool)
         {
-            spinStart.Play(spinStartSource);
-            spinLoop.Play(spinLoopSource);
+            tankAudioScript.TurretSoundPlay();
             spinningBool = true;
         }
         else if (input.x == 0 && spinningBool)
         {
-            spinLoopSource.Stop();
-            spinStop.Play(spinStopSource);
+            tankAudioScript.TurretSoundStop();
             spinningBool = false;
         }
         #endregion
@@ -100,16 +98,12 @@ public class TankTurret : MonoBehaviour
         #region Audio
         if (input.y != 0 && !barrelSpinningBool)
         {
-            spinStart.Play(spinStartSource);
-            barrelLoop.Play(barrelLoopSource);
+            tankAudioScript.BarrelSoundPlay();
             barrelSpinningBool = true;
         }
         else if (input.y == 0 && barrelSpinningBool)
         {
-            barrelLoopSource.Stop();
-            barrelStuckLoopSource.Stop();
-
-            spinStop.Play(spinStopSource);
+            tankAudioScript.BarrelSoundStop();
             barrelSpinningBool = false;
         }
 
@@ -118,11 +112,7 @@ public class TankTurret : MonoBehaviour
         {
             if (input.y != 0 && !barrelStuckBool)
             {
-                spinLoopSource.Stop();
-
-                barrelStuckStart.Play(barrelStuckStartSource);
-                barrelStuckLoop.Play(barrelStuckLoopSource);
-
+                tankAudioScript.BarrelStuckPlay();
                 barrelStuckBool = true;
             }
 

@@ -3,21 +3,54 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
+using TMPro;
 
+[RequireComponent(typeof(MultiplayerEventSystem), typeof(InputSystemUIInputModule), typeof(PlayerInput))]
 public class Tank : MonoBehaviour, IDamageable
 {
     [Header("Variables")]
-    public new string name = "Player 1";
-    public float maxHealth = 100f;
-    public float health;
-    public bool  alive = false;
+    public float      Health        = 0;
+    public float      MaxHealth     = 100f;
+    [Header("Player Stuff")]
+    public bool       Alive         = true;
+    public bool       Ready         = false;
+    public Color      Color 
+    {
+        get {return Game.Instance.PlayerColors[PlayerInput.playerIndex];}
+    }
+    [Header("Naming properties")]
+    public string     Name          = "Player 1";
+    public int        MaxNameLength = 18;
+    public List<char> SpecialChars  = new List<char>();
+
     [Header("REFERENCES")]
-    public CharacterController Controller      = null;
-    public PlayerInput         PlayerInput     = null; 
-    [SerializeField]
-    private Image[] imagesToColor = null;
+    #region references
+    public TankMovement           TankMovement       = null;
+    public TankShoot              TankShoot          = null;
+    public TankTurret             TankTurret         = null;
+    [Space(10)]
+    public CharacterController    Controller         = null;
+    public PlayerInput            PlayerInput        = null; 
+    public MultiplayerEventSystem LocalEventSystem   = null;
+    [Space(10)]
+    public MeshRenderer[]         TankRenderers      = null;
+    [Space(10)]
+    public GameObject             PreviewPrefab      = null;
+    public GameObject             PreviewInstance    = null;
+    [Space(5)]
+    public Button                 PreviewButtonReady = null;
+    public Button                 PreviewButtonRight = null;
+    public Button                 PreviewButtonLeft  = null;
+    public TMP_InputField         PreviewNameField   = null;
+    public RawImage               PreviewTankImage   = null;
+    public Image                  PreviewBackground  = null;
+    #endregion
+
+    IEnumerator IE_ResetSelect = null;
 
     public static       Action<Tank> OnTankFire;
     public static event Action<Tank> OnTankDeath = tank => tank.Die();
@@ -30,22 +63,59 @@ public class Tank : MonoBehaviour, IDamageable
     public int Power = 0;
     public float PowerUpTimer;
 
-    public void Initialize()
+    public enum EInputMode
     {
-        gameObject.name = name = $"Player {PlayerInput.playerIndex+1}";
-        health = maxHealth;
+        Game,
+        Lobby,
+        Menu
+    }
 
 
-        foreach (var i in GetComponentsInChildren<MeshRenderer>())
+
+    public void Awake()
+    {
+        // 1. REFERENCES
+        this.TankMovement     = GetComponent<TankMovement>();
+        this.TankShoot        = GetComponent<TankShoot>();
+        this.TankTurret       = GetComponent<TankTurret>();
+        this.LocalEventSystem = GetComponent<MultiplayerEventSystem>();
+        this.TankRenderers    = GetComponentsInChildren<MeshRenderer>(true);
+
+        // 2. INIT LOGIC
+        InitPlayer();
+        DisableTank();
+        UpdateTank();
+        InitPreview();
+
+        // 3. EVENT SUBSCRIPTION
+        Game.OnStartLobby += EnablePreview;
+        Game.OnEndLobby   += DisablePreview;
+        Game.OnStartMatch += () => Ready = false;
+        
+        Game.OnStartMatch += () => SwitchInputMode(EInputMode.Game);
+        Game.OnStartLobby += () => SwitchInputMode(EInputMode.Lobby);
+        Game.OnPause      += () => SwitchInputMode(EInputMode.Menu);
+    }
+
+//  TANK SETUP
+    public void UpdateTank()
+    {
+        UpdateReferences();
+        UpdateColor();
+    }
+    public void UpdateColor()
+    {
+        foreach (var i in TankRenderers)
         {
-            i.material.color = Game.PlayerColors[PlayerInput.playerIndex];
-        }
-        foreach (var i in imagesToColor)
-        {
-            i.color = Game.PlayerColors[PlayerInput.playerIndex];
+            i.material.color = Color;
         }
     }
+    public void UpdateReferences()
+    {
+
+    }
     
+//  TANK HEALTH
     public float TakeDamage(float damage, DamageInfo info, MonoBehaviour dealer)
     {
         PowerUpTimer -= Time.deltaTime;
@@ -57,7 +127,7 @@ public class Tank : MonoBehaviour, IDamageable
         {
             damage = 0;
         }
-        if ((health = Mathf.Clamp(health - damage, 0f, maxHealth)) <= 0f)
+        if ((Health -= damage) <= 0f)
         {
             Die();
             Game.OnTankDie(this, dealer);
@@ -72,29 +142,195 @@ public class Tank : MonoBehaviour, IDamageable
         {
             yield return new WaitForSeconds(3f);
             Debug.Log($"{this.name} has died!");
-            Disable();
+            DisableTank();
         }
     }
 
-
-    public void Enable()
+//  TANK STATE
+    public void EnableTank()
     {
-        if (alive) return;
+        if (Alive) return;
 
-        Game.AliveList.Add(this);
+        Game.AliveListAddPlayer(this);
         Game.CameraTargets.AddMember(Controller.transform, 1f, 0f);
+        ShowTank();
 
         OnEnable.Invoke();
-        alive = true;
+        Alive = true;
     }
-    public void Disable()
+    public void DisableTank()
     {
-        if (!alive) return;
+        if (!Alive) return;
 
-        Game.AliveList.Remove(this);
+        Game.AliveListRemovePlayer(this);
         Game.CameraTargets.RemoveMember(Controller.transform);
+        HideTank();
 
         OnDisable.Invoke();
-        alive = false;
+        Alive = false;
+    }
+    public void HideTank()
+    {
+        foreach (var i in TankRenderers)
+        i.forceRenderingOff = true;
+    }
+    public void ShowTank()
+    {
+        foreach (var i in TankRenderers)
+        i.forceRenderingOff = false;
+    }
+
+//  USER INTERFACE
+    public void InitPreview()
+    {
+        // 1. CREATE INSTANCE
+        {
+            var root = Instantiate
+            (
+                PreviewPrefab, 
+                Game.Instance.PreviewRootUI.transform
+            );
+            LocalEventSystem.playerRoot = root;
+
+            // 2. GET REFERENCES
+            PreviewNameField  = root.GetComponentInChildren<TMP_InputField>(true);
+            PreviewTankImage  = root.GetComponentInChildren<RawImage>(true);
+            PreviewBackground = root.GetComponent<Image>();
+            PreviewInstance   = root;
+            {
+                var i = root.GetComponentsInChildren<Button>(true);
+                PreviewButtonReady = i[0];
+                PreviewButtonRight = i[1];
+                PreviewButtonLeft  = i[2];
+            }
+        }
+
+        // 3. UPDATE COLOR
+        PreviewBackground.color = Color;
+
+        // 4. SUBSCRIBE EVENTS
+        PreviewNameField.onValidateInput += NameValidation;
+        PreviewNameField.onSubmit.AddListener(NameSubmit);
+        PreviewNameField.onSelect.AddListener(NameSelect);
+
+        PreviewButtonReady.onClick.AddListener(() => Game.UpdateReady(this));
+        
+        // 5. FINAL SETUP
+        DisablePreview();
+        if (Game.GameState == Game.EGameState.Lobby)
+        EnablePreview();
+    }
+    public void EnablePreview()
+    {
+        PreviewInstance.SetActive(true);
+        LocalEventSystem.SetSelectedGameObject(null);
+        LocalEventSystem.sendNavigationEvents = true;
+        ResetPreviewSelection();
+    }
+    public void DisablePreview()
+    {
+        PreviewInstance.SetActive(false);
+        LocalEventSystem.SetSelectedGameObject(null);
+        LocalEventSystem.sendNavigationEvents = false;
+    }
+    public void ResetPreviewSelection()
+    {
+        if (IE_ResetSelect != null)
+        StopCoroutine (IE_ResetSelect);
+        StartCoroutine(IE_ResetSelect = Logic());
+
+        IEnumerator Logic()
+        {
+            LocalEventSystem.SetSelectedGameObject(null);
+            yield return new WaitUntil(() => PreviewButtonReady != null && PreviewButtonReady.enabled);
+            LocalEventSystem.SetSelectedGameObject(PreviewButtonReady.gameObject);
+            PreviewNameField.DeactivateInputField(false);
+        }
+    }
+
+    private char NameValidation(string text, int charIndex, char addedChar)
+    {
+        // 1. RETURN NULL IF TOO LONG
+        if (text.Length >= MaxNameLength)
+            return '\0';
+        // 2. RETURN CHAR IF NORMAL
+        if (char.IsLetterOrDigit(addedChar))
+            return addedChar;
+        // 3. RETURN IF SPECIAL CHAR
+        if (SpecialChars.Contains(addedChar))
+            return addedChar;
+        // 4. ELSE RETURN TERMINATION CHAR
+        return '\0';
+    }
+    private void NameSubmit(string text)
+    {
+        // 1. UPDATE PLAYER NAME
+        Name = text.Trim();
+
+        // 2. UNSELECT INPUT FIELD
+        PreviewNameField.SetTextWithoutNotify(Name);
+        PreviewNameField.DeactivateInputField();
+        PreviewNameField.caretWidth = 0;
+        EventSystem.current.SetSelectedGameObject(null);
+        LocalEventSystem.SetSelectedGameObject(null);
+        ResetPreviewSelection();
+    }
+    private void NameSelect(string text)
+    {
+        PreviewNameField.caretWidth = 1;
+    }
+
+//  PLAYER STATE
+    public void InitPlayer()
+    {
+        gameObject.name = name = $"Player {PlayerInput.playerIndex+1}";
+        Health = MaxHealth;
+        Game.PlayerList.Add(this);
+    }
+    public static void SwitchInputMode(EInputMode InputMode)
+    {
+        switch(InputMode)
+        {
+            case EInputMode.Game: 
+                foreach (var i in Game.PlayerList)
+                i.PlayerInput.SwitchCurrentActionMap("Player");
+                // GLOBAL
+                EventSystem.current.SetSelectedGameObject(null);
+                EventSystem.current.sendNavigationEvents = false;
+                // LOCAL
+                foreach (var i in Game.PlayerList)
+                i.LocalEventSystem.SetSelectedGameObject(null);
+                foreach (var i in Game.PlayerList)
+                i.LocalEventSystem.sendNavigationEvents = false;
+
+            break;
+            
+            case EInputMode.Lobby:
+                foreach (var i in Game.PlayerList)
+                i.PlayerInput.SwitchCurrentActionMap("UI");
+                // GLOBAL
+                EventSystem.current.SetSelectedGameObject(null);
+                EventSystem.current.sendNavigationEvents = false;
+                // LOCAL
+                foreach (var i in Game.PlayerList)
+                i.ResetPreviewSelection();
+                foreach (var i in Game.PlayerList)
+                i.LocalEventSystem.sendNavigationEvents = true;
+            break;
+
+            case EInputMode.Menu:
+                foreach (var i in Game.PlayerList)
+                i.PlayerInput.SwitchCurrentActionMap("UI");
+                // GLOBAL
+                EventSystem.current.SetSelectedGameObject(null);
+                EventSystem.current.sendNavigationEvents = true;
+                // LOCAL
+                foreach (var i in Game.PlayerList)
+                i.LocalEventSystem.SetSelectedGameObject(null);
+                foreach (var i in Game.PlayerList)
+                i.LocalEventSystem.sendNavigationEvents = false;
+
+            break;
+        }
     }
 }
