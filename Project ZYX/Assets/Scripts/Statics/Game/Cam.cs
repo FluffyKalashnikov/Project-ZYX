@@ -20,7 +20,6 @@ public class Cam : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        Tank.OnTankFire += tank => Shake(15f, 5f, 1f);
 
         Camera    = GetComponentInChildren<Camera>();
         Target    = GetComponentInChildren<CinemachineTargetGroup>();

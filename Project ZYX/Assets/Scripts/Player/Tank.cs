@@ -52,8 +52,8 @@ public class Tank : MonoBehaviour, IDamageable
 
     IEnumerator IE_ResetSelect = null;
 
-    public static       Action<Tank> OnTankFire;
-    public static event Action<Tank> OnTankDeath = tank => tank.Die();
+    public Action OnTankFire;
+    public Action OnTankDeath;
 
     [Header("Unity Events")]
     public UnityEvent OnEnable;
@@ -222,6 +222,7 @@ public class Tank : MonoBehaviour, IDamageable
     }
     public void EnablePreview()
     {
+        SwitchLocalInputMode(EInputMode.Menu);
         PreviewInstance.SetActive(true);
         LocalEventSystem.SetSelectedGameObject(null);
         LocalEventSystem.sendNavigationEvents = true;
@@ -287,13 +288,22 @@ public class Tank : MonoBehaviour, IDamageable
         Health = MaxHealth;
         Game.PlayerList.Add(this);
     }
+    public void SwitchLocalInputMode(EInputMode InputMode)
+    {
+        switch(InputMode)
+        {
+            case EInputMode.Game:  PlayerInput.SwitchCurrentActionMap("Player"); break;
+            case EInputMode.Lobby: PlayerInput.SwitchCurrentActionMap("UI");     break;
+            case EInputMode.Menu:  PlayerInput.SwitchCurrentActionMap("UI");     break;
+        }
+    }
     public static void SwitchInputMode(EInputMode InputMode)
     {
         switch(InputMode)
         {
             case EInputMode.Game: 
                 foreach (var i in Game.PlayerList)
-                i.PlayerInput.SwitchCurrentActionMap("Player");
+                i.SwitchLocalInputMode(InputMode);
                 // GLOBAL
                 EventSystem.current.SetSelectedGameObject(null);
                 EventSystem.current.sendNavigationEvents = false;
@@ -307,7 +317,7 @@ public class Tank : MonoBehaviour, IDamageable
             
             case EInputMode.Lobby:
                 foreach (var i in Game.PlayerList)
-                i.PlayerInput.SwitchCurrentActionMap("UI");
+                i.SwitchLocalInputMode(InputMode);
                 // GLOBAL
                 EventSystem.current.SetSelectedGameObject(null);
                 EventSystem.current.sendNavigationEvents = false;
@@ -320,7 +330,7 @@ public class Tank : MonoBehaviour, IDamageable
 
             case EInputMode.Menu:
                 foreach (var i in Game.PlayerList)
-                i.PlayerInput.SwitchCurrentActionMap("UI");
+                i.SwitchLocalInputMode(InputMode);
                 // GLOBAL
                 EventSystem.current.SetSelectedGameObject(null);
                 EventSystem.current.sendNavigationEvents = true;
