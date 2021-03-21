@@ -24,6 +24,6 @@ Material:
     - Vector1_81521761: 0.16
     - Vector1_B7B2D35B: 1
     m_Colors:
-    - Color_1AACD231: {r: 0.010087496, g: 0.16714418, b: 0.008672576, a: 1}
+    - Color_1AACD231: {r: 0.26010898, g: 0.46226418, b: 0.2551175, a: 1}
     - Color_A8190E1A: {r: 0.16269517, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
