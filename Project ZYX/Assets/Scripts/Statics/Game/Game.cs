@@ -26,15 +26,17 @@ public class Game : MonoBehaviour
     public static event Action       OnPause;
     public static event Action       OnUnpause;
     
-    public static List<Tank>         PlayerList     = new List<Tank>();
-    public static List<Tank>         AliveList      = new List<Tank>();
-    public        List<Color>        PlayerColors   = new List<Color>(4);
-    public static EGameState         GameState      = EGameState.Menu;
-    public static EInputMode         InputMode      = EInputMode.MenuUI;
-    public static bool               Paused         = false;
-    public static Camera             Camera         = null;
-    public static PlayerInputManager InputManager   = null;
-    public static Game               Instance       = null;
+    public static List<Tank>         PlayerList   = new List<Tank>();
+    public static List<Tank>         AliveList    = new List<Tank>();
+    public        List<Color>        PlayerColors = new List<Color>(4);
+
+    public static EGameState         GameState    = EGameState.Empty;
+    public static EInputMode         InputMode    = EInputMode.Empty;
+    public static EGameFocus         GameFocus    = EGameFocus.Empty;
+
+    public static Camera             Camera       = null;
+    public static PlayerInputManager InputManager = null;
+    public static Game               Instance     = null;
 
     private static Widget MainMenuWidget = null;
     private static Widget PauseWidget    = null;
@@ -51,18 +53,21 @@ public class Game : MonoBehaviour
 
     public enum EGameState
     {
+        Empty,
         Match,
         Lobby,
         Menu
     }
     public enum EInputMode
     {
+        Empty,
         LobbyUI,
         MatchUI,
         MenuUI
     }
     public enum EGameFocus
     {
+        Empty,
         Match,
         Lobby,
         Menu,
@@ -102,12 +107,14 @@ public class Game : MonoBehaviour
 
         actionAsset.IngameUI.Pause.performed += ctx => 
         { 
-            if (GameState != EGameState.Match)
-            return;
-            switch(Paused = !Paused)
+            Debug.Log(GameFocus);
+
+            if (GameFocus == EGameFocus.Match || GameFocus == EGameFocus.Pause)
+            switch(GameFocus)
             {
-                case true:  PauseGame();  return;
-                default:    PauseReset(); return;
+                case EGameFocus.Match: PauseGame();  SwitchGameFocus(EGameFocus.Pause); return;
+                case EGameFocus.Pause: PauseReset(); SwitchGameFocus(EGameFocus.Match); return;
+                default: Debug.LogError($"EGameFocus \"{GameFocus}\"not implemented."); return;
             }
         };
 
@@ -268,14 +275,12 @@ public class Game : MonoBehaviour
     }
     public static void PauseGame()
     {
-        Paused = true;
         Widget.AddWidget(PauseWidget);
         PauseWidget.SetSelectedElement(PauseWidget.defaultElement);
         OnPause?.Invoke();
     }
     public static void PauseReset()
     {
-        Paused = false;
         Widget.RemoveOverlays();
         OnUnpause?.Invoke();
     }
@@ -299,6 +304,7 @@ public class Game : MonoBehaviour
         OnStartMatch?.Invoke();
         SwitchGameState(EGameState.Match);
         SwitchInputMode(Tank.EInputMode.Game);
+        SwitchGameFocus(EGameFocus.Match);
 
         // 2. MATCH LOGIC
         SelectWidget(MatchWidget);
@@ -314,6 +320,7 @@ public class Game : MonoBehaviour
         OnStartLobby?.Invoke();
         SwitchGameState(EGameState.Lobby);
         SwitchInputMode(Tank.EInputMode.Lobby);
+        SwitchGameFocus(EGameFocus.Lobby);
 
         // 2. LOBBY LOGIC
         SelectWidget(LobbyWidget);
@@ -331,12 +338,12 @@ public class Game : MonoBehaviour
     }
     public static void SwitchGameFocus(EGameFocus GameFocus)
     {
-        switch(GameFocus)
+        switch(Game.GameFocus = GameFocus)
         {
-            case EGameFocus.Lobby: break;
-            case EGameFocus.Match: break;
-            case EGameFocus.Menu:  break;
-            case EGameFocus.Pause: break;
+            case EGameFocus.Lobby: SwitchInputMode(Tank.EInputMode.Lobby); break;
+            case EGameFocus.Match: SwitchInputMode(Tank.EInputMode.Game);  break;
+            case EGameFocus.Menu:  SwitchInputMode(Tank.EInputMode.Menu);  break;
+            case EGameFocus.Pause: SwitchInputMode(Tank.EInputMode.Menu);  break;
         }
     }
 
@@ -345,5 +352,13 @@ public class Game : MonoBehaviour
     {
         Debug.Log("Quitting...");
         Application.Quit();
+    }
+    public static bool IsPaused()
+    {
+        return GameFocus == EGameFocus.Pause;
+    }
+    public static bool IsPlaying()
+    {
+        return GameFocus == EGameFocus.Match;
     }
 }
