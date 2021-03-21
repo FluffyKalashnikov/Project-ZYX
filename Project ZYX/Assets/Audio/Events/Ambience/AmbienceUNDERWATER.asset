@@ -19,7 +19,7 @@ MonoBehaviour:
   volume:
     type: 0
     slider: 1
-    single: 0.2
+    single: 0.3
     min: 0.4092949
     max: 0.48233694
     minLimit: 0

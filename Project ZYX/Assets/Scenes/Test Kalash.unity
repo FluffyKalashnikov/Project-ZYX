@@ -10478,19 +10478,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 378456680, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.000000015896624
+      value: -1e-45
       objectReference: {fileID: 0}
     - target: {fileID: 378456680, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.000000006584597
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 868862682, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.863525
+      value: 0.8635249
       objectReference: {fileID: 0}
     - target: {fileID: 868862682, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.13604762
+      value: 0.13604765
       objectReference: {fileID: 0}
     - target: {fileID: 868862684, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
       propertyPath: m_RenderPostProcessing
@@ -10498,11 +10498,59 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1350783316, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.863525
+      value: 0.8635249
       objectReference: {fileID: 0}
     - target: {fileID: 1350783316, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.13604762
+      value: 0.13604765
+      objectReference: {fileID: 0}
+    - target: {fileID: 1915683843, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
+      propertyPath: PlayerColors.Array.data[0].b
+      value: 0.8867924
+      objectReference: {fileID: 0}
+    - target: {fileID: 1915683843, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
+      propertyPath: PlayerColors.Array.data[0].g
+      value: 0.32307184
+      objectReference: {fileID: 0}
+    - target: {fileID: 1915683843, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
+      propertyPath: PlayerColors.Array.data[0].r
+      value: 0.09620863
+      objectReference: {fileID: 0}
+    - target: {fileID: 1915683843, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
+      propertyPath: PlayerColors.Array.data[1].b
+      value: 0.14796188
+      objectReference: {fileID: 0}
+    - target: {fileID: 1915683843, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
+      propertyPath: PlayerColors.Array.data[1].g
+      value: 0.14796188
+      objectReference: {fileID: 0}
+    - target: {fileID: 1915683843, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
+      propertyPath: PlayerColors.Array.data[1].r
+      value: 0.8962264
+      objectReference: {fileID: 0}
+    - target: {fileID: 1915683843, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
+      propertyPath: PlayerColors.Array.data[2].b
+      value: 0.14684942
+      objectReference: {fileID: 0}
+    - target: {fileID: 1915683843, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
+      propertyPath: PlayerColors.Array.data[2].g
+      value: 0.8358456
+      objectReference: {fileID: 0}
+    - target: {fileID: 1915683843, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
+      propertyPath: PlayerColors.Array.data[2].r
+      value: 0.9433962
+      objectReference: {fileID: 0}
+    - target: {fileID: 1915683843, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
+      propertyPath: PlayerColors.Array.data[3].b
+      value: 0.09927912
+      objectReference: {fileID: 0}
+    - target: {fileID: 1915683843, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
+      propertyPath: PlayerColors.Array.data[3].g
+      value: 0.9150943
+      objectReference: {fileID: 0}
+    - target: {fileID: 1915683843, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
+      propertyPath: PlayerColors.Array.data[3].r
+      value: 0.26019683
       objectReference: {fileID: 0}
     - target: {fileID: 821787623625406256, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
       propertyPath: m_RootOrder
