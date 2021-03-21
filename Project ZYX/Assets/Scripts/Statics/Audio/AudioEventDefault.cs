@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Audio", menuName = "ZYX Assets/Audio/Default")]
+[CreateAssetMenu(fileName = "Audio", menuName = "ZYX Assets/Audio Event/Default")]
 public class AudioEventDefault : AudioEvent
 {
     [Header("Event Settings")]
