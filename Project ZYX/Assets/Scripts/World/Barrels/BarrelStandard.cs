@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BarrelRadioactive : BarrelBaseCode
+public class BarrelStandard : BarrelBaseCode
 {
     private void OnCollisionEnter(Collision collision)
     {
@@ -10,7 +10,7 @@ public class BarrelRadioactive : BarrelBaseCode
         {
             BarrelCollisionSound();
             DeleteBarrelModel();
-            //Some kind of tank damage code here and some radiation animations aswell?
+            //Some kind of particle animation
             if (barrelCollisionSource.isPlaying)
             {
                 DeleteBarrelCompletly();
