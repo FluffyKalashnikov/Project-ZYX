@@ -105,9 +105,10 @@ public class Tank : MonoBehaviour, IDamageable
     }
     public void UpdateColor()
     {
-        foreach (var i in TankRenderers)
+        foreach (var rd in TankRenderers)
         {
-            i.material.color = Color;
+            foreach(var i in rd.materials)
+            i.color = Color;
         }
     }
     public void UpdateReferences()

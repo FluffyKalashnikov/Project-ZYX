@@ -112,8 +112,8 @@ public class Game : MonoBehaviour
             if (GameFocus == EGameFocus.Match || GameFocus == EGameFocus.Pause)
             switch(GameFocus)
             {
-                case EGameFocus.Match: PauseGame();  SwitchGameFocus(EGameFocus.Pause); return;
-                case EGameFocus.Pause: PauseReset(); SwitchGameFocus(EGameFocus.Match); return;
+                case EGameFocus.Match: PauseGame();                                     return; 
+                case EGameFocus.Pause: PauseReset(); SwitchGameFocus(EGameFocus.Match); /* KALLAS EJ MED CONTINUE-KNAPPEN */ return; 
                 default: Debug.LogError($"EGameFocus \"{GameFocus}\"not implemented."); return;
             }
         };
@@ -276,6 +276,7 @@ public class Game : MonoBehaviour
     public static void PauseGame()
     {
         Widget.AddWidget(PauseWidget);
+        SwitchGameFocus(EGameFocus.Pause);
         PauseWidget.SetSelectedElement(PauseWidget.defaultElement);
         OnPause?.Invoke();
     }
@@ -304,13 +305,13 @@ public class Game : MonoBehaviour
         OnStartMatch?.Invoke();
         SwitchGameState(EGameState.Match);
         SwitchInputMode(Tank.EInputMode.Game);
-        SwitchGameFocus(EGameFocus.Match);
 
         // 2. MATCH LOGIC
         SelectWidget(MatchWidget);
         Cam.SetActiveCamera(MatchCamera);
         SpawnTanks();
         PauseReset();
+        SwitchGameFocus(EGameFocus.Match);
 
         Debug.Log("Match Started!");
     }
@@ -320,13 +321,13 @@ public class Game : MonoBehaviour
         OnStartLobby?.Invoke();
         SwitchGameState(EGameState.Lobby);
         SwitchInputMode(Tank.EInputMode.Lobby);
-        SwitchGameFocus(EGameFocus.Lobby);
 
         // 2. LOBBY LOGIC
         SelectWidget(LobbyWidget);
         Cam.SetActiveCamera(LobbyCamera);
         PauseReset();
         DisableTanks();
+        SwitchGameFocus(EGameFocus.Lobby);
 
         Debug.Log("Lobby Started!");
     }
@@ -338,6 +339,7 @@ public class Game : MonoBehaviour
     }
     public static void SwitchGameFocus(EGameFocus GameFocus)
     {
+        if (Game.GameFocus != GameFocus)
         switch(Game.GameFocus = GameFocus)
         {
             case EGameFocus.Lobby: SwitchInputMode(Tank.EInputMode.Lobby); break;

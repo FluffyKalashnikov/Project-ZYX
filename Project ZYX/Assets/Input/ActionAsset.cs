@@ -207,6 +207,17 @@ public class @ActionAsset : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
+                    ""name"": """",
+                    ""id"": ""c18e59c7-16aa-4687-bb4b-4c4fef085d31"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Fire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
                     ""name"": ""Arrows"",
                     ""id"": ""6b557225-190c-44fc-8a9a-06f29145e880"",
                     ""path"": ""2DVector"",
