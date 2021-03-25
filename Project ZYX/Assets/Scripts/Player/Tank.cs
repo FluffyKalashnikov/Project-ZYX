@@ -88,13 +88,9 @@ public class Tank : MonoBehaviour, IDamageable
         InitPreview();
 
         // 3. EVENT SUBSCRIPTION
-        Game.OnStartLobby += EnablePreview;
-        Game.OnEndLobby   += DisablePreview;
-        Game.OnStartMatch += () => Ready = false;
-        
-        Game.OnStartMatch += () => SwitchInputMode(EInputMode.Game);
-        Game.OnStartLobby += () => SwitchInputMode(EInputMode.Lobby);
-        Game.OnPause      += () => SwitchInputMode(EInputMode.Menu);
+        Game.OnNewLobby += EnablePreview;
+        Game.OnEndLobby += DisablePreview;
+        Game.OnNewMatch += () => Ready = false;
     }
 
 //  TANK SETUP
@@ -298,7 +294,7 @@ public class Tank : MonoBehaviour, IDamageable
             case EInputMode.Menu:  PlayerInput.SwitchCurrentActionMap("UI");     break;
         }
     }
-    public static void SwitchInputMode(EInputMode InputMode)
+    public static void SwitchInputMode(EInputMode InputMode, Action OnComplete)
     {
         switch(InputMode)
         {
@@ -343,5 +339,6 @@ public class Tank : MonoBehaviour, IDamageable
 
             break;
         }
+        OnComplete?.Invoke();
     }
 }
