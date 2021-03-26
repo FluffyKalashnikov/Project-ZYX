@@ -76,8 +76,7 @@ public class TankMovement : MonoBehaviour
     private void BaseMovement(Vector2 input)
     {
         #region Actual Movement
-        float multipliedMotorForce = input.y * motorForce;
-        driveForce = new Vector3(0, 0, multipliedMotorForce) * Time.deltaTime;
+        driveForce = new Vector3(0, 0, input.y * motorForce) * Time.deltaTime;
         #region Accel/Decel-Physics
         if (input.y != 0)
         {
@@ -88,9 +87,7 @@ public class TankMovement : MonoBehaviour
             currentVel = Vector3.Lerp(currentVel, Vector3.zero, decelerationForce * Time.deltaTime);
         }
         #endregion
-        float multipliedRotationForce = input.x * rotationForce;
-
-        tankScript.Controller.transform.Rotate(0, multipliedRotationForce * Time.deltaTime, 0);
+        tankScript.Controller.transform.Rotate(0, input.x * rotationForce * Time.deltaTime, 0);
         direction = tankScript.Controller.transform.TransformDirection(currentVel);
         tankScript.Controller.Move(direction);
         #endregion
