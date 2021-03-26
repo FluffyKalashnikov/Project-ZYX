@@ -71,8 +71,7 @@ public class TankTurret : MonoBehaviour
     #region Spin Functions
     private void TurretMovement(Vector2 input)
     {
-        float multipliedSpinForce = input.x * spinForce;
-        turretSpin = new Vector3(0, multipliedSpinForce, 0) * Time.deltaTime;
+        turretSpin = new Vector3(0, input.x * spinForce, 0) * Time.deltaTime;
         turret.transform.Rotate(turretSpin);
 
         #region Audio
