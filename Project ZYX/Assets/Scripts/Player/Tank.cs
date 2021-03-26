@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
+using UnityEngine.Animations;
 using TMPro;
 
 [RequireComponent(typeof(MultiplayerEventSystem), typeof(InputSystemUIInputModule), typeof(PlayerInput))]
@@ -30,7 +31,11 @@ public class Tank : MonoBehaviour, IDamageable
     public float  Health
     {
         get {return m_Health;}
-        set {m_Health = Mathf.Clamp(m_Health, 0, MaxHealth);}
+        set {m_Health = Mathf.Clamp(value, 0, MaxHealth); UpdateHealthbar(); }
+    }
+    public float  HealthFactor
+    {
+        get {return Health/MaxHealth;}
     }
     public string Name 
     {
@@ -81,6 +86,10 @@ public class Tank : MonoBehaviour, IDamageable
     public Image                  PreviewBackground  = null;
     #endregion
 
+    public ParentConstraint HudConstraint = null;
+    public GameObject       HudRoot       = null;
+    public Image            HealthBar     = null;
+
     IEnumerator IE_ResetSelect = null;
 
     public Action OnTankFire;
@@ -117,6 +126,7 @@ public class Tank : MonoBehaviour, IDamageable
         DisableTank();
         UpdateTank();
         InitPreview();
+        InitHUD();
 
         // 3. EVENT SUBSCRIPTION
         Game.OnNewLobby += EnablePreview;
@@ -146,6 +156,7 @@ public class Tank : MonoBehaviour, IDamageable
 //  TANK HEALTH
     public float TakeDamage(float damage, DamageInfo info, MonoBehaviour dealer)
     {
+        /*
         PowerUpTimer -= Time.deltaTime;
         if (PowerUpTimer < 0)
         {
@@ -155,6 +166,7 @@ public class Tank : MonoBehaviour, IDamageable
         {
             damage = 0;
         }
+        */
         if ((Health -= damage) <= 0f)
         {
             Die();
@@ -182,6 +194,7 @@ public class Tank : MonoBehaviour, IDamageable
         Game.AliveListAddPlayer(this);
         Game.CameraTargets.AddMember(Controller.transform, 1f, 0f);
         ShowTank();
+        EnableHUD();
 
         OnEnable.Invoke();
         Alive = true;
@@ -193,6 +206,7 @@ public class Tank : MonoBehaviour, IDamageable
         Game.AliveListRemovePlayer(this);
         Game.CameraTargets.RemoveMember(Controller.transform);
         HideTank();
+        DisableHUD();
 
         OnDisable.Invoke();
         Alive = false;
@@ -326,7 +340,7 @@ public class Tank : MonoBehaviour, IDamageable
 //  PLAYER STATE
     public void InitPlayer()
     {
-        gameObject.name = name = $"Player {PlayerInput.playerIndex+1}";
+        gameObject.name = $"Player {PlayerInput.playerIndex+1}";
         Health = MaxHealth;
         Game.PlayerList.Add(this);
     }
@@ -385,5 +399,41 @@ public class Tank : MonoBehaviour, IDamageable
             break;
         }
         OnComplete?.Invoke();
+    }
+
+//  PLAYER HUD
+    public void InitHUD()
+    {
+        var i = new ConstraintSource();
+        i.sourceTransform = Game.Camera.transform;
+        i.weight = 1f;
+
+        HudConstraint.AddSource(i);
+        HudConstraint.constraintActive = true;
+        DisableHUD();
+    }
+    public void EnableHUD()
+    {
+        HudRoot.SetActive(true);
+    }
+    public void DisableHUD()
+    {
+        HudRoot.SetActive(false);
+    }
+    public void UpdateHealthbar()
+    {
+        HealthBar.fillAmount = HealthFactor;
+    }
+
+//  COLLISION LOGIC
+    public static void IgnoreCollision(Collider collider)
+    {
+        foreach(Tank tank in Game.PlayerList)
+        {
+            foreach(var i in tank.GetComponentsInChildren<Collider>(true))
+            {
+                Physics.IgnoreCollision(collider, i);
+            }
+        }
     }
 }

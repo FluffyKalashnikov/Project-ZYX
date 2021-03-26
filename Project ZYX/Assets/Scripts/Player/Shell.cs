@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Shell : MonoBehaviour
 {
+    [SerializeField] private float damage = 0f;
+
     private Rigidbody    rb       = null;
     private Tank         owner    = null;
     private bool         hasHit   = false;
@@ -28,9 +30,7 @@ public class Shell : MonoBehaviour
     private void Update()
     {
         if (!hasHit && rb.velocity != Vector3.zero) 
-        {
-            transform.rotation = Quaternion.LookRotation(rb.velocity);
-        }
+        transform.rotation = Quaternion.LookRotation(rb.velocity);
     }
 
 
@@ -41,22 +41,16 @@ public class Shell : MonoBehaviour
         if (hasHit) return;
         IDamageable hit = collision.gameObject.GetComponentInParent<IDamageable>();
 
-        if (hit != null) hit.TakeDamage
+        hit?.TakeDamage
         (
-            0f, 
+            damage, 
             new DamageInfo(DamageType.ShellImpact), 
             this
         );
 
         hasHit = true;
-        foreach(var player in Game.PlayerList)
-        {
-            foreach(var collider2 in player.GetComponentsInChildren<Collider>())
-            {
-                Physics.IgnoreCollision(collider, collider2, true);
-                
-            }
-        }
+        rb.useGravity = true;
+        Tank.IgnoreCollision(collider);
     }
     public void Destroy()
     {

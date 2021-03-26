@@ -118,7 +118,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 378456678}
-  m_LocalRotation: {x: 0.38268346, y: -1e-45, z: 1e-45, w: 0.92387956}
+  m_LocalRotation: {x: 0.38268346, y: 3e-45, z: -1e-45, w: 0.92387956}
   m_LocalPosition: {x: 0, y: 15, z: -15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -764,10 +764,10 @@ MonoBehaviour:
   ScoreboardLayout: {fileID: 2469262212099232992}
   PreviewRootUI: {fileID: 6060729848166121459}
   PlayerColors:
-  - {r: 0.08962262, g: 0.35469514, b: 1, a: 1}
-  - {r: 1, g: 0.13679248, b: 0.13679248, a: 1}
-  - {r: 1, g: 0.87318784, b: 0.07075471, a: 1}
-  - {r: 0.31487498, g: 1, b: 0.1462264, a: 1}
+  - {r: 0.09620863, g: 0.32307184, b: 0.8867924, a: 1}
+  - {r: 0.8962264, g: 0.14796188, b: 0.14796188, a: 1}
+  - {r: 0.9433962, g: 0.8358456, b: 0.14684942, a: 1}
+  - {r: 0.26019683, g: 0.9150943, b: 0.09927912, a: 1}
   buttonMainMenuStart: {fileID: 678984269324556531}
   buttonPauseMenuContinue: {fileID: 5617941344905632672}
   buttonPauseMenuLobby: {fileID: 8925674031943752464}
@@ -932,7 +932,7 @@ Canvas:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1975567297675945847}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_RenderMode: 1
   m_Camera: {fileID: 868862681}
