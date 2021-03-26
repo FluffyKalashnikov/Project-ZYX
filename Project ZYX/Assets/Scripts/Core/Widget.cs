@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -21,14 +22,11 @@ public class Widget : MonoBehaviour
         currentElement = defaultElement;
     }
 
-
-
-
     // WIDGET FUNCTIONS
     public void Enable()
     {
         canvas.enabled = true;
-        SetSelectedElement(defaultElement);
+        SetSelectedElement(defaultElement, null, true);
     }
     public void Disable()
     {
@@ -40,7 +38,7 @@ public class Widget : MonoBehaviour
     }
 
     // WIDGET SELECTION
-    public void SetSelectedElement(GameObject element, bool ignoreNull = true)
+    public void SetSelectedElement(GameObject element,  Action OnComplete, bool ignoreNull = false)
     {
         if (ignoreNull && element == null) return;
 
@@ -54,53 +52,56 @@ public class Widget : MonoBehaviour
         {
             yield return new WaitUntil(() => canvas.enabled);
 
-            EventSystem.current.SetSelectedGameObject(defaultElement);
+            EventSystem.current.SetSelectedGameObject(element);
+            OnComplete?.Invoke();
         }
     }
-    public static void SetSelectedWidget(Widget widget, bool ignoreNull = false)
+    public static void SetSelectedWidget(Widget widget, Action OnComplete, bool ignoreNull = false)
     {
         if (widget == null && !ignoreNull)
         {
             Debug.LogError("Null Widget detected!");
+            return;
         }
         
-        // 1. STORE ALL WIDGETS
+        // 1. DEACTIVATE ALL WIDGETS
         Widget[] widgets = FindObjectsOfType<Widget>();
+        foreach (var i in widgets) 
+        i.Disable();
 
-        // 2. DEACTIVATE ALL WIDGETS
-        foreach (var i in widgets) i.Disable();
-        
-        // 3. ENABLE SELECTED WIDGET
+        // 2. ENABLE SELECTED WIDGET
         widget?.Enable();
+        OnComplete?.Invoke();
     }
     
     // WIDGET ORDER
-    public static void AddWidget(Widget widget)
+    public static void AddWidget(Widget widget, Action OnComplete)
     {
         // 1. ENABLE
         widget.ShowFirst();
         widget.Enable();
+        OnComplete?.Invoke();
 
         // 2. ADD TO LIST
         if (!OverlayWidgets.Contains(widget))
         OverlayWidgets.Add(widget);
     }
-    public static void RemoveWidget(Widget widget)
+    public static void RemoveWidget(Widget widget, Action OnComplete)
     {
         // 1. DISABLE
         widget.ShowLast();
         widget.Disable();
+        OnComplete?.Invoke();
 
         // 2. REMOVE FROM LIST
         if (OverlayWidgets.Contains(widget))
         OverlayWidgets.Remove(widget);
     }
-    public static void RemoveOverlays()
+    public static void RemoveOverlays(Action OnComplete)
     {
         for (int i = OverlayWidgets.Count-1; i>=0; i--)
-        {
-            RemoveWidget(OverlayWidgets[i]);
-        }
+        RemoveWidget(OverlayWidgets[i], null);
+        OnComplete?.Invoke();
     }
 
     public void SetOrder(int order)

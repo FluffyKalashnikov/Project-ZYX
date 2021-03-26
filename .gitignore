@@ -9,6 +9,7 @@
 /Project ZYX/[Bb]uilds/
 /Project ZYX/[Ll]ogs/
 /Project ZYX/[Mm]emoryCaptures/
+/Builds
 
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 !/[Aa]ssets/**/*.meta

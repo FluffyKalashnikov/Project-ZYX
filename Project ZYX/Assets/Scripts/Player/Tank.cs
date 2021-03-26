@@ -52,8 +52,8 @@ public class Tank : MonoBehaviour, IDamageable
 
     IEnumerator IE_ResetSelect = null;
 
-    public static       Action<Tank> OnTankFire;
-    public static event Action<Tank> OnTankDeath = tank => tank.Die();
+    public Action OnTankFire;
+    public Action OnTankDeath;
 
     [Header("Unity Events")]
     public UnityEvent OnEnable;
@@ -88,13 +88,9 @@ public class Tank : MonoBehaviour, IDamageable
         InitPreview();
 
         // 3. EVENT SUBSCRIPTION
-        Game.OnStartLobby += EnablePreview;
-        Game.OnEndLobby   += DisablePreview;
-        Game.OnStartMatch += () => Ready = false;
-        
-        Game.OnStartMatch += () => SwitchInputMode(EInputMode.Game);
-        Game.OnStartLobby += () => SwitchInputMode(EInputMode.Lobby);
-        Game.OnPause      += () => SwitchInputMode(EInputMode.Menu);
+        Game.OnNewLobby += EnablePreview;
+        Game.OnEndLobby += DisablePreview;
+        Game.OnNewMatch += () => Ready = false;
     }
 
 //  TANK SETUP
@@ -105,9 +101,10 @@ public class Tank : MonoBehaviour, IDamageable
     }
     public void UpdateColor()
     {
-        foreach (var i in TankRenderers)
+        foreach (var rd in TankRenderers)
         {
-            i.material.color = Color;
+            foreach(var i in rd.materials)
+            i.color = Color;
         }
     }
     public void UpdateReferences()
@@ -222,6 +219,7 @@ public class Tank : MonoBehaviour, IDamageable
     }
     public void EnablePreview()
     {
+        SwitchLocalInputMode(EInputMode.Menu);
         PreviewInstance.SetActive(true);
         LocalEventSystem.SetSelectedGameObject(null);
         LocalEventSystem.sendNavigationEvents = true;
@@ -287,13 +285,22 @@ public class Tank : MonoBehaviour, IDamageable
         Health = MaxHealth;
         Game.PlayerList.Add(this);
     }
-    public static void SwitchInputMode(EInputMode InputMode)
+    public void SwitchLocalInputMode(EInputMode InputMode)
+    {
+        switch(InputMode)
+        {
+            case EInputMode.Game:  PlayerInput.SwitchCurrentActionMap("Player"); break;
+            case EInputMode.Lobby: PlayerInput.SwitchCurrentActionMap("UI");     break;
+            case EInputMode.Menu:  PlayerInput.SwitchCurrentActionMap("UI");     break;
+        }
+    }
+    public static void SwitchInputMode(EInputMode InputMode, Action OnComplete)
     {
         switch(InputMode)
         {
             case EInputMode.Game: 
                 foreach (var i in Game.PlayerList)
-                i.PlayerInput.SwitchCurrentActionMap("Player");
+                i.SwitchLocalInputMode(InputMode);
                 // GLOBAL
                 EventSystem.current.SetSelectedGameObject(null);
                 EventSystem.current.sendNavigationEvents = false;
@@ -307,7 +314,7 @@ public class Tank : MonoBehaviour, IDamageable
             
             case EInputMode.Lobby:
                 foreach (var i in Game.PlayerList)
-                i.PlayerInput.SwitchCurrentActionMap("UI");
+                i.SwitchLocalInputMode(InputMode);
                 // GLOBAL
                 EventSystem.current.SetSelectedGameObject(null);
                 EventSystem.current.sendNavigationEvents = false;
@@ -320,7 +327,7 @@ public class Tank : MonoBehaviour, IDamageable
 
             case EInputMode.Menu:
                 foreach (var i in Game.PlayerList)
-                i.PlayerInput.SwitchCurrentActionMap("UI");
+                i.SwitchLocalInputMode(InputMode);
                 // GLOBAL
                 EventSystem.current.SetSelectedGameObject(null);
                 EventSystem.current.sendNavigationEvents = true;
@@ -332,5 +339,6 @@ public class Tank : MonoBehaviour, IDamageable
 
             break;
         }
+        OnComplete?.Invoke();
     }
 }
