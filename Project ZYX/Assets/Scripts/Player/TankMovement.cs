@@ -8,7 +8,7 @@ public class TankMovement : MonoBehaviour
 {
     //ActionAsset actionAsset;
     InputAction moveAction;
-    PlayerInput playerInput;
+    [SerializeField] private PlayerInput playerInput;
     [SerializeField] private Tank tankScript;
     [SerializeField] private TankAudio tankAudioScript;
     [SerializeField] private TankAnimation tankAnimationScript;
@@ -59,6 +59,7 @@ public class TankMovement : MonoBehaviour
         {
             //BaseMovement(actionAsset.Player.Move.ReadValue<Vector2>());
             BaseMovement(moveAction.ReadValue<Vector2>());
+            EngineRev(moveAction.ReadValue<Vector2>());
 
             //EngineRev(actionAsset.Player.Move.ReadValue<Vector2>());
             //MovementAnimations(actionAsset.Player.Move.ReadValue<Vector2>());
@@ -82,7 +83,7 @@ public class TankMovement : MonoBehaviour
     private void BaseMovement(Vector2 input)
     {
         #region Actual Movement
-        driveForce = new Vector3(0, 0, input.y * motorForce) * Time.deltaTime;
+        driveForce = new Vector3(0, 0, input.y * motorForce);
         #region Accel/Decel-Physics
         if (input.y != 0)
         {
@@ -90,7 +91,7 @@ public class TankMovement : MonoBehaviour
         }
         else if (input.y == 0 && currentVel.z != 0)
         {
-            currentVel = Vector3.Lerp(currentVel, Vector3.zero, decelerationForce * Time.deltaTime);
+            currentVel = Vector3.Lerp(currentVel, Vector3.zero, decelerationForce);
         }
         #endregion
         tankScript.Controller.transform.Rotate(0, input.x * rotationForce * Time.deltaTime, 0);
