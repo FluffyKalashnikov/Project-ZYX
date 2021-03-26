@@ -733,11 +733,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5090454c187f024c9a37f5b2edf566e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Health: 0
   MaxHealth: 100
   Alive: 1
   Ready: 0
-  Name: Player 1
   MaxNameLength: 18
   SpecialChars: 20005f00220023002d005b005d003d00
   TankMovement: {fileID: 0}
@@ -749,6 +747,8 @@ MonoBehaviour:
   TankRenderers: []
   PreviewPrefab: {fileID: 2305085263532993303, guid: 28875ad44daa16244ab54e18e0aa9b4c, type: 3}
   PreviewInstance: {fileID: 0}
+  ScorePrefab: {fileID: 152477876357035898, guid: b5f403f8294a9484eb29ab68f96cb433, type: 3}
+  ScoreElement: {fileID: 0}
   PreviewButtonReady: {fileID: 0}
   PreviewButtonRight: {fileID: 0}
   PreviewButtonLeft: {fileID: 0}

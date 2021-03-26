@@ -12,20 +12,49 @@ using TMPro;
 [RequireComponent(typeof(MultiplayerEventSystem), typeof(InputSystemUIInputModule), typeof(PlayerInput))]
 public class Tank : MonoBehaviour, IDamageable
 {
-    [Header("Variables")]
-    public float      Health        = 0;
-    public float      MaxHealth     = 100f;
-    [Header("Player Stuff")]
-    public bool       Alive         = true;
-    public bool       Ready         = false;
-    public Color      Color 
+    [Header("Player Stats")]
+    public float  MaxHealth = 100f;
+    [Header("Player Bools")]
+    public bool   Alive = true;
+    public bool   Ready = false;
+    public Color  Color 
     {
-        get {return Game.Instance.PlayerColors[PlayerInput.playerIndex];}
+        get {return Game.Instance.PlayerColors[Index];}
     }
     [Header("Naming properties")]
-    public string     Name          = "Player 1";
     public int        MaxNameLength = 18;
     public List<char> SpecialChars  = new List<char>();
+
+
+    // PROPERTIES
+    public float  Health
+    {
+        get {return m_Health;}
+        set {m_Health = Mathf.Clamp(m_Health, 0, MaxHealth);}
+    }
+    public string Name 
+    {
+        get 
+        {
+            if (m_Name == string.Empty)
+            Name = $"Player {Index+1}";
+            return m_Name;
+        }
+        set {m_Name = value; ScoreElement?.UpdateElement();}
+    }
+    public float  Score
+    {
+        get { return m_Score; }
+        set { m_Score = value; Game.SortScoreboard(); }
+    }
+    public int    Index 
+    {
+        get {return PlayerInput.playerIndex;}
+    }
+
+    private float  m_Health = 0f;
+    private float  m_Score  = 0f;
+    private string m_Name   = string.Empty;
 
     [Header("REFERENCES")]
     #region references
@@ -41,6 +70,8 @@ public class Tank : MonoBehaviour, IDamageable
     [Space(10)]
     public GameObject             PreviewPrefab      = null;
     public GameObject             PreviewInstance    = null;
+    public GameObject             ScorePrefab        = null;
+    public ScoreboardElement      ScoreElement       = null;
     [Space(5)]
     public Button                 PreviewButtonReady = null;
     public Button                 PreviewButtonRight = null;
@@ -276,6 +307,20 @@ public class Tank : MonoBehaviour, IDamageable
     private void NameSelect(string text)
     {
         PreviewNameField.caretWidth = 1;
+    }
+
+    public void InitScore()
+    {
+        // 1. CREATE SCOREBOARD
+        ScoreboardElement i = Instantiate
+        (
+            ScorePrefab, 
+            Game.Instance.ScoreboardLayout.transform
+        ).GetComponent<ScoreboardElement>();
+
+        // 2. INIT AND GET REF
+        ScoreElement = i;
+        i.Init(this);
     }
 
 //  PLAYER STATE

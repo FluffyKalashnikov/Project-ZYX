@@ -49,7 +49,6 @@ public class Shell : MonoBehaviour
         );
 
         hasHit = true;
-        Debug.Log($"Players: {Game.PlayerList.Count}");
         foreach(var player in Game.PlayerList)
         {
             foreach(var collider2 in player.GetComponentsInChildren<Collider>())
