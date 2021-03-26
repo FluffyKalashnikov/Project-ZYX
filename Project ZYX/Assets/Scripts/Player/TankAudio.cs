@@ -2,8 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Tank))]
 public class TankAudio : MonoBehaviour
 {
+    private Tank TankScript = null;
+
+
+
     [Tooltip("Sync the ‟play engine sounds‟ function with the start up sound")]
     [Header("Engine Start Up Time (In seconds)")]
     [SerializeField] private float engineStartUpTime;
@@ -52,6 +57,22 @@ public class TankAudio : MonoBehaviour
     [Header("Tank Shoot Audio")]
     [SerializeField] private AudioEvent cannonBlast;
     [SerializeField] private AudioSource cannonBlastsource;
+
+
+
+    private void Awake()
+    {
+        // 1. GET REFERENCES
+        TankScript = GetComponent<Tank>();
+
+        // 2. EVENT SUBSCRIPTION
+        TankScript.OnTankFire += CannonFire;
+    }
+
+
+
+
+
 
     public IEnumerator EngineStartUpSound()
     {

@@ -3,101 +3,83 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(Tank), typeof(PlayerInput))]
 public class TankShoot : MonoBehaviour
 {
-    #region Setup Var
-    ActionAsset actionAsset;
-    [SerializeField] private Tank tankScript;
-    [SerializeField] private TankAudio tankAudioScript;
-    [SerializeField] private TankAnimation tankAnimationScript;
-    private bool gunActive;
-    private bool launchActive;
-    private float chargeStrength;
-    #endregion
+    [Header("Firing Stats")]
+    [SerializeField] private float bulletVelocity = 25f;
+    [SerializeField] private float minCharge      = 0.6f;
+    [SerializeField] private float maxCharge      = 1f;
+    [SerializeField] private float chargeTime     = 1f;
+    [SerializeField] private float fireRate       = 1f;
 
-    [SerializeField] private Transform bulletPoint;
-    [SerializeField] private GameObject bullet;
-    [SerializeField] private Shell bulletScript;
+    [Header("References")]
+    [SerializeField] private Transform  MuzzlePoint;
+    [SerializeField] private GameObject ShellPrefab;
 
-    public float timer;
-    public float timer2;
+    // PRIVATE REFERENCES
+    private Tank        TankScript  = null;
+    private PlayerInput PlayerInput = null;
+    private InputAction FireAction  = null;
+  
 
-    #region Setup
+
     private void Awake()
     {
-        actionAsset = new ActionAsset();
-        tankScript = GetComponent<Tank>();
-    }
-    void Start()
-    {
-        gunActive = false;
-        launchActive = false;
-        actionAsset.Player.Enable();
-        actionAsset.Player.Fire.performed += ctx => gunActive = true;
-        actionAsset.Player.Fire.performed += ctx => launchActive = false;
-        actionAsset.Player.Fire.canceled += ctx => gunActive = false;
-        actionAsset.Player.Fire.canceled += ctx => launchActive = true;
-    }
-    void Update()
-    {
-        if(gunActive == true && launchActive == false)
-        {
-            ChargeFunction();
-        }
-        else if(gunActive == false && launchActive == true)
-        {
-            LaunchFunction();
-        }
-    }
-    #endregion
-    private void ChargeFunction()
-    {
-        if (timer2 <= 0)
-        {
-            timer2 -= Time.deltaTime;
-            if (chargeStrength <= 30)
-            {
-                chargeStrength = chargeStrength + 10 * (Time.deltaTime * 6);
-            }
-        }
-        else if (timer2 >= 0)
-        {
-            timer2 -= Time.deltaTime;
-            if (chargeStrength <= 30)
-            {
-                chargeStrength = chargeStrength + 10 * Time.deltaTime;
-            }
-        }
-       
+        // 1. GET REFERENCES
+        TankScript  = GetComponent<Tank>();
+        PlayerInput = GetComponent<PlayerInput>();
+        
+        FireAction = PlayerInput.actions.FindAction("Fire", true);
 
+        // 32. EVENT SUBSCRIPTION
+        FireAction.started  += ctx => Debug.Log("Charging...");
+        FireAction.canceled += Fire;
+
+        TankScript.OnTankFire += () => Cam.Shake(15f, 5f, 1f);
     }
-    private void LaunchFunction()
+
+
+    private void Fire(float charge)
     {
-        if (timer >= 0)
+        Debug.Log($"Firing! [CHARGE: {charge}]");
+
+        // 1. CREATE BULLET
+        var Shell = Instantiate
+        (
+            ShellPrefab, 
+            MuzzlePoint.position, 
+            MuzzlePoint.rotation
+        ).GetComponent<Shell>();
+
+        // 2. INIT BULLET
+        Shell.Init(bulletVelocity * charge, TankScript);
+        TankScript?.OnTankFire.Invoke();
+        FireDelay();
+    }
+
+
+
+    private void Fire(InputAction.CallbackContext ctx)
+    {
+        Fire
+        (
+            Mathf.Lerp
+            (
+                minCharge, 
+                maxCharge, 
+                Mathf.Min((float) ctx.duration/chargeTime, 1f)
+            )
+        );
+    }
+    private void FireDelay()
+    {
+        StartCoroutine(Logic());
+        IEnumerator Logic()
         {
-            timer -= Time.deltaTime;
-            for (int i = 0; i <= 2; i++)
-            {
-                tankAudioScript.CannonFire();
-                var projectile = Instantiate(bullet, bulletPoint.position, bulletPoint.rotation);
-                projectile.GetComponentInChildren<Shell>().Init(chargeStrength, tankScript);
-                chargeStrength = 0;
-                Tank.OnTankFire?.Invoke(tankScript); // Fires of OnTankFire event
-                //tankAnimationScript.ShootAnim();
-                launchActive = false;
-            }
-            
+            FireAction.canceled -= Fire;
+            yield return new WaitForSeconds(fireRate);
+            FireAction.canceled += Fire;
         }
-        else if (timer <= 0)
-        {
-            timer -= Time.deltaTime;
-            tankAudioScript.CannonFire();
-            var projectile = Instantiate(bullet, bulletPoint.position, bulletPoint.rotation);
-            projectile.GetComponentInChildren<Shell>().Init(chargeStrength, tankScript);
-            chargeStrength = 0;
-            Tank.OnTankFire?.Invoke(tankScript); // Fires of OnTankFire event
-            launchActive = false;
-        }
-       
     }
 }
