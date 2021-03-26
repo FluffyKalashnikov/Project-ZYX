@@ -6,7 +6,9 @@ using System;
 
 public class TankMovement : MonoBehaviour
 {
-    ActionAsset actionAsset;
+    //ActionAsset actionAsset;
+    InputAction moveAction;
+    PlayerInput playerInput;
     [SerializeField] private Tank tankScript;
     [SerializeField] private TankAudio tankAudioScript;
     [SerializeField] private TankAnimation tankAnimationScript;
@@ -41,20 +43,24 @@ public class TankMovement : MonoBehaviour
     #region Setup
     private void Awake()
     {
-        actionAsset = new ActionAsset();
+        //actionAsset = new ActionAsset();
+        moveAction = playerInput.actions.FindAction("Move");
         tankScript = GetComponent<Tank>();
     }
     void Start()
     {
         StartCoroutine(tankAudioScript.EngineStartUpSound());
-        actionAsset.Player.Enable();
+        //actionAsset.Player.Enable();
+        moveAction.Enable();
     }
     private void Update()
     {
         if (moveable)
         {
-            BaseMovement(actionAsset.Player.Move.ReadValue<Vector2>());
-            EngineRev(actionAsset.Player.Move.ReadValue<Vector2>());
+            //BaseMovement(actionAsset.Player.Move.ReadValue<Vector2>());
+            BaseMovement(moveAction.ReadValue<Vector2>());
+
+            //EngineRev(actionAsset.Player.Move.ReadValue<Vector2>());
             //MovementAnimations(actionAsset.Player.Move.ReadValue<Vector2>());
         }
         VolumeManager();
