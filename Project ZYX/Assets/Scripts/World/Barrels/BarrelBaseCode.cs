@@ -22,6 +22,7 @@ public class BarrelBaseCode : MonoBehaviour
     {
         barrelAmbienceSource.Stop();
         barrelCollisionSFX.Play(barrelCollisionSource);
+        Debug.Log("collision sound");
     }
 
     public void DeleteBarrelModel()
@@ -31,6 +32,6 @@ public class BarrelBaseCode : MonoBehaviour
 
     public void DeleteBarrelCompletly()
     {
-        Destroy(this.gameObject);
+        Destroy(gameObject);
     }
 }

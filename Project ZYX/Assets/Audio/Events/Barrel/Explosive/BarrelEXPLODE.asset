@@ -16,11 +16,11 @@ MonoBehaviour:
   - {fileID: 8300000, guid: ce6648afe884fe743b5de42d72cf9d8e, type: 3}
   - {fileID: 8300000, guid: 616d740ca649e964cbf647659ed5a1ab, type: 3}
   loop: 0
-  playOneShot: 1
+  playOneShot: 0
   volume:
     type: 0
     slider: 0
-    single: 1
+    single: 0.5
     min: 0
     max: 1
     minLimit: 1
@@ -48,7 +48,7 @@ MonoBehaviour:
   spatialBlend:
     type: 0
     slider: 0
-    single: 0
+    single: 0.75
     min: 0
     max: 1
     minLimit: 0

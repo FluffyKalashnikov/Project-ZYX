@@ -6,12 +6,16 @@ public class BarrelStandard : BarrelBaseCode
 {
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Bullet")
+
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.layer == 8 || other.gameObject.tag == "Bullet")
         {
             BarrelCollisionSound();
             DeleteBarrelModel();
             //Some kind of particle animation
-            if (barrelCollisionSource.isPlaying)
+            if (barrelCollisionSource.isPlaying == false)
             {
                 DeleteBarrelCompletly();
             }

@@ -11,7 +11,9 @@ GameObject:
   - component: {fileID: 2992788503705083006}
   - component: {fileID: 2172809648061141979}
   - component: {fileID: 4162356938290046737}
-  m_Layer: 0
+  - component: {fileID: 3468018070018953276}
+  - component: {fileID: 2407717656973907753}
+  m_Layer: 15
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2504940260749117124}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.74, y: 0.36, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.002, y: 0.003, z: 0.002}
   m_Children: []
   m_Father: {fileID: 3663561959194159015}
@@ -81,6 +83,36 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!54 &3468018070018953276
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2504940260749117124}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!64 &2407717656973907753
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2504940260749117124}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -5076798556035486163, guid: f1c90dc643d179a44bb49c6842cdded6, type: 3}
 --- !u!1 &3663561959194159014
 GameObject:
   m_ObjectHideFlags: 0
@@ -91,7 +123,9 @@ GameObject:
   m_Component:
   - component: {fileID: 3663561959194159015}
   - component: {fileID: 7631383162641410683}
-  m_Layer: 0
+  - component: {fileID: 8133110541014957729}
+  - component: {fileID: 1167650150588704676}
+  m_Layer: 14
   m_Name: BarrelStandard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -131,6 +165,35 @@ MonoBehaviour:
   barrelAmbienceSource: {fileID: 9168132043653397752}
   barrelCollisionSFX: {fileID: 11400000, guid: d6a773afba759b84faa4c92fced95df4, type: 2}
   barrelCollisionSource: {fileID: 1608498897250413172}
+--- !u!54 &8133110541014957729
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3663561959194159014}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 14
+  m_CollisionDetection: 0
+--- !u!65 &1167650150588704676
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3663561959194159014}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.65, y: 0.75, z: 0.65}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4936550345624136322
 GameObject:
   m_ObjectHideFlags: 0
@@ -332,7 +395,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0

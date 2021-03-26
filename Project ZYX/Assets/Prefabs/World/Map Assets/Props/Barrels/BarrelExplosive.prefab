@@ -42,7 +42,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -169,7 +169,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2753754402669527821}
   - component: {fileID: 5805612557171825661}
-  m_Layer: 0
+  - component: {fileID: 2607078472239598070}
+  - component: {fileID: 8599878664623039273}
+  m_Layer: 14
   m_Name: BarrelExplosive
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -209,6 +211,35 @@ MonoBehaviour:
   barrelAmbienceSource: {fileID: 1382562439761642860}
   barrelCollisionSFX: {fileID: 11400000, guid: 7afc107683514ef4ba848020767e9df9, type: 2}
   barrelCollisionSource: {fileID: 684838868514887474}
+--- !u!54 &2607078472239598070
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2753754402669527820}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 14
+  m_CollisionDetection: 0
+--- !u!65 &8599878664623039273
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2753754402669527820}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.65, y: 0.75, z: 0.65}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4226658418116162004
 GameObject:
   m_ObjectHideFlags: 0
@@ -220,7 +251,9 @@ GameObject:
   - component: {fileID: 3594940967629237102}
   - component: {fileID: 453755624581571787}
   - component: {fileID: 2425442523025887233}
-  m_Layer: 0
+  - component: {fileID: 3262269417734221355}
+  - component: {fileID: 7491923061557318891}
+  m_Layer: 15
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -235,7 +268,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4226658418116162004}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.592, y: 0.36, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.002, y: 0.003, z: 0.002}
   m_Children: []
   m_Father: {fileID: 2753754402669527821}
@@ -290,6 +323,36 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!54 &3262269417734221355
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4226658418116162004}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!64 &7491923061557318891
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4226658418116162004}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -5076798556035486163, guid: db7b4916b0772d44494dc8505b594476, type: 3}
 --- !u!1 &5617588493598614922
 GameObject:
   m_ObjectHideFlags: 0

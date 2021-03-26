@@ -15,11 +15,11 @@ MonoBehaviour:
   clips:
   - {fileID: 8300000, guid: dc89a62c383932c40b4f273d124fbe7d, type: 3}
   loop: 0
-  playOneShot: 1
+  playOneShot: 0
   volume:
     type: 0
     slider: 0
-    single: 1
+    single: 0.1
     min: 0
     max: 1
     minLimit: 1
@@ -47,7 +47,7 @@ MonoBehaviour:
   spatialBlend:
     type: 0
     slider: 0
-    single: 0
+    single: 0.75
     min: 0
     max: 1
     minLimit: 0
