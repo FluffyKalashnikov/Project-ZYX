@@ -4,14 +4,16 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
 
+[RequireComponent(typeof(PlayerInput))]
 public class TankMovement : MonoBehaviour
 {
-    //ActionAsset actionAsset;
-    InputAction moveAction;
-    [SerializeField] private PlayerInput playerInput;
     [SerializeField] private Tank tankScript;
     [SerializeField] private TankAudio tankAudioScript;
     [SerializeField] private TankAnimation tankAnimationScript;
+
+    // PRIVATE REFERENCES
+    InputAction moveAction;
+    PlayerInput playerInput;
 
     public bool moveable = false;
 
@@ -43,26 +45,27 @@ public class TankMovement : MonoBehaviour
     #region Setup
     private void Awake()
     {
-        //actionAsset = new ActionAsset();
-        moveAction = playerInput.actions.FindAction("Move");
-        tankScript = GetComponent<Tank>();
+        // 1. GET REFERENCES
+        tankScript  = GetComponent<Tank>();
+        playerInput = GetComponent<PlayerInput>();
+
+        moveAction  = playerInput.actions.FindAction("Move");
     }
     void Start()
     {
         StartCoroutine(tankAudioScript.EngineStartUpSound());
-        //actionAsset.Player.Enable();
-        moveAction.Enable();
     }
+
+
     private void Update()
     {
         if (moveable)
         {
-            //BaseMovement(actionAsset.Player.Move.ReadValue<Vector2>());
             BaseMovement(moveAction.ReadValue<Vector2>());
-            EngineRev(moveAction.ReadValue<Vector2>());
 
-            //EngineRev(actionAsset.Player.Move.ReadValue<Vector2>());
-            //MovementAnimations(actionAsset.Player.Move.ReadValue<Vector2>());
+
+            //EngineRev(moveAction.ReadValue<Vector2>());
+            //MovementAnimations(moveAction.ReadValue<Vector2>());
         }
         VolumeManager();
         PropellerSpin();
@@ -83,7 +86,7 @@ public class TankMovement : MonoBehaviour
     private void BaseMovement(Vector2 input)
     {
         #region Actual Movement
-        driveForce = new Vector3(0, 0, input.y * motorForce);
+        driveForce = new Vector3(0, 0, input.y * motorForce) * Time.deltaTime;
         #region Accel/Decel-Physics
         if (input.y != 0)
         {
@@ -91,12 +94,12 @@ public class TankMovement : MonoBehaviour
         }
         else if (input.y == 0 && currentVel.z != 0)
         {
-            currentVel = Vector3.Lerp(currentVel, Vector3.zero, decelerationForce);
+            currentVel = Vector3.Lerp(currentVel, Vector3.zero, decelerationForce * Time.deltaTime);
         }
         #endregion
         tankScript.Controller.transform.Rotate(0, input.x * rotationForce * Time.deltaTime, 0);
         direction = tankScript.Controller.transform.TransformDirection(currentVel);
-        tankScript.Controller.Move(direction);
+        tankScript.Controller.Move(direction * Time.deltaTime);
         #endregion
     }
 

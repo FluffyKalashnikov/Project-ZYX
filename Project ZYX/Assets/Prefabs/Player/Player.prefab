@@ -915,6 +915,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18df1badbb943774f83c79e2f948e55a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bulletVelocity: 25
+  minCharge: 0.6
+  maxCharge: 1
+  chargeTime: 1
+  inputTolerance: 0.2
+  fireRate: 1
   MuzzlePoint: {fileID: 5565309698107008037}
   ShellPrefab: {fileID: 646759349837301862, guid: 4af3f896bf7abce4c9a4e4326f725b00, type: 3}
 --- !u!114 &838318969809300764

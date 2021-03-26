@@ -11,17 +11,21 @@ public class TankShoot : MonoBehaviour
     [SerializeField] private float minCharge      = 0.6f;
     [SerializeField] private float maxCharge      = 1f;
     [SerializeField] private float chargeTime     = 1f;
+    [SerializeField] private float inputTolerance = 0.5f;
     [SerializeField] private float fireRate       = 1f;
 
     [Header("References")]
     [SerializeField] private Transform  MuzzlePoint;
     [SerializeField] private GameObject ShellPrefab;
 
+    // PRIVATE VARIABLES
+    private float       FireTimestamp = 0;
+
     // PRIVATE REFERENCES
-    private Tank        TankScript  = null;
-    private PlayerInput PlayerInput = null;
-    private InputAction FireAction  = null;
-  
+    private Tank        TankScript    = null;
+    private PlayerInput PlayerInput   = null;
+    private InputAction FireAction    = null;
+    private IEnumerator IE_Fire       = null;
 
 
     private void Awake()
@@ -32,18 +36,21 @@ public class TankShoot : MonoBehaviour
         
         FireAction = PlayerInput.actions.FindAction("Fire", true);
 
-        // 32. EVENT SUBSCRIPTION
+        // 2. EVENT SUBSCRIPTION
         FireAction.started  += ctx => Debug.Log("Charging...");
         FireAction.canceled += Fire;
 
         TankScript.OnTankFire += () => Cam.Shake(15f, 5f, 1f);
+        Game.OnPauseReset     += () => 
+        {
+            if (IE_Fire != null) 
+            StopCoroutine(IE_Fire);
+        };
     }
 
 
     private void Fire(float charge)
     {
-        Debug.Log($"Firing! [CHARGE: {charge}]");
-
         // 1. CREATE BULLET
         var Shell = Instantiate
         (
@@ -55,31 +62,36 @@ public class TankShoot : MonoBehaviour
         // 2. INIT BULLET
         Shell.Init(bulletVelocity * charge, TankScript);
         TankScript?.OnTankFire.Invoke();
-        FireDelay();
     }
-
-
 
     private void Fire(InputAction.CallbackContext ctx)
     {
-        Fire
-        (
-            Mathf.Lerp
-            (
-                minCharge, 
-                maxCharge, 
-                Mathf.Min((float) ctx.duration/chargeTime, 1f)
-            )
-        );
-    }
-    private void FireDelay()
-    {
-        StartCoroutine(Logic());
+        if (IE_Fire != null)
+        StopCoroutine (IE_Fire);
+        StartCoroutine(IE_Fire = Logic());
+
         IEnumerator Logic()
         {
-            FireAction.canceled -= Fire;
-            yield return new WaitForSeconds(fireRate);
-            FireAction.canceled += Fire;
+            // 1. WAIT WHILE CAN'T FIRE
+            float time = Time.time;
+            yield return new WaitUntil
+            (
+                () => { return FireTimestamp + fireRate <= Time.time;}
+            );
+            if (!FireAction.enabled) yield break;
+            if (time + inputTolerance < Time.time) yield break;
+
+            // 2. FIRE ACTION
+            FireTimestamp = Time.time;
+            Fire
+            (   
+                Mathf.Lerp
+                (
+                    minCharge, 
+                    maxCharge, 
+                    Mathf.Min((float) ctx.duration/chargeTime, 1f)
+                )
+            );
         }
     }
 }
