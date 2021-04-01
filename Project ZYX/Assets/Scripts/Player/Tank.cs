@@ -321,6 +321,7 @@ public class Tank : MonoBehaviour, IDamageable
     private void NameSelect(string text)
     {
         PreviewNameField.caretWidth = 1;
+        PreviewNameField.caretPosition = PreviewNameField.text.Length;
     }
 
     public void InitScore()
