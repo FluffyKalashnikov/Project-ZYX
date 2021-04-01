@@ -166,4 +166,9 @@ public class TankMovement : MonoBehaviour
     {
         moveable = true;
     }
+
+    public void OnLoadStats(TankRef i)
+    {
+        
+    }
 }

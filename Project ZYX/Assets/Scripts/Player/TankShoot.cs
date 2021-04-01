@@ -94,4 +94,11 @@ public class TankShoot : MonoBehaviour
             );
         }
     }
+
+
+
+    public void OnLoadStats(TankRef i)
+    {
+        MuzzlePoint = i.MuzzlePoint;
+    }
 }

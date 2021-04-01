@@ -127,4 +127,10 @@ public class TankTurret : MonoBehaviour
         #endregion
     }
     #endregion
+
+
+    public void OnLoadStats()
+    {
+        turret = tankScript.Model.GetComponent<TankRef>().TurretTransform.gameObject;
+    }
 }

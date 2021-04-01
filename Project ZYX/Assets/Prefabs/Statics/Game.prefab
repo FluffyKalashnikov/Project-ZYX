@@ -763,6 +763,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ScoreboardLayout: {fileID: 2469262212099232992}
   PreviewRootUI: {fileID: 6060729848166121459}
+  TankTypes:
+  - {fileID: 11400000, guid: a03df45a276250944ac4f3ab103814a5, type: 2}
+  - {fileID: 11400000, guid: e78c7c11df6421e40b34c4bfe9921680, type: 2}
   PlayerColors:
   - {r: 0.09620863, g: 0.32307184, b: 0.8867924, a: 1}
   - {r: 0.8962264, g: 0.14796188, b: 0.14796188, a: 1}
