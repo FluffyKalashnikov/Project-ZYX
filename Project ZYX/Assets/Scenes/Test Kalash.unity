@@ -10540,14 +10540,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Game
       objectReference: {fileID: 0}
-    - target: {fileID: 1722307499365908170, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1975567297675945847, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3740812115008938504, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -11083,7 +11075,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1355935357
 PrefabInstance:
