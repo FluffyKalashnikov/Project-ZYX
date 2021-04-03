@@ -43,7 +43,7 @@ public class Tank : MonoBehaviour, IDamageable
     {
         get 
         {
-            return m_TankRef ? m_TankRef : m_TankRef = Model.GetComponent<TankRef>();
+            return Model.GetComponent<TankRef>();
         }
     }
 
@@ -127,7 +127,6 @@ public class Tank : MonoBehaviour, IDamageable
 
     private GameObject m_Model     = null;
     private TankAsset  m_TankAsset = null;
-    private TankRef    m_TankRef   = null;
     private float      m_Health    = 0f;
     private float      m_Score     = 0f;
     private string     m_Name      = string.Empty;
@@ -143,8 +142,6 @@ public class Tank : MonoBehaviour, IDamageable
     public CharacterController    Controller         = null;
     public PlayerInput            PlayerInput        = null; 
     public MultiplayerEventSystem LocalEventSystem   = null;
-    [Space(10)]
-    public MeshRenderer[]         TankRenderers      = null;
     [Space(10)]
     public GameObject             PreviewPrefab      = null;
     public GameObject             PreviewInstance    = null;
@@ -211,11 +208,11 @@ public class Tank : MonoBehaviour, IDamageable
     }
     public void UpdateReferences()
     {
-        this.TankRenderers = GetComponentsInChildren<MeshRenderer>(true);
+        
     }
     public void UpdateColor()
     {
-        foreach (var rd in TankRenderers)
+        foreach (var rd in Model.GetComponentsInChildren<MeshRenderer>(true))
         {
             foreach(var i in rd.materials)
             i.color = Color;
@@ -280,12 +277,12 @@ public class Tank : MonoBehaviour, IDamageable
     }
     public void HideTank()
     {
-        foreach (var i in TankRenderers)
+        foreach (var i in Model.GetComponentsInChildren<MeshRenderer>(true))
         i.forceRenderingOff = true;
     }
     public void ShowTank()
     {
-        foreach (var i in TankRenderers)
+        foreach (var i in Model.GetComponentsInChildren<MeshRenderer>(true))
         i.forceRenderingOff = false;
     }
 
@@ -294,10 +291,12 @@ public class Tank : MonoBehaviour, IDamageable
     {
         Model = Asset.Model;
         UpdateTank();
-
-        TankMovement.OnLoadStats(TankRef);
-        TankShoot   .OnLoadStats(TankRef);
-        TankAudio   .OnLoadStats(TankRef);
+        BroadcastMessage
+        (
+            "OnLoadStats", 
+            TankRef, 
+            SendMessageOptions.RequireReceiver
+        );
 
         Debug.Log($"\"{Asset.Name}\" Tank has been loaded.");
     }

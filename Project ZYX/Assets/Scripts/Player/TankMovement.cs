@@ -38,6 +38,8 @@ public class TankMovement : MonoBehaviour
 
     public float Timer;
 
+    private Animator animator = null;
+
     #region Setup
     private void Awake()
     {
@@ -58,7 +60,6 @@ public class TankMovement : MonoBehaviour
             //MovementAnimations(actionAsset.Player.Move.ReadValue<Vector2>());
         }
         VolumeManager();
-        PropellerSpin();
 
         if (Timer < 0)
         {
@@ -77,7 +78,7 @@ public class TankMovement : MonoBehaviour
     {
         #region Actual Movement
         float multipliedMotorForce = input.y * motorForce;
-        driveForce = new Vector3(0, 0, multipliedMotorForce) * Time.deltaTime;
+        driveForce = new Vector3(0, 0, multipliedMotorForce);
         #region Accel/Decel-Physics
         if (input.y != 0)
         {
@@ -92,7 +93,10 @@ public class TankMovement : MonoBehaviour
 
         tankScript.Controller.transform.Rotate(0, multipliedRotationForce * Time.deltaTime, 0);
         direction = tankScript.Controller.transform.TransformDirection(currentVel);
-        tankScript.Controller.Move(direction);
+        tankScript.Controller.Move(direction * Time.deltaTime);
+        animator?.SetFloat("Speed", Mathf.Abs(currentVel.z));
+        animator?.SetFloat("Speed Non-abs", currentVel.z);
+
         #endregion
     }
 
@@ -154,14 +158,6 @@ public class TankMovement : MonoBehaviour
         tankAudioScript.EngineSounds(velocityScale);
     }
 
-    private void PropellerSpin()
-    {
-        Vector3 multipliedPropellerValue;
-        propellerVector = new Vector3(0, 0, propellerIdleSpeed) * Time.deltaTime;
-        multipliedPropellerValue = (currentVel * propellerForceMultiplier) + propellerVector;
-        propellerBlades.transform.Rotate(multipliedPropellerValue);
-    }
-
     public void EnableTankMovement()
     {
         moveable = true;
@@ -169,6 +165,6 @@ public class TankMovement : MonoBehaviour
 
     public void OnLoadStats(TankRef i)
     {
-        
+        animator = i.GetComponent<Animator>();
     }
 }
