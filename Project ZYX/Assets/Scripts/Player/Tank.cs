@@ -19,11 +19,11 @@ public class Tank : MonoBehaviour, IDamageable
         { 
             return m_TankAsset 
              ? m_TankAsset 
-             : m_TankAsset = Game.Instance.TankTypes[TankIndex]; 
+             : m_TankAsset = Game.TankTypes[TankIndex]; 
         }
         set 
         { 
-            if (m_TankAsset != value)
+            if (m_TankAsset == value) return;
             LoadStats(m_TankAsset = value); 
         }
     }
@@ -116,12 +116,12 @@ public class Tank : MonoBehaviour, IDamageable
     }
     public int    TankIndex
     {
-        get { return Mathf.Clamp(m_TankIndex, 0, Game.Instance.TankTypes.Count-1);  }
+        get { return Mathf.Clamp(m_TankIndex, 0, Game.TankTypes.Length-1);  }
         set 
         { 
             // SET INDEX/UPDATE TANK
-            m_TankIndex = Mathf.Clamp(value, 0, Game.Instance.TankTypes.Count-1); 
-            TankAsset = Game.Instance.TankTypes.Count != 0 ? Game.Instance.TankTypes[m_TankIndex] : null;
+            m_TankIndex = Mathf.Clamp(value, 0, Game.TankTypes.Length-1); 
+            TankAsset = Game.TankTypes.Length != 0 ? Game.TankTypes[m_TankIndex] : null;
         }
     }
 

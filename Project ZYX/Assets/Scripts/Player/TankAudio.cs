@@ -65,6 +65,8 @@ public class TankAudio : MonoBehaviour
         // 1. GET REFERENCES
         TankScript = GetComponent<Tank>();
 
+        Debug.Log("Bröd");
+
         // 2. EVENT SUBSCRIPTION
         TankScript.OnTankFire += CannonFire;
     }

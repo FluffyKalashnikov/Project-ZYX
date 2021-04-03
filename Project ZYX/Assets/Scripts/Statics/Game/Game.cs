@@ -17,10 +17,13 @@ public class Game : MonoBehaviour
     public static int ReadyCount = 0;
     private ActionAsset actionAsset = null;
 
-    public static List<Tank>      PlayerList   = new List<Tank>();
-    public static List<Tank>      AliveList    = new List<Tank>();
-    public        List<TankAsset> TankTypes    = new List<TankAsset>();
-    public        List<Color>     PlayerColors = new List<Color>(4);
+    public static List<Tank>  PlayerList   = new List<Tank>();
+    public static List<Tank>  AliveList    = new List<Tank>();
+    public static TankAsset[] TankTypes
+    {
+        get { return Resources.LoadAll<TankAsset>("Tank Assets"); }
+    }
+    public        List<Color> PlayerColors = new List<Color>(4);
     public static List<ScoreboardElement> ScoreElements = new List<ScoreboardElement>();
 
     public static EGameState  GameState = EGameState.Empty;
