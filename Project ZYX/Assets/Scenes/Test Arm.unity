@@ -6189,6 +6189,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60e7902ab13c2694b9bcbf95f1db8606, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeSetting: 0
+  triggerinoNEXT: 0
+  triggerinoBACK: 0
 --- !u!4 &646884071
 Transform:
   m_ObjectHideFlags: 0
@@ -10546,19 +10549,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 868862682, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.8635249
+      value: 0.863525
       objectReference: {fileID: 0}
     - target: {fileID: 868862682, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.13604765
+      value: 0.13604762
       objectReference: {fileID: 0}
     - target: {fileID: 1350783316, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.8635249
+      value: 0.863525
       objectReference: {fileID: 0}
     - target: {fileID: 1350783316, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.13604765
+      value: 0.13604762
       objectReference: {fileID: 0}
     - target: {fileID: 821787623625406256, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
       propertyPath: m_RootOrder
