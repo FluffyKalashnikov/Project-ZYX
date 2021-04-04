@@ -12,13 +12,19 @@ using UnityEngine.UI;
 public class Game : MonoBehaviour
 {
     // GAME PROPERTIES
+    public VerticalLayoutGroup ScoreboardLayout = null;
     public HorizontalLayoutGroup PreviewRootUI = null;
     public static int ReadyCount = 0;
     private ActionAsset actionAsset = null;
 
     public static List<Tank>  PlayerList   = new List<Tank>();
     public static List<Tank>  AliveList    = new List<Tank>();
+    public static TankAsset[] TankTypes
+    {
+        get { return Resources.LoadAll<TankAsset>("Tank Assets"); }
+    }
     public        List<Color> PlayerColors = new List<Color>(4);
+    public static List<ScoreboardElement> ScoreElements = new List<ScoreboardElement>();
 
     public static EGameState  GameState = EGameState.Empty;
     public static EInputMode  InputMode = EInputMode.Empty;
@@ -359,6 +365,7 @@ public class Game : MonoBehaviour
                     EGameFocus.Match, () => 
                     {
                         PauseReset(null);
+                        InitScoreboard();
                         Cam.SetActiveCamera(MatchCamera);
                         SpawnTanks();
 
@@ -408,6 +415,39 @@ public class Game : MonoBehaviour
             case EGameFocus.Menu:  SwitchInputMode(Tank.EInputMode.Menu,  OnComplete); break;
             case EGameFocus.Pause: SwitchInputMode(Tank.EInputMode.Menu,  OnComplete); break;
         }
+    }
+    public static void InitScoreboard()
+    {
+        // 1. CREATE SCOREBOARDS
+        foreach(var i in PlayerList)
+        {
+            // 1. IF EXIST
+            if (i.ScoreElement)
+            i.ScoreElement.UpdateElement();
+
+            // 2. ELSE CREATE
+            i.InitScore();
+        }
+        
+        // 2. DESTROY UNPARENTED SCOREBOARDS
+        foreach(var i in ScoreElements)
+        {
+            if (i.Owner && i.Owner.ScoreElement == i) 
+            continue;
+            Destroy(i.gameObject);
+        }
+
+        // 3. SORT
+        SortScoreboard();
+    }
+    public static void SortScoreboard()
+    {
+        ScoreboardElement.SortElements();
+    }
+    public static void RemoveScoreboard()
+    {
+        for (int i = ScoreElements.Count; i >= 0; i--)
+        Destroy(ScoreElements[i].gameObject);
     }
 
 //  APPLICATION LOGIC

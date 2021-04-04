@@ -7,40 +7,148 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
+using UnityEngine.Animations;
 using TMPro;
 
 [RequireComponent(typeof(MultiplayerEventSystem), typeof(InputSystemUIInputModule), typeof(PlayerInput))]
 public class Tank : MonoBehaviour, IDamageable
 {
-    [Header("Variables")]
-    public float      Health        = 0;
-    public float      MaxHealth     = 100f;
-    [Header("Player Stuff")]
-    public bool       Alive         = true;
-    public bool       Ready         = false;
+    public TankAsset  TankAsset
+    {
+        get 
+        { 
+            return m_TankAsset 
+             ? m_TankAsset 
+             : m_TankAsset = Game.TankTypes[TankIndex]; 
+        }
+        set 
+        { 
+            if (m_TankAsset == value) return;
+            LoadStats(m_TankAsset = value); 
+        }
+    }
+    public GameObject Model
+    {
+        get { return m_Model; }
+        set 
+        {
+            // REPLACE MODEL
+            if (m_Model) Destroy(m_Model);
+            m_Model = Instantiate(value, Controller ? Controller.transform : transform);
+            m_Model.transform.localPosition = TankRef.ModelOffset;
+            m_Model.name = "Tank Model";
+            UpdateTank();
+        }
+    }
+    public TankRef    TankRef
+    {
+        get 
+        {
+            return Model.GetComponent<TankRef>();
+        }
+    }
+
+    public float      MaxHealth
+    {
+        get { return TankAsset ? TankAsset.Health : 42069f; }
+    }
+    public float      Damage
+    {
+        get { return TankAsset ? TankAsset.Damage : 42069; }
+    }
+    public float      Speed
+    {
+        get { return TankAsset ? TankAsset.Speed : 42069; }
+    }
+
+    public AudioClip  AudioIdle
+    {
+        get { return TankAsset ? TankAsset.AudioIdle : null; }
+    }
+    public AudioClip  AudioStartup
+    {
+        get { return TankAsset ? TankAsset.AudioStartup : null; }
+    }
+    public AudioClip  AudioThrottle
+    {
+        get { return TankAsset ? TankAsset.AudioThrottle : null; }
+    }
+    
+    [Header("Player Bools")]
+    public bool       Alive = true;
+    public bool       Ready = false;
     public Color      Color 
     {
-        get {return Game.Instance.PlayerColors[PlayerInput.playerIndex];}
+        get {return Game.Instance.PlayerColors[PlayerIndex];}
     }
     [Header("Naming properties")]
-    public string     Name          = "Player 1";
     public int        MaxNameLength = 18;
     public List<char> SpecialChars  = new List<char>();
+
+
+    // PROPERTIES
+    public float  Health
+    {
+        get {return m_Health;}
+        set {m_Health = Mathf.Clamp(value, 0, MaxHealth); UpdateHealthbar(); }
+    }
+    public float  HealthFactor
+    {
+        get {return Health/MaxHealth;}
+    }
+    public string Name 
+    {
+        get 
+        {
+            if (m_Name == string.Empty)
+            Name = $"Player {PlayerIndex+1}";
+            return m_Name;
+        }
+        set {m_Name = value; ScoreElement?.UpdateElement();}
+    }
+    public float  Score
+    {
+        get { return m_Score; }
+        set { m_Score = value; Game.SortScoreboard(); }
+    }
+    public int    PlayerIndex 
+    {
+        get {return PlayerInput.playerIndex;}
+    }
+    public int    TankIndex
+    {
+        get { return Mathf.Clamp(m_TankIndex, 0, Game.TankTypes.Length-1);  }
+        set 
+        { 
+            // SET INDEX/UPDATE TANK
+            m_TankIndex = Mathf.Clamp(value, 0, Game.TankTypes.Length-1); 
+            TankAsset = Game.TankTypes.Length != 0 ? Game.TankTypes[m_TankIndex] : null;
+        }
+    }
+
+    private GameObject m_Model     = null;
+    private TankAsset  m_TankAsset = null;
+    private float      m_Health    = 0f;
+    private float      m_Score     = 0f;
+    private string     m_Name      = string.Empty;
+    private int        m_TankIndex = 0;
 
     [Header("REFERENCES")]
     #region references
     public TankMovement           TankMovement       = null;
     public TankShoot              TankShoot          = null;
     public TankTurret             TankTurret         = null;
+    public TankAudio              TankAudio          = null;
     [Space(10)]
+    public Animator               Animator           = null;
     public CharacterController    Controller         = null;
     public PlayerInput            PlayerInput        = null; 
     public MultiplayerEventSystem LocalEventSystem   = null;
     [Space(10)]
-    public MeshRenderer[]         TankRenderers      = null;
-    [Space(10)]
     public GameObject             PreviewPrefab      = null;
     public GameObject             PreviewInstance    = null;
+    public GameObject             ScorePrefab        = null;
+    public ScoreboardElement      ScoreElement       = null;
     [Space(5)]
     public Button                 PreviewButtonReady = null;
     public Button                 PreviewButtonRight = null;
@@ -50,14 +158,14 @@ public class Tank : MonoBehaviour, IDamageable
     public Image                  PreviewBackground  = null;
     #endregion
 
+    public ParentConstraint HudConstraint = null;
+    public GameObject       HudRoot       = null;
+    public Image            HealthBar     = null;
+
     IEnumerator IE_ResetSelect = null;
 
     public Action OnTankFire;
     public Action OnTankDeath;
-
-    [Header("Unity Events")]
-    public UnityEvent OnEnable;
-    public UnityEvent OnDisable;
 
 
     public int Power = 0;
@@ -78,19 +186,22 @@ public class Tank : MonoBehaviour, IDamageable
         this.TankMovement     = GetComponent<TankMovement>();
         this.TankShoot        = GetComponent<TankShoot>();
         this.TankTurret       = GetComponent<TankTurret>();
+        this.TankAudio        = GetComponent<TankAudio>();
         this.LocalEventSystem = GetComponent<MultiplayerEventSystem>();
-        this.TankRenderers    = GetComponentsInChildren<MeshRenderer>(true);
 
         // 2. INIT LOGIC
         InitPlayer();
         DisableTank();
         UpdateTank();
         InitPreview();
+        InitHUD();
 
         // 3. EVENT SUBSCRIPTION
         Game.OnNewLobby += EnablePreview;
         Game.OnEndLobby += DisablePreview;
         Game.OnNewMatch += () => Ready = false;
+
+        OnTankFire += () => Animator?.Play("Shoot", 1);
     }
 
 //  TANK SETUP
@@ -99,22 +210,23 @@ public class Tank : MonoBehaviour, IDamageable
         UpdateReferences();
         UpdateColor();
     }
+    public void UpdateReferences()
+    {
+        Animator = Model.GetComponent<Animator>();
+    }
     public void UpdateColor()
     {
-        foreach (var rd in TankRenderers)
+        foreach (var rd in Model.GetComponentsInChildren<MeshRenderer>(true))
         {
             foreach(var i in rd.materials)
             i.color = Color;
         }
     }
-    public void UpdateReferences()
-    {
-
-    }
     
 //  TANK HEALTH
     public float TakeDamage(float damage, DamageInfo info, MonoBehaviour dealer)
     {
+        /*
         PowerUpTimer -= Time.deltaTime;
         if (PowerUpTimer < 0)
         {
@@ -124,6 +236,7 @@ public class Tank : MonoBehaviour, IDamageable
         {
             damage = 0;
         }
+        */
         if ((Health -= damage) <= 0f)
         {
             Die();
@@ -143,7 +256,7 @@ public class Tank : MonoBehaviour, IDamageable
         }
     }
 
-//  TANK STATE
+//  TANK ENABLING
     public void EnableTank()
     {
         if (Alive) return;
@@ -151,8 +264,8 @@ public class Tank : MonoBehaviour, IDamageable
         Game.AliveListAddPlayer(this);
         Game.CameraTargets.AddMember(Controller.transform, 1f, 0f);
         ShowTank();
+        EnableHUD();
 
-        OnEnable.Invoke();
         Alive = true;
     }
     public void DisableTank()
@@ -162,19 +275,32 @@ public class Tank : MonoBehaviour, IDamageable
         Game.AliveListRemovePlayer(this);
         Game.CameraTargets.RemoveMember(Controller.transform);
         HideTank();
+        DisableHUD();
 
-        OnDisable.Invoke();
         Alive = false;
     }
     public void HideTank()
     {
-        foreach (var i in TankRenderers)
+        foreach (var i in Model.GetComponentsInChildren<MeshRenderer>(true))
         i.forceRenderingOff = true;
     }
     public void ShowTank()
     {
-        foreach (var i in TankRenderers)
+        foreach (var i in Model.GetComponentsInChildren<MeshRenderer>(true))
         i.forceRenderingOff = false;
+    }
+
+//  TANK STATS
+    public void LoadStats(TankAsset Asset)
+    {
+        Model = Asset.Model;
+        UpdateTank();
+        BroadcastMessage
+        (
+            "OnLoadStats", 
+            TankRef, 
+            SendMessageOptions.RequireReceiver
+        );
     }
 
 //  USER INTERFACE
@@ -211,6 +337,8 @@ public class Tank : MonoBehaviour, IDamageable
         PreviewNameField.onSelect.AddListener(NameSelect);
 
         PreviewButtonReady.onClick.AddListener(() => Game.UpdateReady(this));
+        PreviewButtonRight.onClick.AddListener(() => TankIndex++);
+        PreviewButtonLeft .onClick.AddListener(() => TankIndex--);
         
         // 5. FINAL SETUP
         DisablePreview();
@@ -276,14 +404,30 @@ public class Tank : MonoBehaviour, IDamageable
     private void NameSelect(string text)
     {
         PreviewNameField.caretWidth = 1;
+        PreviewNameField.caretPosition = PreviewNameField.text.Length;
+    }
+
+    public void InitScore()
+    {
+        // 1. CREATE SCOREBOARD
+        ScoreboardElement i = Instantiate
+        (
+            ScorePrefab, 
+            Game.Instance.ScoreboardLayout.transform
+        ).GetComponent<ScoreboardElement>();
+
+        // 2. INIT AND GET REF
+        ScoreElement = i;
+        i.Init(this);
     }
 
 //  PLAYER STATE
     public void InitPlayer()
     {
-        gameObject.name = name = $"Player {PlayerInput.playerIndex+1}";
+        gameObject.name = $"Player {PlayerInput.playerIndex+1}";
         Health = MaxHealth;
         Game.PlayerList.Add(this);
+        LoadStats(TankAsset);
     }
     public void SwitchLocalInputMode(EInputMode InputMode)
     {
@@ -340,5 +484,41 @@ public class Tank : MonoBehaviour, IDamageable
             break;
         }
         OnComplete?.Invoke();
+    }
+
+//  PLAYER HUD
+    public void InitHUD()
+    {
+        var i = new ConstraintSource();
+        i.sourceTransform = Game.Camera.transform;
+        i.weight = 1f;
+
+        HudConstraint.AddSource(i);
+        HudConstraint.constraintActive = true;
+        DisableHUD();
+    }
+    public void EnableHUD()
+    {
+        HudRoot.SetActive(true);
+    }
+    public void DisableHUD()
+    {
+        HudRoot.SetActive(false);
+    }
+    public void UpdateHealthbar()
+    {
+        HealthBar.fillAmount = HealthFactor;
+    }
+
+//  COLLISION LOGIC
+    public static void IgnoreCollision(Collider collider)
+    {
+        foreach(Tank tank in Game.PlayerList)
+        {
+            foreach(var i in tank.GetComponentsInChildren<Collider>(true))
+            {
+                Physics.IgnoreCollision(collider, i);
+            }
+        }
     }
 }

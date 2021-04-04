@@ -90,6 +90,7 @@ public class TankTurret : MonoBehaviour
     }
     private void BarrelMovement(Vector2 input)
     {
+        /*
         gunElevation += input.y * spinForce * Time.deltaTime;
         gunElevation = Mathf.Clamp(gunElevation, gunClampMin, gunClampMax);
 
@@ -125,6 +126,13 @@ public class TankTurret : MonoBehaviour
             }
         }
         #endregion
+        */
     }
     #endregion
+
+
+    public void OnLoadStats(TankRef i)
+    {
+        turret = tankScript.TankRef.TurretTransform.gameObject;
+    }
 }

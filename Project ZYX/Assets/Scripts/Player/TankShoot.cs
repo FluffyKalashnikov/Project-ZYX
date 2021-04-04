@@ -37,7 +37,6 @@ public class TankShoot : MonoBehaviour
         FireAction = PlayerInput.actions.FindAction("Fire", true);
 
         // 2. EVENT SUBSCRIPTION
-        FireAction.started  += ctx => Debug.Log("Charging...");
         FireAction.canceled += Fire;
 
         TankScript.OnTankFire += () => Cam.Shake(15f, 5f, 1f);
@@ -93,5 +92,12 @@ public class TankShoot : MonoBehaviour
                 )
             );
         }
+    }
+
+
+
+    public void OnLoadStats(TankRef i)
+    {
+        MuzzlePoint = i.MuzzlePoint;
     }
 }
