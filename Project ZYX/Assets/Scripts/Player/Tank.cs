@@ -35,7 +35,7 @@ public class Tank : MonoBehaviour, IDamageable
             // REPLACE MODEL
             if (m_Model) Destroy(m_Model);
             m_Model = Instantiate(value, Controller ? Controller.transform : transform);
-            m_Model.transform.localPosition = Vector3.zero;
+            m_Model.transform.localPosition = TankRef.ModelOffset;
             UpdateTank();
         }
     }

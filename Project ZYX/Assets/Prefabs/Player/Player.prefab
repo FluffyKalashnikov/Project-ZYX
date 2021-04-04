@@ -272,7 +272,6 @@ MonoBehaviour:
   Controller: {fileID: 838318968599533941}
   PlayerInput: {fileID: 838318969809300763}
   LocalEventSystem: {fileID: 0}
-  TankRenderers: []
   PreviewPrefab: {fileID: 2305085263532993303, guid: 28875ad44daa16244ab54e18e0aa9b4c, type: 3}
   PreviewInstance: {fileID: 0}
   ScorePrefab: {fileID: 152477876357035898, guid: b5f403f8294a9484eb29ab68f96cb433, type: 3}
