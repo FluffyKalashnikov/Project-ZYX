@@ -23,6 +23,11 @@ public class Game : MonoBehaviour
     {
         get { return Resources.LoadAll<TankAsset>("Tank Assets"); }
     }
+    public static Gamemode[]  ModeList
+    {
+        get { return Resources.LoadAll<Gamemode>("Mode Assets"); }
+    }
+    public        Gamemode    Gamemode;
     public        List<Color> PlayerColors = new List<Color>(4);
     public static List<ScoreboardElement> ScoreElements = new List<ScoreboardElement>();
 
@@ -40,6 +45,8 @@ public class Game : MonoBehaviour
     public static event Action OnPause;
     public static event Action OnPauseReset;
     public static event Action OnResume;
+
+    public static event Action TickMatch;
 
     // GAME WIDGETS
     private static Widget MainMenuWidget = null;
@@ -128,11 +135,13 @@ public class Game : MonoBehaviour
         };
 
         // 4. EVENT SUBSCRIPTION
-        OnEndMatch += MatchCleanup;
+        OnNewMatch += () => TickMatch += Gamemode.Tick;
+        OnEndMatch += () => TickMatch -= Gamemode.Tick;
+        OnNewMatch += Gamemode.BeginPlay;
+        OnEndMatch += Gamemode.StopPlay;
+
         OnNewLobby += InputManager.EnableJoining;
         OnEndLobby += InputManager.DisableJoining;
-
-        Tank.OnTankFire += Game.OnTankFire;
 
         buttonMainMenuStart    .onClick.AddListener(() => SwitchGameState(EGameState.Lobby));
         buttonPauseMenuContinue.onClick.AddListener(() => ResumeGame());
@@ -148,7 +157,10 @@ public class Game : MonoBehaviour
             }
         );
     }
-    
+    private void Update()
+    {
+        TickMatch?.Invoke();
+    }
 
 //  PLAYER LOGIC
     public static void UpdateReady(Tank tank)
@@ -177,14 +189,13 @@ public class Game : MonoBehaviour
         if (AliveList.Contains(tank))
         AliveList.Remove(tank);
     }
-    public static void OnTankDead(Tank tank, DamageInfo damageInfo)
+    public static void OnTankKill(Tank Tank, DamageInfo DamageInfo)
     {
-        Debug.Log($"[GAME]: \"{tank.Name}\" has been killed.");
-        tank.Spawn(3f);
+        Instance.Gamemode?.OnTankKill(Tank, DamageInfo);
     }
-    public static void OnTankFire(Tank tank)
+    public static void OnTankSpawn(Tank Tank)
     {
-        
+        Instance.Gamemode?.OnTankSpawn(Tank);
     }
 
 //  GAMEMODE LOGIC
@@ -196,7 +207,7 @@ public class Game : MonoBehaviour
             tank.DisableTank();
             yield return new WaitForSeconds(delay);
             tank.Controller.transform.position = RespawnPosition();
-            tank.OnSpawn();
+            tank.OnSpawned();
 
             Vector3 RespawnPosition()
             {
@@ -235,7 +246,7 @@ public class Game : MonoBehaviour
                     {
                         float closest = Mathf.Infinity;
 
-                        // STORE OPPONENT DISTANCE
+                        // STORE CLOSEST DISTANCE
                         foreach (var opponent in opponents)
                         {
                             float current = Vector3.Distance
@@ -375,7 +386,6 @@ public class Game : MonoBehaviour
                         PauseReset(null);
                         InitScoreboard();
                         Cam.SetActiveCamera(MatchCamera);
-                        SpawnTanks();
 
                         SwitchGameState(EGameState.Match);
                         OnNewMatch?.Invoke();
@@ -383,7 +393,6 @@ public class Game : MonoBehaviour
                 );
             }
         );
-        Debug.Log("[GAME]: Match Started!");
     }
     public static void StartLobby()
     {
@@ -405,7 +414,6 @@ public class Game : MonoBehaviour
                 );
             }
         );
-        Debug.Log("[GAME]: Lobby Started!");
     }
     public static void MatchCleanup()
     {

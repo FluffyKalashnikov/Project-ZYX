@@ -203,7 +203,7 @@ public class Tank : MonoBehaviour, IDamageable
             if (tank != this) return;
             Animator?.Play("Shoot", 1); 
         };
-        OnTankDead += DamageInfo => Game.OnTankDead((Tank) DamageInfo.Reciever, DamageInfo);
+        OnTankDead += DamageInfo => Game.OnTankKill((Tank) DamageInfo.Reciever, DamageInfo);
     }
 
 //  TANK SETUP
@@ -235,14 +235,14 @@ public class Tank : MonoBehaviour, IDamageable
     }
     public void Die(DamageInfo damageInfo)
     {
-        Game.OnTankDead((Tank) damageInfo.Reciever, damageInfo);
+        Game.OnTankKill((Tank) damageInfo.Reciever, damageInfo);
         DisableTank();
     }
     public void Spawn(float delay = 0f)
     {
         Game.SpawnTank(this, delay);
     }
-    public void OnSpawn()
+    public void OnSpawned()
     {
         Health = MaxHealth;
         EnableTank();
