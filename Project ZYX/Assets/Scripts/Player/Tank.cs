@@ -89,8 +89,8 @@ public class Tank : MonoBehaviour, IDamageable
     // PROPERTIES
     public float  Health
     {
-        get {return m_Health;}
-        set {m_Health = Mathf.Clamp(value, 0, MaxHealth); UpdateHealthbar(); }
+        get { return m_Health; }
+        set { m_Health = Mathf.Clamp(value, 0, MaxHealth); UpdateHealthbar(); }
     }
     public float  HealthFactor
     {
@@ -109,7 +109,7 @@ public class Tank : MonoBehaviour, IDamageable
     public float  Score
     {
         get { return m_Score; }
-        set { m_Score = value; Game.SortScoreboard(); }
+        set { m_Score = value; Game.UpdateScoreboard(); }
     }
     public int    PlayerIndex 
     {

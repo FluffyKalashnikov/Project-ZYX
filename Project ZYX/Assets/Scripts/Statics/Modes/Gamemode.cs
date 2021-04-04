@@ -4,34 +4,82 @@ using UnityEngine;
 
 public abstract class Gamemode : ScriptableObject
 {
-    public string DisplayName  =  "GAMEMODE";
-    public string Name         =  "GMODE";
-    public float  Time         =  320f;
-    public float  Score        =  10f;
-    [Space(10)]
-    public GameObject[] Prefabs;
+    [Header("Gamemode")]
+    [SerializeField] protected string DisplayName  =  "GAMEMODE";
+    [SerializeField] protected string Name         =  "GMODE";
+    [SerializeField] protected float  MatchLength  =  320f;
+    [SerializeField] protected float  Score        =  10f;
+    [SerializeField] protected GameObject[] Prefabs;
+    
+    private IEnumerator IE_Exec = null;
+    private IEnumerator IE_Main = null;
+    private bool initialized = false;
 
 //  TANK LOGIC
-    public virtual void OnTankKill (Tank Tank, DamageInfo DamageInfo)
+    protected virtual void OnTankKill (Tank Tank, DamageInfo DamageInfo)
     {
         Debug.Log($"[{Name}]: Tank Died!");
     }
-    public virtual void OnTankSpawn(Tank Tank)
+    protected virtual void OnTankSpawn(Tank Tank)
     {
         Debug.Log($"[{Name}]: Tank Spawned!");
     }
 
-//  MATCH LOGIC
-    public virtual void BeginPlay()
+//  EVENTS
+    protected virtual void BeginPlay()
     {
         Debug.Log($"[{Name}]: Begun playing!");
     }
-    public virtual void Tick()
+    protected virtual void Tick()
     {
 
     }
-    public virtual void StopPlay()
+    protected virtual void StopPlay()
     {
         Debug.Log($"[{Name}]: Stopped playing!");
+    }
+    
+//  LIFE CYCLE
+    public void Init()
+    {
+        if (!initialized) return;
+        initialized = true;
+
+        Game.OnTankKill  += OnTankKill;
+        Game.OnTankSpawn += OnTankSpawn;
+
+        Game.Instance.StartCoroutine(IE_Exec = Exec());
+        Debug.Log("[FFA]: Initialized.");
+    }
+    public void Destruct()
+    {
+        if (initialized) return;
+        initialized = false;
+
+        Game.OnTankKill  -= OnTankKill;
+        Game.OnTankSpawn -= OnTankSpawn;
+
+        if (IE_Exec != null) Game.Instance.StopCoroutine(IE_Exec);
+        if (IE_Main != null) Game.Instance.StopCoroutine(IE_Main);
+    }
+    protected virtual IEnumerator Main()
+    {
+        yield return null;
+    }
+    private IEnumerator Exec()
+    {
+        float time = Time.time;
+
+        BeginPlay();
+        Game.Instance.StartCoroutine(IE_Main = Main());
+        yield return new WaitWhile
+        (
+            () => 
+            { 
+                Tick(); 
+                return Time.time < time + MatchLength; 
+            }
+        );
+        StopPlay();
     }
 }

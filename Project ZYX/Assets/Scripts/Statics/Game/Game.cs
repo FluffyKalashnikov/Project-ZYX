@@ -27,7 +27,7 @@ public class Game : MonoBehaviour
     {
         get { return Resources.LoadAll<Gamemode>("Mode Assets"); }
     }
-    public        Gamemode    Gamemode;
+    public static Gamemode    Gamemode;
     public        List<Color> PlayerColors = new List<Color>(4);
     public static List<ScoreboardElement> ScoreElements = new List<ScoreboardElement>();
 
@@ -46,7 +46,9 @@ public class Game : MonoBehaviour
     public static event Action OnPauseReset;
     public static event Action OnResume;
 
-    public static event Action TickMatch;
+    public static Action<Tank, DamageInfo> OnTankKill; 
+    public static Action<Tank>             OnTankSpawn;
+
 
     // GAME WIDGETS
     private static Widget MainMenuWidget = null;
@@ -135,17 +137,15 @@ public class Game : MonoBehaviour
         };
 
         // 4. EVENT SUBSCRIPTION
-        OnNewMatch += () => TickMatch += Gamemode.Tick;
-        OnEndMatch += () => TickMatch -= Gamemode.Tick;
-        OnNewMatch += Gamemode.BeginPlay;
-        OnEndMatch += Gamemode.StopPlay;
-
         OnNewLobby += InputManager.EnableJoining;
         OnEndLobby += InputManager.DisableJoining;
 
         buttonMainMenuStart    .onClick.AddListener(() => SwitchGameState(EGameState.Lobby));
         buttonPauseMenuContinue.onClick.AddListener(() => ResumeGame());
         buttonPauseMenuLobby   .onClick.AddListener(() => SwitchGameState(EGameState.Lobby));
+
+        // 5. MISC
+        Gamemode = ModeList[1];
     }
     private void Start()
     {   
@@ -157,11 +157,7 @@ public class Game : MonoBehaviour
             }
         );
     }
-    private void Update()
-    {
-        TickMatch?.Invoke();
-    }
-
+    
 //  PLAYER LOGIC
     public static void UpdateReady(Tank tank)
     {
@@ -189,13 +185,11 @@ public class Game : MonoBehaviour
         if (AliveList.Contains(tank))
         AliveList.Remove(tank);
     }
-    public static void OnTankKill(Tank Tank, DamageInfo DamageInfo)
+    public static void ResetScore()
     {
-        Instance.Gamemode?.OnTankKill(Tank, DamageInfo);
-    }
-    public static void OnTankSpawn(Tank Tank)
-    {
-        Instance.Gamemode?.OnTankSpawn(Tank);
+        foreach (var i in PlayerList)
+        i.Score = 0;
+        UpdateScoreboard();
     }
 
 //  GAMEMODE LOGIC
@@ -384,8 +378,9 @@ public class Game : MonoBehaviour
                     EGameFocus.Match, () => 
                     {
                         PauseReset(null);
-                        InitScoreboard();
+                        UpdateScoreboard();
                         Cam.SetActiveCamera(MatchCamera);
+                        Gamemode.Init();
 
                         SwitchGameState(EGameState.Match);
                         OnNewMatch?.Invoke();
@@ -432,7 +427,7 @@ public class Game : MonoBehaviour
             case EGameFocus.Pause: SwitchInputMode(Tank.EInputMode.Menu,  OnComplete); break;
         }
     }
-    public static void InitScoreboard()
+    public static void UpdateScoreboard()
     {
         // 1. CREATE SCOREBOARDS
         foreach(var i in PlayerList)

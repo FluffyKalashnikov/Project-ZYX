@@ -5,34 +5,41 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Free For All", menuName = "ZYX Assets/Gamemodes/Free For All")]
 public class ModeFFA : Gamemode
 {
-    float PointsPerKill = 2f;
-
+    [Space(10, order = 0)]
+    [Header("Free For All", order = 1)]
+    [SerializeField] private float PointsPerKill = 2f;
+    
 //  LOGIC
-    public override void OnTankKill(Tank Tank, DamageInfo DamageInfo)
+    protected override void OnTankKill(Tank Tank, DamageInfo DamageInfo)
     {
         base.OnTankKill(Tank, DamageInfo);
         
+        // 1. GIVE SCORE TO KILLER
         Tank Dealer = (Tank) DamageInfo.Dealer;
-        Dealer.Score++;
-        Tank.Spawn(3f);
+        Dealer.Score += PointsPerKill;
+
+        // 2. IF ONLY ONE ALIVE, SPAWN ALL
+        if (Game.AliveList.Count == 1)
+        Game.SpawnTanks(4f);
+
         Debug.Log($"[{Name}]: \"{DamageInfo.Reciever}\" was killed by \"{DamageInfo.Dealer}\"");
     }
-    public override void OnTankSpawn(Tank Tank)
-    {
-        base.OnTankSpawn(Tank);
-    }
 
-//  EVENTS
-    public override void BeginPlay()
+//  LIFE CYCLE
+    protected override IEnumerator Main()
+    {
+        yield return new WaitForSeconds(10);
+        Debug.Log("Funkar :3");
+    }
+    protected override void BeginPlay()
     {
         base.BeginPlay();
-
+        Game.ResetScore();
         Game.SpawnTanks();
     }
-    public override void StopPlay()
+    protected override void StopPlay()
     {
         base.StopPlay();
-        
         Game.MatchCleanup();
     }
-}
+}   
