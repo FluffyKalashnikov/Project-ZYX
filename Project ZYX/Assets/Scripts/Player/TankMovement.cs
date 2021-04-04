@@ -94,10 +94,8 @@ public class TankMovement : MonoBehaviour
         tankScript.Controller.transform.Rotate(0, multipliedRotationForce * Time.deltaTime, 0);
         direction = tankScript.Controller.transform.TransformDirection(currentVel);
         tankScript.Controller.Move(direction * Time.deltaTime);
-        animator?.SetFloat("Speed", Mathf.Abs(currentVel.z));
-        animator?.SetFloat("Speed Non-abs", currentVel.z);
-
-        #endregion
+        animator?.SetFloat("Speed", currentVel.z);
+        #endregion  
     }
 
     private void EngineRev(Vector2 input)

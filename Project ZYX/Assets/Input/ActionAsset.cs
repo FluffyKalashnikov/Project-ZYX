@@ -55,7 +55,7 @@ public class @ActionAsset : IInputActionCollection, IDisposable
                 {
                     ""name"": ""WASD"",
                     ""id"": ""6917e884-7cf4-4abf-9240-2e05c7965bdf"",
-                    ""path"": ""2DVector"",
+                    ""path"": ""2DVector(mode=1)"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

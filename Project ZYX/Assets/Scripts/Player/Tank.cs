@@ -36,6 +36,7 @@ public class Tank : MonoBehaviour, IDamageable
             if (m_Model) Destroy(m_Model);
             m_Model = Instantiate(value, Controller ? Controller.transform : transform);
             m_Model.transform.localPosition = TankRef.ModelOffset;
+            m_Model.name = "Tank Model";
             UpdateTank();
         }
     }
@@ -139,6 +140,7 @@ public class Tank : MonoBehaviour, IDamageable
     public TankTurret             TankTurret         = null;
     public TankAudio              TankAudio          = null;
     [Space(10)]
+    public Animator               Animator           = null;
     public CharacterController    Controller         = null;
     public PlayerInput            PlayerInput        = null; 
     public MultiplayerEventSystem LocalEventSystem   = null;
@@ -198,6 +200,8 @@ public class Tank : MonoBehaviour, IDamageable
         Game.OnNewLobby += EnablePreview;
         Game.OnEndLobby += DisablePreview;
         Game.OnNewMatch += () => Ready = false;
+
+        OnTankFire += () => Animator?.Play("Shoot", 1);
     }
 
 //  TANK SETUP
@@ -208,7 +212,7 @@ public class Tank : MonoBehaviour, IDamageable
     }
     public void UpdateReferences()
     {
-        
+        Animator = Model.GetComponent<Animator>();
     }
     public void UpdateColor()
     {
@@ -297,8 +301,6 @@ public class Tank : MonoBehaviour, IDamageable
             TankRef, 
             SendMessageOptions.RequireReceiver
         );
-
-        Debug.Log($"\"{Asset.Name}\" Tank has been loaded.");
     }
 
 //  USER INTERFACE
