@@ -76,13 +76,6 @@ public class TankPowerups : MonoBehaviour
         Destroy(other.gameObject);
     }
     //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    private void SeamineOperator()
-    {
-        if (seamineList.Count >= 1 && seamineActive == true)
-        {
-            Instantiate(seamineObject, new Vector3(tankTransform.position.x, tankTransform.position.y, tankTransform.right.z + 1.7f), Quaternion.identity);
-        }
-    }
 
     #region Pickup Adder
     private void HPMethod()
@@ -118,4 +111,12 @@ public class TankPowerups : MonoBehaviour
         Debug.Log("invincible");
     }
     #endregion
+
+    private void SeamineOperator()
+    {
+        if (seamineList.Count >= 1 && seamineActive == true)
+        {
+            Instantiate(seamineObject, new Vector3(tankTransform.position.x, tankTransform.position.y, tankTransform.position.z + 1.7f), Quaternion.identity);
+        }
+    }
 }
