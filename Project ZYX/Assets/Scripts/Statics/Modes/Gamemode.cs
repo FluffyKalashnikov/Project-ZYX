@@ -13,7 +13,6 @@ public abstract class Gamemode : ScriptableObject
     
     private IEnumerator IE_Exec = null;
     private IEnumerator IE_Main = null;
-    private bool initialized = false;
 
 //  TANK LOGIC
     protected virtual void OnTankKill (Tank Tank, DamageInfo DamageInfo)
@@ -42,9 +41,6 @@ public abstract class Gamemode : ScriptableObject
 //  LIFE CYCLE
     public void Init()
     {
-        if (!initialized) return;
-        initialized = true;
-
         Game.OnTankKill  += OnTankKill;
         Game.OnTankSpawn += OnTankSpawn;
 
@@ -53,14 +49,12 @@ public abstract class Gamemode : ScriptableObject
     }
     public void Destruct()
     {
-        if (initialized) return;
-        initialized = false;
-
         Game.OnTankKill  -= OnTankKill;
         Game.OnTankSpawn -= OnTankSpawn;
 
         if (IE_Exec != null) Game.Instance.StopCoroutine(IE_Exec);
         if (IE_Main != null) Game.Instance.StopCoroutine(IE_Main);
+        Debug.Log("[FFA]: Destroyed.");
     }
     protected virtual IEnumerator Main()
     {
