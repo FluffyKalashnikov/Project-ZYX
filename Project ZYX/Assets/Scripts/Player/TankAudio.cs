@@ -78,7 +78,7 @@ public class TankAudio : MonoBehaviour
     {
         engineStartup.Play(engineStartupSource);
 
-        yield return new WaitForSeconds(engineStartUpTime);
+        yield return new WaitForSeconds(engineStartUpTime * Time.deltaTime);
 
         engineIdle.Play(engineIdleSource);
         engineThrottle.Play(engineThrottleSource);
@@ -118,18 +118,18 @@ public class TankAudio : MonoBehaviour
         spinStop.Play(spinStopSource);
     }
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    public void BarrelSoundPlay()
+    /*public void BarrelSoundPlay()
     {
         spinStart.Play(spinStartSource);
         barrelLoop.Play(barrelLoopSource);
-    }
+    }*/
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    public void BarrelStuckPlay()
+    /*public void BarrelStuckPlay()
     {
         barrelLoopSource.Stop();
         barrelStuckStart.Play(barrelStuckStartSource);
         barrelStuckLoop.Play(barrelStuckLoopSource);
-    }
+    }*/
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     public void BarrelSoundStop()
     {
