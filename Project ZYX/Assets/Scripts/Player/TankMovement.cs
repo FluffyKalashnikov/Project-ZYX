@@ -11,6 +11,10 @@ public class TankMovement : MonoBehaviour
     [SerializeField] private TankAudio tankAudioScript;
     [SerializeField] private TankAnimation tankAnimationScript;
 
+    // PRIVATE REFERENCES
+    InputAction moveAction;
+    PlayerInput playerInput;
+
     public bool moveable = false;
 
     #region Stats
@@ -43,20 +47,22 @@ public class TankMovement : MonoBehaviour
     #region Setup
     private void Awake()
     {
-        actionAsset = new ActionAsset();
+        // 1. GET REFERENCES
         tankScript = GetComponent<Tank>();
+        playerInput = GetComponent<PlayerInput>();
+
+        moveAction = playerInput.actions.FindAction("Move");
     }
     void Start()
     {
         StartCoroutine(tankAudioScript.EngineStartUpSound());
-        actionAsset.Player.Enable();
     }
     private void Update()
     {
         if (moveable)
         {
-            BaseMovement(actionAsset.Player.Move.ReadValue<Vector2>());
-            EngineRev(actionAsset.Player.Move.ReadValue<Vector2>());
+            BaseMovement(moveAction.ReadValue<Vector2>());
+            EngineRev(moveAction.ReadValue<Vector2>());
             //MovementAnimations(actionAsset.Player.Move.ReadValue<Vector2>());
         }
         VolumeManager();
