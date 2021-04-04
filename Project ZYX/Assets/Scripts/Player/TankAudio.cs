@@ -66,7 +66,11 @@ public class TankAudio : MonoBehaviour
         TankScript = GetComponent<Tank>();
 
         // 2. EVENT SUBSCRIPTION
-        TankScript.OnTankFire += CannonFire;
+        Tank.OnTankFire += tank => 
+        {
+            if (tank != TankScript) return;
+            CannonFire();
+        };
     }
 
 

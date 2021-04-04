@@ -39,8 +39,13 @@ public class TankShoot : MonoBehaviour
         // 2. EVENT SUBSCRIPTION
         FireAction.canceled += Fire;
 
-        TankScript.OnTankFire += () => Cam.Shake(15f, 5f, 1f);
-        Game.OnPauseReset     += () => 
+        Tank.OnTankFire += tank => 
+        {
+            if (tank != TankScript) return;
+
+            Cam.Shake(15f, 5f, 1f);
+        };
+        Game.OnPauseReset += () => 
         {
             if (IE_Fire != null) 
             StopCoroutine(IE_Fire);
@@ -60,7 +65,7 @@ public class TankShoot : MonoBehaviour
 
         // 2. INIT BULLET
         Shell.Init(bulletVelocity * charge, TankScript);
-        TankScript?.OnTankFire.Invoke();
+        Tank.OnTankFire.Invoke(TankScript);
     }
 
     private void Fire(InputAction.CallbackContext ctx)

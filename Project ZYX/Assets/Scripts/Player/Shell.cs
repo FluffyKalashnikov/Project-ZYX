@@ -43,9 +43,13 @@ public class Shell : MonoBehaviour
 
         hit?.TakeDamage
         (
-            damage, 
-            new DamageInfo(DamageType.ShellImpact), 
-            this
+            new DamageInfo
+            (
+                damage,
+                DamageType.ShellImpact,
+                owner,
+                hit
+            )
         );
 
         hasHit = true;

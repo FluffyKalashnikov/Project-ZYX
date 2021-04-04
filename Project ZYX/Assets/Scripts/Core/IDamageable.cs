@@ -4,23 +4,31 @@ using UnityEngine;
 
 public interface IDamageable
 {
-    float TakeDamage(float damage, DamageInfo info, MonoBehaviour dealer);
+    void TakeDamage(DamageInfo info);
 }
 
 public class DamageInfo
 {
-    public DamageType type;
+    // VARIABLES
+    public float         Damage;
+    public DamageType    DamageType;
+    public MonoBehaviour Dealer;
+    public IDamageable   Reciever;
 
-    public DamageInfo(DamageType type)
+    public DamageInfo(float Damage, DamageType DamageType, MonoBehaviour Dealer, IDamageable Reciever)
     {
-        this.type = type;
+        this.Damage     = Damage;
+        this.DamageType = DamageType;
+        this.Dealer     = Dealer;
+        this.Reciever   = Reciever;
     }
 }
 
 public enum DamageType
 {
     ShellImpact,
-    ShellExplosion
+    ShellExplosion,
+    OutOfBounds
 }
 
 

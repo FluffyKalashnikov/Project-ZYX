@@ -122,16 +122,17 @@ public class Game : MonoBehaviour
                 case EGameFocus.Match: PauseGame();  break;
                 case EGameFocus.Pause: ResumeGame(); break;
                 default: 
-                    Debug.LogError($"EGameFocus \"{GameFocus}\"not implemented."); 
+                    Debug.LogError($"[GAME]: EGameFocus \"{GameFocus}\"not implemented."); 
                 return;
             }
-            Debug.Log(GameFocus);
         };
 
         // 4. EVENT SUBSCRIPTION
         OnEndMatch += MatchCleanup;
         OnNewLobby += InputManager.EnableJoining;
         OnEndLobby += InputManager.DisableJoining;
+
+        Tank.OnTankFire += Game.OnTankFire;
 
         buttonMainMenuStart    .onClick.AddListener(() => SwitchGameState(EGameState.Lobby));
         buttonPauseMenuContinue.onClick.AddListener(() => ResumeGame());
@@ -176,6 +177,15 @@ public class Game : MonoBehaviour
         if (AliveList.Contains(tank))
         AliveList.Remove(tank);
     }
+    public static void OnTankDead(Tank tank, DamageInfo damageInfo)
+    {
+        Debug.Log($"[GAME]: \"{tank.Name}\" has been killed.");
+        tank.Spawn(3f);
+    }
+    public static void OnTankFire(Tank tank)
+    {
+        
+    }
 
 //  GAMEMODE LOGIC
     public static void SpawnTank(Tank tank, float delay = 0f)
@@ -186,48 +196,46 @@ public class Game : MonoBehaviour
             tank.DisableTank();
             yield return new WaitForSeconds(delay);
             tank.Controller.transform.position = RespawnPosition();
-            tank.EnableTank();
+            tank.OnSpawn();
 
             Vector3 RespawnPosition()
             {
                 GameObject[] points = GameObject.FindGameObjectsWithTag("Respawn Point");
                 switch (AliveList.Count)
                 {
-                    case 0: return points[UnityEngine.Random.Range(0, points.Length)].transform.position;
+                    case 0:  return RandomPoint  ().transform.position;
                     default: return FarthestPoint().transform.position;
                 }
 
-
                 GameObject FarthestPoint()
                 {
-                    // 1. Get list of players to compare
+                    // 1. GET OPPONENTS
                     List<Tank> opponents = AliveList;
                     opponents.Remove(tank);
 
-                    // VARIABLES
-                    float maxDist = 0f;
-                    int maxIndx = 0;
+                    // 2. SAVE FURTHEST INDEX
+                    float maxDistance = 0f;
+                    int   maxIndex    = 0;
 
-                    // 2. Save index for farthest point
-                    for (int indx = 0; indx < points.Length; indx++)
+                    for (int index = 0; index < points.Length; index++)
                     {
-                        float dist = Distance(points[indx]);
+                        float distance = GetDistance(points[index]);
 
-                        if (maxDist < dist)
+                        if (maxDistance < distance)
                         {
-                            maxDist = dist;
-                            maxIndx = indx;
+                            maxDistance = distance;
+                            maxIndex    = index;
                         }
                     }
 
-                    // 3. Return farthest point
-                    return points[maxIndx];
+                    // 3. RETURN FURTHEST POINT
+                    return points[maxIndex];
 
-                    float Distance(GameObject point)
+                    float GetDistance(GameObject point)
                     {
                         float closest = Mathf.Infinity;
 
-                        // Stores closest distance to a player
+                        // STORE OPPONENT DISTANCE
                         foreach (var opponent in opponents)
                         {
                             float current = Vector3.Distance
@@ -240,12 +248,12 @@ public class Game : MonoBehaviour
                         return closest;
                     }
                 }
+                GameObject RandomPoint()
+                {
+                    return points[UnityEngine.Random.Range(0, points.Length)];
+                }
             }
         }
-    }
-    public static void OnTankDie(Tank tank, MonoBehaviour dealer)
-    {
-
     }
     public static void SpawnTanks(float delay = 0f)
     {
@@ -375,7 +383,7 @@ public class Game : MonoBehaviour
                 );
             }
         );
-        Debug.Log("Match Started!");
+        Debug.Log("[GAME]: Match Started!");
     }
     public static void StartLobby()
     {
@@ -397,13 +405,13 @@ public class Game : MonoBehaviour
                 );
             }
         );
-        Debug.Log("Lobby Started!");
+        Debug.Log("[GAME]: Lobby Started!");
     }
     public static void MatchCleanup()
     {
         DisableTanks();
 
-        Debug.Log($"Cleanup Finished!");
+        Debug.Log($"[GAME]: Cleanup Finished!");
     }
     public static void SwitchGameFocus(EGameFocus GameFocus, Action OnComplete)
     {

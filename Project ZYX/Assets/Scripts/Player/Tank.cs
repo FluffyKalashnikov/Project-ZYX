@@ -156,16 +156,15 @@ public class Tank : MonoBehaviour, IDamageable
     public TMP_InputField         PreviewNameField   = null;
     public RawImage               PreviewTankImage   = null;
     public Image                  PreviewBackground  = null;
-    #endregion
-
     public ParentConstraint HudConstraint = null;
     public GameObject       HudRoot       = null;
     public Image            HealthBar     = null;
+    #endregion
 
     IEnumerator IE_ResetSelect = null;
 
-    public Action OnTankFire;
-    public Action OnTankDeath;
+    public static Action<Tank>       OnTankFire;
+    public static Action<DamageInfo> OnTankDead;
 
 
     public int Power = 0;
@@ -177,8 +176,6 @@ public class Tank : MonoBehaviour, IDamageable
         Lobby,
         Menu
     }
-
-
 
     public void Awake()
     {
@@ -201,7 +198,12 @@ public class Tank : MonoBehaviour, IDamageable
         Game.OnEndLobby += DisablePreview;
         Game.OnNewMatch += () => Ready = false;
 
-        OnTankFire += () => Animator?.Play("Shoot", 1);
+        OnTankFire += tank => 
+        { 
+            if (tank != this) return;
+            Animator?.Play("Shoot", 1); 
+        };
+        OnTankDead += DamageInfo => Game.OnTankDead((Tank) DamageInfo.Reciever, DamageInfo);
     }
 
 //  TANK SETUP
@@ -224,36 +226,26 @@ public class Tank : MonoBehaviour, IDamageable
     }
     
 //  TANK HEALTH
-    public float TakeDamage(float damage, DamageInfo info, MonoBehaviour dealer)
+    public void TakeDamage(DamageInfo damageInfo)
     {
-        /*
-        PowerUpTimer -= Time.deltaTime;
-        if (PowerUpTimer < 0)
+        if ((Health -= damageInfo.Damage) <= 0f)
         {
-            Power = 0;
+            Die(damageInfo);
         }
-        if (Power <= 0)
-        {
-            damage = 0;
-        }
-        */
-        if ((Health -= damage) <= 0f)
-        {
-            Die();
-            Game.OnTankDie(this, dealer);
-        }
-
-        return damage;
     }
-    public void Die()
+    public void Die(DamageInfo damageInfo)
     {
-        StartCoroutine(DeathEffect());
-        IEnumerator DeathEffect()
-        {
-            yield return new WaitForSeconds(3f);
-            Debug.Log($"{this.name} has died!");
-            DisableTank();
-        }
+        Game.OnTankDead((Tank) damageInfo.Reciever, damageInfo);
+        DisableTank();
+    }
+    public void Spawn(float delay = 0f)
+    {
+        Game.SpawnTank(this, delay);
+    }
+    public void OnSpawn()
+    {
+        Health = MaxHealth;
+        EnableTank();
     }
 
 //  TANK ENABLING
@@ -283,11 +275,15 @@ public class Tank : MonoBehaviour, IDamageable
     {
         foreach (var i in Model.GetComponentsInChildren<MeshRenderer>(true))
         i.forceRenderingOff = true;
+        foreach (var i in Model.GetComponentsInChildren<Light>(true))
+        i.enabled = false;
     }
     public void ShowTank()
     {
         foreach (var i in Model.GetComponentsInChildren<MeshRenderer>(true))
         i.forceRenderingOff = false;
+        foreach (var i in Model.GetComponentsInChildren<Light>(true))
+        i.enabled = true;
     }
 
 //  TANK STATS
