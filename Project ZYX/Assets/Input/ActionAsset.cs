@@ -49,6 +49,14 @@ public class @ActionAsset : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Seamine"",
+                    ""type"": ""Button"",
+                    ""id"": ""5c3c35bf-99d2-4e77-9074-34ada2573de4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -326,6 +334,28 @@ public class @ActionAsset : IInputActionCollection, IDisposable
                     ""action"": ""Turret"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3035e5bb-8627-4ef8-aa0a-a6d2faf1db4c"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Seamine"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""056ba2e8-f950-4298-afb1-ae06398a7169"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Seamine"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -784,6 +814,7 @@ public class @ActionAsset : IInputActionCollection, IDisposable
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
         m_Player_Turret = m_Player.FindAction("Turret", throwIfNotFound: true);
+        m_Player_Seamine = m_Player.FindAction("Seamine", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -850,6 +881,7 @@ public class @ActionAsset : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_Fire;
     private readonly InputAction m_Player_Turret;
+    private readonly InputAction m_Player_Seamine;
     public struct PlayerActions
     {
         private @ActionAsset m_Wrapper;
@@ -858,6 +890,7 @@ public class @ActionAsset : IInputActionCollection, IDisposable
         public InputAction @Look => m_Wrapper.m_Player_Look;
         public InputAction @Fire => m_Wrapper.m_Player_Fire;
         public InputAction @Turret => m_Wrapper.m_Player_Turret;
+        public InputAction @Seamine => m_Wrapper.m_Player_Seamine;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -879,6 +912,9 @@ public class @ActionAsset : IInputActionCollection, IDisposable
                 @Turret.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTurret;
                 @Turret.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTurret;
                 @Turret.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTurret;
+                @Seamine.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSeamine;
+                @Seamine.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSeamine;
+                @Seamine.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSeamine;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -895,6 +931,9 @@ public class @ActionAsset : IInputActionCollection, IDisposable
                 @Turret.started += instance.OnTurret;
                 @Turret.performed += instance.OnTurret;
                 @Turret.canceled += instance.OnTurret;
+                @Seamine.started += instance.OnSeamine;
+                @Seamine.performed += instance.OnSeamine;
+                @Seamine.canceled += instance.OnSeamine;
             }
         }
     }
@@ -1072,6 +1111,7 @@ public class @ActionAsset : IInputActionCollection, IDisposable
         void OnLook(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
         void OnTurret(InputAction.CallbackContext context);
+        void OnSeamine(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

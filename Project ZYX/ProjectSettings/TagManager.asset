@@ -5,6 +5,13 @@ TagManager:
   serializedVersion: 2
   tags:
   - Respawn Point
+  - PU-HP
+  - PU-Seamine
+  - PU-EMP
+  - PU-QuickCharge
+  - PU-Multishot
+  - PU-SpeedBoost
+  - PU-Invincibility
   layers:
   - Default
   - TransparentFX
@@ -41,7 +48,4 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
-    locked: 0
-  - name: Radar
-    uniqueID: 750283753
     locked: 0

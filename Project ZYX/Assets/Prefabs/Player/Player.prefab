@@ -187,6 +187,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 838318968740344951}
+  - component: {fileID: 2619485043127998339}
   - component: {fileID: 838318969809300763}
   - component: {fileID: 838318969809300762}
   - component: {fileID: 838318969809300761}
@@ -197,6 +198,7 @@ GameObject:
   - component: {fileID: 838318969809300738}
   - component: {fileID: 838318969809300737}
   - component: {fileID: 838318969809300736}
+  - component: {fileID: 6033883733049633988}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -219,6 +221,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &2619485043127998339
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 838318969809300743}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 3
 --- !u!114 &838318969809300763
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -269,6 +287,7 @@ MonoBehaviour:
   TankShoot: {fileID: 0}
   TankTurret: {fileID: 0}
   TankAudio: {fileID: 0}
+  Animator: {fileID: 0}
   Controller: {fileID: 838318968599533941}
   PlayerInput: {fileID: 838318969809300763}
   LocalEventSystem: {fileID: 0}
@@ -326,11 +345,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tankScript: {fileID: 838318969809300762}
   tankAudioScript: {fileID: 838318969809300737}
-  spinForce: 50
   turret: {fileID: 0}
-  barrel: {fileID: 0}
-  gunClampMin: -100
-  gunClampMax: -70
 --- !u!114 &838318969809300767
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -466,6 +481,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tankAnimator: {fileID: 0}
+--- !u!114 &6033883733049633988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 838318969809300743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c937becb79eddf04ab9573c1c62735e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tankScript: {fileID: 838318969809300762}
+  seamineList: []
+  tankTransform: {fileID: 838318968599533946}
+  seamineObject: {fileID: 6562246226451581440, guid: ad0c960a873911c4eb18fcf988ebd01e, type: 3}
+  HP_Ammount: 0
+  Seamine_Ammount: 3
+  Multishot_Ammount: 0
+  EMP_Duration: 0
+  QuickCharge_Duration: 0
+  Multishot_Duration: 0
+  SpeedBoost_Duration: 0
+  Invincibility_Duration: 0
+  QuickCharge_Multiplier: 0
+  SpeedBoost_Multiplier: 0
 --- !u!1 &885906594277948803
 GameObject:
   m_ObjectHideFlags: 0
