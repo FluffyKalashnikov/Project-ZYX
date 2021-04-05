@@ -6,15 +6,18 @@ public class BarrelStandard : BarrelBaseCode
 {
     private void OnTriggerEnter(Collider collision)
     {
-        if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Bullet")
+        if (collision.gameObject.layer == 8 || collision.gameObject.tag == "Bullet")
         {
+            barrelCollider.enabled = false;
             BarrelCollisionSound();
-            //DeleteBarrelModel();
+            DeleteBarrelModel();
             //Some kind of particle animation
-            /*if (barrelCollisionSource.isPlaying == false)
-            {
-                DeleteBarrelCompletly();
-            }*/
+            StartCoroutine(BarrelDestroyer());
         }
+    }
+    IEnumerator BarrelDestroyer()
+    {
+        yield return new WaitForSeconds(barrelCollisionSource.clip.length);
+        DeleteBarrelCompletly();
     }
 }

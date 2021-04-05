@@ -6,15 +6,18 @@ public class BarrelExplosive : BarrelBaseCode
 {
     private void OnTriggerEnter(Collider collision)
     {
-        if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Bullet")
+        if (collision.gameObject.layer == 8 || collision.gameObject.tag == "Bullet")
         {
-            //BarrelCollisionSound();
-            //DeleteBarrelModel();
+            barrelCollider.enabled = false;
+            BarrelCollisionSound();
+            DeleteBarrelModel();
             //Some kind of tank damage code here and some fire animations aswell
-            /*if (barrelCollisionSource.isPlaying == false)
-            {
-                DeleteBarrelCompletly();
-            }*/
+            StartCoroutine(BarrelDestroyer());
         }
+    }
+    IEnumerator BarrelDestroyer()
+    {
+        yield return new WaitForSeconds(barrelCollisionSource.clip.length);
+        DeleteBarrelCompletly();
     }
 }

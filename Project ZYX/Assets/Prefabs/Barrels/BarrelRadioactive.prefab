@@ -255,10 +255,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   barrelModel: {fileID: 3262023632627959778}
+  barrelCollider: {fileID: 7160290408951749066}
   barrelAmbienceSFX: {fileID: 11400000, guid: cf9a1f0088c18114a8cfef21c50b44a7, type: 2}
   barrelAmbienceSource: {fileID: 3216160251615852945}
   barrelCollisionSFX: {fileID: 11400000, guid: 71e064ceb0185a54a82cb8a863845e65, type: 2}
   barrelCollisionSource: {fileID: 7467419858030009571}
+  collAudLength: 3.61
 --- !u!65 &7160290408951749066
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -346,7 +348,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0

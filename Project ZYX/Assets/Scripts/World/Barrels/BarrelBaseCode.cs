@@ -6,6 +6,7 @@ public class BarrelBaseCode : MonoBehaviour
 {
     [Header("Model")]
     public GameObject barrelModel;
+    public BoxCollider barrelCollider;
 
     [Header("Audio")]
     public AudioEvent barrelAmbienceSFX;
@@ -27,12 +28,10 @@ public class BarrelBaseCode : MonoBehaviour
     public void DeleteBarrelModel()
     {
         Destroy(barrelModel.gameObject);
-        Debug.Log("420");
     }
 
     public void DeleteBarrelCompletly()
     {
         Destroy(gameObject);
-        Debug.Log("69");
     }
 }
