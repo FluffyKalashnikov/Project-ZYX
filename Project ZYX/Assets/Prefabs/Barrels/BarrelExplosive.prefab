@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 712591395143942679}
-  - component: {fileID: 3841658655203795154}
-  - component: {fileID: 6725791690541019797}
+  - component: {fileID: 3222128000703243933}
+  - component: {fileID: 4557926881826578652}
   m_Layer: 0
   m_Name: BarrelExplosive
   m_TagString: BarrelExplosive
@@ -34,7 +34,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3841658655203795154
+--- !u!114 &3222128000703243933
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -43,17 +43,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 712591395143942678}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6954ae6dfd09d8e4d80d4e3e3d0ccd54, type: 3}
+  m_Script: {fileID: 11500000, guid: e523bc32cd8085a4eaa43f1d2dc91743, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   barrelModel: {fileID: 8312071565783812515}
-  barrelCollider: {fileID: 6725791690541019797}
+  barrelCollider: {fileID: 4557926881826578652}
   barrelAmbienceSFX: {fileID: 11400000, guid: 05fb2bbf734e59e45a6934989bb93451, type: 2}
   barrelAmbienceSource: {fileID: 5137261767533907175}
   barrelCollisionSFX: {fileID: 11400000, guid: db6d055a08a563a469206a51716ef43c, type: 2}
   barrelCollisionSource: {fileID: 5337648784584219865}
   barrelDestructEvent: {fileID: 11400000, guid: 53020d8b124d1a547b819c7181d644c6, type: 2}
---- !u!65 &6725791690541019797
+--- !u!65 &4557926881826578652
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

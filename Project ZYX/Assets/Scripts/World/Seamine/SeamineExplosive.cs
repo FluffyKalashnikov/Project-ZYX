@@ -21,35 +21,35 @@ public class SeamineExplosive : MonoBehaviour
     {
         //seamineAmbienceSFX.Play(seamineAmbienceSource);
     }
-    private void OnTriggerEnter(Collider collision)
+    private void OnTriggerEnter(Collider seamine)
     {
-        if (collision.gameObject.layer == 8 || collision.gameObject.layer == 9)
+        if (seamine.gameObject.layer == 8 || seamine.gameObject.layer == 9)
         {
             seamineCollider.enabled = false;
-            BarrelCollisionSound();
-            DeleteBarrelModel();
+            SeamineCollisionSound();
+            DeleteSeamineModel();
             //Some kind of tank damage code here and some fire animations aswell
-            StartCoroutine(BarrelDestroyer());
+            StartCoroutine(SeamineDestroyer());
         }
     }
-    IEnumerator BarrelDestroyer()
+    IEnumerator SeamineDestroyer()
     {
         yield return new WaitForSeconds(seamineCollisionSource.clip.length);
-        DeleteBarrelCompletly();
+        DeleteSeamineCompletly();
     }
 
-    public void BarrelCollisionSound()
+    public void SeamineCollisionSound()
     {
         seamineAmbienceSource.Stop();
         seamineCollisionSFX.Play(seamineCollisionSource);
     }
 
-    public void DeleteBarrelModel()
+    public void DeleteSeamineModel()
     {
         seamineDestructEvent.Play(seamineModel);
     }
 
-    public void DeleteBarrelCompletly()
+    public void DeleteSeamineCompletly()
     {
         Destroy(gameObject);
     }
