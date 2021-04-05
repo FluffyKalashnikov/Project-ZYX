@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class ScoreboardElement : MonoBehaviour
+public class ScoreWidget : MonoBehaviour
 {
     // VARIABLES
     public string Name 
@@ -71,7 +71,7 @@ public class ScoreboardElement : MonoBehaviour
         foreach(var i in Game.ScoreElements)
         i.UpdateElement();
     }
-    public static int SortFunction(ScoreboardElement a, ScoreboardElement b)
+    public static int SortFunction(ScoreWidget a, ScoreWidget b)
     {
         if      (a.Score > b.Score)  return -1;
         else if (a.Score == b.Score) return 0;

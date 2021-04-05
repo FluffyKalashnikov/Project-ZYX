@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 192625273701500578}
   - component: {fileID: 2621273358604769015}
   m_Layer: 0
-  m_Name: Scoreboard Element
+  m_Name: ScoreWidget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -39,8 +39,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -661.27, y: 427.8722}
-  m_SizeDelta: {x: 500, y: 50}
+  m_AnchoredPosition: {x: 166.53015, y: -25}
+  m_SizeDelta: {x: 432.93976, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &9130426778115442342
 MonoBehaviour:
@@ -112,9 +112,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc3c983cb9e95cb4e947e96e3187e5cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Name: 
-  Score: 0
-  Color: {r: 1, g: 1, b: 1, a: 1}
   Owner: {fileID: 0}
   ColorImage: {fileID: 0}
   BorderImage: {fileID: 0}

@@ -75,33 +75,30 @@ public class Widget : MonoBehaviour
     }
     
     // WIDGET ORDER
-    public static void AddWidget(Widget widget, Action OnComplete)
+    public static void AddWidget(Widget Widget)
     {
         // 1. ENABLE
-        widget.ShowFirst();
-        widget.Enable();
-        OnComplete?.Invoke();
+        Widget.ShowFirst();
+        Widget.Enable();
 
         // 2. ADD TO LIST
-        if (!OverlayWidgets.Contains(widget))
-        OverlayWidgets.Add(widget);
+        if (!OverlayWidgets.Contains(Widget))
+        OverlayWidgets.Add(Widget);
     }
-    public static void RemoveWidget(Widget widget, Action OnComplete)
+    public static void RemoveWidget(Widget widget)
     {
         // 1. DISABLE
         widget.ShowLast();
         widget.Disable();
-        OnComplete?.Invoke();
 
         // 2. REMOVE FROM LIST
         if (OverlayWidgets.Contains(widget))
         OverlayWidgets.Remove(widget);
     }
-    public static void RemoveOverlays(Action OnComplete)
+    public static void RemoveOverlays()
     {
         for (int i = OverlayWidgets.Count-1; i>=0; i--)
-        RemoveWidget(OverlayWidgets[i], null);
-        OnComplete?.Invoke();
+        RemoveWidget(OverlayWidgets[i]);
     }
 
     public void SetOrder(int order)

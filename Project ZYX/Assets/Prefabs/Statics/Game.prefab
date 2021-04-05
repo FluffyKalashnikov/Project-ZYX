@@ -283,7 +283,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 868862679}
-  m_LocalRotation: {x: 0.32844803, y: -0.35768375, z: 0.13604762, w: 0.863525}
+  m_LocalRotation: {x: 0.32844803, y: -0.35768375, z: 0.13604765, w: 0.8635249}
   m_LocalPosition: {x: 9, y: 11.32, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -480,7 +480,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1350783314}
-  m_LocalRotation: {x: 0.32844803, y: -0.35768375, z: 0.13604762, w: 0.863525}
+  m_LocalRotation: {x: 0.32844803, y: -0.35768375, z: 0.13604765, w: 0.8635249}
   m_LocalPosition: {x: 9, y: 11.32, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -813,8 +813,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2248a33ac0cfd448a0d7ddc45cf088e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ScoreboardLayout: {fileID: 2469262212099232992}
-  PreviewRootUI: {fileID: 6060729848166121459}
   PlayerColors:
   - {r: 0.09620863, g: 0.32307184, b: 0.8867924, a: 1}
   - {r: 0.8962264, g: 0.14796188, b: 0.14796188, a: 1}
@@ -822,7 +820,9 @@ MonoBehaviour:
   - {r: 0.26019683, g: 0.9150943, b: 0.09927912, a: 1}
   buttonMainMenuStart: {fileID: 678984269324556531}
   buttonPauseMenuContinue: {fileID: 5617941344905632672}
-  buttonPauseMenuLobby: {fileID: 8925674031943752464}
+  buttonPauseMenuNewLobby: {fileID: 8925674031943752464}
+  ScoreboardLayout: {fileID: 2469262212099232992}
+  PreviewRootUI: {fileID: 6060729848166121459}
 --- !u!114 &7443425433295272657
 MonoBehaviour:
   m_ObjectHideFlags: 0

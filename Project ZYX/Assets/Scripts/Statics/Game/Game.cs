@@ -12,29 +12,67 @@ using UnityEngine.UI;
 public class Game : MonoBehaviour
 {
     // GAME PROPERTIES
-    public VerticalLayoutGroup ScoreboardLayout = null;
-    public HorizontalLayoutGroup PreviewRootUI = null;
-    public static int ReadyCount = 0;
-    private ActionAsset actionAsset = null;
-
-    public static List<Tank>  PlayerList   = new List<Tank>();
-    public static List<Tank>  AliveList    = new List<Tank>();
-    public static TankAsset[] TankTypes
+    public static int          ReadyCount = 0;
+    public static EState       State
+    {
+        get { return m_State; }
+        set 
+        { 
+            // 1. BAIL IF SET
+            if (m_State == value)
+            return;
+            // 2. END OLD LOGIC
+            switch(m_State)
+            {
+                case EState.Match:  Game.OnEndMatch?.Invoke(); break;
+                case EState.Lobby:  Game.OnEndLobby?.Invoke(); break;
+                case EState.Menu:   break;
+            }
+            // 3. BEGIN NEW LOGIC
+            switch(m_State = value)
+            {
+                case EState.Match:  Game.StartMatch(); break;
+                case EState.Lobby:  Game.StartLobby(); break;
+                case EState.Menu:   break;
+            }
+        }
+    }
+    public static EFocus       Focus
+    {
+        get { return m_Focus; }
+        set 
+        {   
+            // 1. BAIL IF SET
+            if (m_Focus == value)
+            return;
+            // 2. SWITCH INPUT MODE
+            switch(m_Focus = value)
+            {
+                case EFocus.Lobby: SwitchInputMode(Tank.EInputMode.Lobby); break;
+                case EFocus.Match: SwitchInputMode(Tank.EInputMode.Game);  break;
+                case EFocus.Menu:  SwitchInputMode(Tank.EInputMode.Menu);  break;
+                case EFocus.Pause: SwitchInputMode(Tank.EInputMode.Menu);  break;
+            }
+        }
+    }
+    
+    public static List<Tank>   PlayerList   = new List<Tank>();
+    public static List<Tank>   AliveList    = new List<Tank>();
+    public static TankAsset[]  TankTypes
     {
         get { return Resources.LoadAll<TankAsset>("Tank Assets"); }
     }
-    public static Gamemode[]  ModeList
+    public static Gamemode[]   ModeList
     {
         get { return Resources.LoadAll<Gamemode>("Mode Assets"); }
     }
-    public static Gamemode    Gamemode;
-    public        List<Color> PlayerColors = new List<Color>(4);
-    public static List<ScoreboardElement> ScoreElements = new List<ScoreboardElement>();
+    public static Gamemode     CurrentMode;
+    public        List<Color>  PlayerColors = new List<Color>(4);
+    public static List<ScoreWidget> ScoreElements = new List<ScoreWidget>();
 
-    public static EGameState  GameState = EGameState.Empty;
-    public static EInputMode  InputMode = EInputMode.Empty;
-    public static EGameFocus  GameFocus = EGameFocus.Empty;
 
+    private static EState      m_State     = EState.Empty;
+    private static EFocus      m_Focus     = EFocus.Empty;
 
     // GAME EVENTS
     public static event Action OnNewMatch;
@@ -49,7 +87,6 @@ public class Game : MonoBehaviour
     public static Action<Tank, DamageInfo> OnTankKill; 
     public static Action<Tank>             OnTankSpawn;
 
-
     // GAME WIDGETS
     private static Widget MainMenuWidget = null;
     private static Widget PauseWidget    = null;
@@ -57,33 +94,27 @@ public class Game : MonoBehaviour
     private static Widget LobbyWidget    = null;
     
     // REFERENCES
-    public static Camera             Camera       = null;
-    public static PlayerInputManager InputManager = null;
-    public static Game               Instance     = null;
+    public static Camera                   Camera                  = null;
+    public static PlayerInputManager       InputManager            = null;
+    public static Game                     Instance                = null;
+    [SerializeField] private Button        buttonMainMenuStart     = null;
+    [SerializeField] private Button        buttonPauseMenuContinue = null;
+    [SerializeField] private Button        buttonPauseMenuNewLobby = null;
+    public        VerticalLayoutGroup      ScoreboardLayout        = null;
+    public        HorizontalLayoutGroup    PreviewRootUI           = null;
+    public static CinemachineTargetGroup   CameraTargets           = null;
+    public static CinemachineVirtualCamera MatchCamera             = null;
+    public static CinemachineVirtualCamera LobbyCamera             = null;
+    private       ActionAsset              actionAsset             = null;
 
-    [SerializeField] private Button buttonMainMenuStart     = null;
-    [SerializeField] private Button buttonPauseMenuContinue = null;
-    [SerializeField] private Button buttonPauseMenuLobby    = null;
-
-    public static CinemachineTargetGroup   CameraTargets = null;
-    public static CinemachineVirtualCamera MatchCamera   = null;
-    public static CinemachineVirtualCamera LobbyCamera   = null;
-
-    public enum EGameState
+    public enum EState
     {
         Empty,
         Match,
         Lobby,
         Menu
     }
-    public enum EInputMode
-    {
-        Empty,
-        LobbyUI,
-        MatchUI,
-        MenuUI
-    }
-    public enum EGameFocus
+    public enum EFocus
     {
         Empty,
         Match,
@@ -125,13 +156,13 @@ public class Game : MonoBehaviour
 
         actionAsset.IngameUI.Pause.performed += ctx => 
         { 
-            if (GameFocus == EGameFocus.Match || GameFocus == EGameFocus.Pause)
-            switch(GameFocus)
+            if (Focus == EFocus.Match || Focus == EFocus.Pause)
+            switch(Focus)
             {
-                case EGameFocus.Match: PauseGame();  break;
-                case EGameFocus.Pause: ResumeGame(); break;
+                case EFocus.Match: PauseGame();  break;
+                case EFocus.Pause: ResumeGame(); break;
                 default: 
-                    Debug.LogError($"[GAME]: EGameFocus \"{GameFocus}\"not implemented."); 
+                    Debug.LogError($"[GAME]: EGameFocus \"{Focus}\"not implemented."); 
                 return;
             }
         };
@@ -140,22 +171,17 @@ public class Game : MonoBehaviour
         OnNewLobby += InputManager.EnableJoining;
         OnEndLobby += InputManager.DisableJoining;
 
-        buttonMainMenuStart    .onClick.AddListener(() => SwitchGameState(EGameState.Lobby));
+        buttonMainMenuStart    .onClick.AddListener(() => Game.State = EState.Lobby);
         buttonPauseMenuContinue.onClick.AddListener(() => ResumeGame());
-        buttonPauseMenuLobby   .onClick.AddListener(() => SwitchGameState(EGameState.Lobby));
+        buttonPauseMenuNewLobby.onClick.AddListener(() => Game.State = EState.Lobby);
 
         // 5. MISC
-        Gamemode = ModeList[1];
+        CurrentMode = ModeList[1];
     }
     private void Start()
     {   
-        SwitchGameFocus
-        (
-            EGameFocus.Menu, () => 
-            {
-                Widget.SetSelectedWidget(MainMenuWidget, null);
-            }
-        );
+        Game.Focus = EFocus.Menu;
+        Widget.SetSelectedWidget(MainMenuWidget, null);
     }
     
 //  PLAYER LOGIC
@@ -262,7 +288,7 @@ public class Game : MonoBehaviour
     }
     public static void SpawnTanks(float delay = 0f)
     {
-        foreach (Tank tank in FindObjectsOfType<Tank>())
+        foreach (Tank tank in PlayerList)
         SpawnTank(tank, delay);
     }
     public static void EnableTanks()
@@ -275,26 +301,6 @@ public class Game : MonoBehaviour
         foreach (Tank tank in FindObjectsOfType<Tank>())
         tank.DisableTank();
     }
-    public static void SwitchGameState(EGameState GameState)
-    {
-        // 1. CHECK NEW STATE
-        if (Game.GameState == GameState)
-        return;
-        // 2. END OLD LOGIC
-        switch(Game.GameState)
-        {
-            case EGameState.Match:  OnEndMatch(); break;
-            case EGameState.Lobby:  OnEndLobby(); break;
-            case EGameState.Menu:   break;
-        }
-        // 3. BEGIN NEW LOGIC
-        switch(Game.GameState = GameState)
-        {
-            case EGameState.Match:  StartMatch(); break;
-            case EGameState.Lobby:  StartLobby(); break;
-            case EGameState.Menu:   break;
-        }
-    }
 
 //  MENU LOGIC
     public static void SelectWidget(Widget widget, Action OnComplete = null, bool ignoreNull = false)
@@ -303,55 +309,28 @@ public class Game : MonoBehaviour
     }
     public static void PauseGame()
     {
-        Widget.AddWidget
+        Widget.AddWidget(PauseWidget);
+        Game.Focus = EFocus.Pause;
+        PauseWidget.SetSelectedElement
         (
-            PauseWidget, () => 
+            PauseWidget.defaultElement, () => 
             {
-                SwitchGameFocus
-                (
-                    EGameFocus.Pause, () => 
-                    {
-                        PauseWidget.SetSelectedElement
-                        (
-                            PauseWidget.defaultElement, () => 
-                            {
-                                Time.timeScale = 0f;
-                                OnPause?.Invoke();
-                            }
-                        );
-                    }
-                );
+                Time.timeScale = 0f;
+                OnPause?.Invoke();
             }
         );
-        
     }
-    public static void PauseReset(Action OnComplete)
+    public static void PauseReset()
     {
-        Widget.RemoveOverlays
-        (
-            () => 
-            {
-                Time.timeScale = 1f;
-                OnPauseReset?.Invoke();
-                OnComplete?.Invoke();
-            }
-        );
+        Widget.RemoveOverlays();
+        Time.timeScale = 1f;
+        OnPauseReset?.Invoke();
     }
     public static void ResumeGame()
     {
-        PauseReset
-        (
-            () => 
-            {
-                SwitchGameFocus
-                (
-                    EGameFocus.Match, () => 
-                    {
-                        OnResume?.Invoke();
-                    }
-                );
-            }
-        );
+        PauseReset();
+        Game.Focus = EFocus.Match;
+        OnResume?.Invoke();
     }
     public static void ResetReady()
     {
@@ -361,9 +340,9 @@ public class Game : MonoBehaviour
     }
 
 //  INPUT LOGIC
-    private static void SwitchInputMode(Tank.EInputMode InputMode, Action OnComplete)
+    private static void SwitchInputMode(Tank.EInputMode InputMode)
     {
-        Tank.SwitchInputMode(InputMode, OnComplete);
+        Tank.SwitchInputMode(InputMode);
     }
 
 //  MATCH LOGIC
@@ -373,19 +352,14 @@ public class Game : MonoBehaviour
         (
             MatchWidget, () =>
             {
-                SwitchGameFocus
-                (
-                    EGameFocus.Match, () => 
-                    {
-                        PauseReset(null);
-                        UpdateScoreboard();
-                        Cam.SetActiveCamera(MatchCamera);
-                        Gamemode.Init();
+                Game.Focus = EFocus.Match; 
+                PauseReset();
+                UpdateScoreboard();
+                Cam.SetActiveCamera(MatchCamera);
+                CurrentMode.Init();
 
-                        SwitchGameState(EGameState.Match);
-                        OnNewMatch?.Invoke();
-                    }
-                );
+                Game.State = EState.Match;
+                OnNewMatch?.Invoke();
             }
         );
     }
@@ -395,18 +369,13 @@ public class Game : MonoBehaviour
         (
             LobbyWidget, () => 
             {
-                SwitchGameFocus
-                (
-                    EGameFocus.Lobby, () => 
-                    {
-                        DisableTanks();
-                        PauseReset(null);
-                        Cam.SetActiveCamera(LobbyCamera);
+                Focus = EFocus.Lobby;
+                DisableTanks();
+                PauseReset();
+                Cam.SetActiveCamera(LobbyCamera);
 
-                        SwitchGameState(EGameState.Lobby);
-                        OnNewLobby?.Invoke();
-                    }
-                );
+                Game.State = EState.Lobby;
+                OnNewLobby?.Invoke();
             }
         );
     }
@@ -416,17 +385,6 @@ public class Game : MonoBehaviour
 
         Debug.Log($"[GAME]: Cleanup Finished!");
     }
-    public static void SwitchGameFocus(EGameFocus GameFocus, Action OnComplete)
-    {
-        if (Game.GameFocus != GameFocus)
-        switch(Game.GameFocus = GameFocus)
-        {
-            case EGameFocus.Lobby: SwitchInputMode(Tank.EInputMode.Lobby, OnComplete); break;
-            case EGameFocus.Match: SwitchInputMode(Tank.EInputMode.Game,  OnComplete); break;
-            case EGameFocus.Menu:  SwitchInputMode(Tank.EInputMode.Menu,  OnComplete); break;
-            case EGameFocus.Pause: SwitchInputMode(Tank.EInputMode.Menu,  OnComplete); break;
-        }
-    }
     public static void UpdateScoreboard()
     {
         // 1. CREATE SCOREBOARDS
@@ -435,11 +393,9 @@ public class Game : MonoBehaviour
             // 1. IF EXIST
             if (i.ScoreElement)
             i.ScoreElement.UpdateElement();
-
             // 2. ELSE CREATE
             i.InitScore();
-        }
-        
+        } 
         // 2. DESTROY UNPARENTED SCOREBOARDS
         foreach(var i in ScoreElements)
         {
@@ -447,13 +403,12 @@ public class Game : MonoBehaviour
             continue;
             Destroy(i.gameObject);
         }
-
         // 3. SORT
         SortScoreboard();
     }
     public static void SortScoreboard()
     {
-        ScoreboardElement.SortElements();
+        ScoreWidget.SortElements();
     }
     public static void RemoveScoreboard()
     {
@@ -469,10 +424,10 @@ public class Game : MonoBehaviour
     }
     public static bool IsPaused()
     {
-        return GameFocus == EGameFocus.Pause;
+        return Focus == EFocus.Pause;
     }
     public static bool IsPlaying()
     {
-        return GameFocus == EGameFocus.Match;
+        return Focus == EFocus.Match;
     }
 }

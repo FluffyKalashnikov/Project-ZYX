@@ -148,7 +148,7 @@ public class Tank : MonoBehaviour, IDamageable
     public GameObject             PreviewPrefab      = null;
     public GameObject             PreviewInstance    = null;
     public GameObject             ScorePrefab        = null;
-    public ScoreboardElement      ScoreElement       = null;
+    public ScoreWidget            ScoreElement       = null;
     [Space(5)]
     public Button                 PreviewButtonReady = null;
     public Button                 PreviewButtonRight = null;
@@ -338,7 +338,7 @@ public class Tank : MonoBehaviour, IDamageable
         
         // 5. FINAL SETUP
         DisablePreview();
-        if (Game.GameState == Game.EGameState.Lobby)
+        if (Game.State == Game.EState.Lobby)
         EnablePreview();
     }
     public void EnablePreview()
@@ -406,11 +406,11 @@ public class Tank : MonoBehaviour, IDamageable
     public void InitScore()
     {
         // 1. CREATE SCOREBOARD
-        ScoreboardElement i = Instantiate
+        ScoreWidget i = Instantiate
         (
             ScorePrefab, 
             Game.Instance.ScoreboardLayout.transform
-        ).GetComponent<ScoreboardElement>();
+        ).GetComponent<ScoreWidget>();
 
         // 2. INIT AND GET REF
         ScoreElement = i;
@@ -434,7 +434,7 @@ public class Tank : MonoBehaviour, IDamageable
             case EInputMode.Menu:  PlayerInput.SwitchCurrentActionMap("UI");     break;
         }
     }
-    public static void SwitchInputMode(EInputMode InputMode, Action OnComplete)
+    public static void SwitchInputMode(EInputMode InputMode)
     {
         switch(InputMode)
         {
@@ -479,7 +479,6 @@ public class Tank : MonoBehaviour, IDamageable
 
             break;
         }
-        OnComplete?.Invoke();
     }
 
 //  PLAYER HUD

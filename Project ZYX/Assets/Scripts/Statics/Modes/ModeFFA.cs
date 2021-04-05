@@ -26,11 +26,6 @@ public class ModeFFA : Gamemode
     }
 
 //  LIFE CYCLE
-    protected override IEnumerator Main()
-    {
-        yield return new WaitForSeconds(10);
-        Debug.Log("Funkar :3");
-    }
     protected override void BeginPlay()
     {
         base.BeginPlay();
@@ -41,5 +36,6 @@ public class ModeFFA : Gamemode
     {
         base.StopPlay();
         Game.MatchCleanup();
+        Game.State = Game.EState.Lobby;
     }
 }   

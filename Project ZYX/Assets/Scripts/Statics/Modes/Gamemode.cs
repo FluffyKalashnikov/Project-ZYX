@@ -47,7 +47,7 @@ public abstract class Gamemode : ScriptableObject
         Game.Instance.StartCoroutine(IE_Exec = Exec());
         Debug.Log("[FFA]: Initialized.");
     }
-    public void Destruct()
+    private void Destruct()
     {
         Game.OnTankKill  -= OnTankKill;
         Game.OnTankSpawn -= OnTankSpawn;
@@ -75,5 +75,6 @@ public abstract class Gamemode : ScriptableObject
             }
         );
         StopPlay();
+        //Destruct();
     }
 }
