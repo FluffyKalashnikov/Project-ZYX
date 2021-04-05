@@ -52,6 +52,7 @@ MonoBehaviour:
   barrelAmbienceSource: {fileID: 5137261767533907175}
   barrelCollisionSFX: {fileID: 11400000, guid: db6d055a08a563a469206a51716ef43c, type: 2}
   barrelCollisionSource: {fileID: 5337648784584219865}
+  barrelDestructEvent: {fileID: 11400000, guid: 53020d8b124d1a547b819c7181d644c6, type: 2}
 --- !u!65 &6725791690541019797
 BoxCollider:
   m_ObjectHideFlags: 0

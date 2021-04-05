@@ -11,6 +11,10 @@ public class TankPowerups : MonoBehaviour
     #region Stats
     [Header("Scripts")]
     [SerializeField] private Tank tankScript;
+    [SerializeField] private TankAudio tankAudioScript;
+
+    [Header("DestructEvent")]
+    [SerializeField] private DestructEvent pickupDestroyer;
 
     [Header("Seamine")]
     [SerializeField] private List<GameObject> seamineList = new List<GameObject>();
@@ -34,6 +38,7 @@ public class TankPowerups : MonoBehaviour
     [SerializeField] private float QuickCharge_Multiplier;
     [SerializeField] private float SpeedBoost_Multiplier;
     #endregion
+
     private void Awake()
     {
         tankScript = GetComponent<Tank>();
@@ -47,12 +52,20 @@ public class TankPowerups : MonoBehaviour
         seamineActive = false;
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider powerup)
     {
-        switch (other.gameObject.tag)
+        switch (powerup.gameObject.tag)
         {
             case "PU-HP":
-                HPMethod();
+                if(tankScript.Health != tankScript.MaxHealth)
+                {
+                    HPMethod();
+                    pickupDestroyer.Play(powerup.gameObject);
+                }
+                else
+                {
+                    return;
+                }
                 break;
             case "PU-Seamine":
                 SeamineMethod();
@@ -80,6 +93,7 @@ public class TankPowerups : MonoBehaviour
     private void HPMethod()
     {
         tankScript.Health += HP_Ammount;
+        tankAudioScript.PickupHPSound();
     }
     private void SeamineMethod()
     {

@@ -14,6 +14,9 @@ public class BarrelBaseCode : MonoBehaviour
     public AudioEvent barrelCollisionSFX;
     public AudioSource barrelCollisionSource;
 
+    [Header("DestructEvent")]
+    public DestructEvent barrelDestructEvent;
+
     private void Start()
     {
         barrelAmbienceSFX.Play(barrelAmbienceSource);
@@ -27,7 +30,7 @@ public class BarrelBaseCode : MonoBehaviour
 
     public void DeleteBarrelModel()
     {
-        Destroy(barrelModel.gameObject);
+        barrelDestructEvent.Play(barrelModel);
     }
 
     public void DeleteBarrelCompletly()

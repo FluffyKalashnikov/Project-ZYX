@@ -47,8 +47,6 @@ public class TankBarrelFX : MonoBehaviour
             {
                 StartCoroutine(RadioactiveTimer());
             }
-            Debug.Log(currentRadOverallDuration == 0);
-            Debug.Log(currentRadOverallDuration);
         }
     }
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

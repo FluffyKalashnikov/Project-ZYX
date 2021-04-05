@@ -6,7 +6,7 @@ public class BarrelRadioactive : BarrelBaseCode
 {
     private void OnTriggerEnter(Collider collision)
     {
-        if (collision.gameObject.layer == 8 || collision.gameObject.tag == "Bullet")
+        if (collision.gameObject.layer == 8 || collision.gameObject.layer == 9)
         {
             barrelCollider.enabled = false;
             BarrelCollisionSound();

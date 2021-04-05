@@ -58,6 +58,10 @@ public class TankAudio : MonoBehaviour
     [SerializeField] private AudioEvent cannonBlast;
     [SerializeField] private AudioSource cannonBlastsource;
 
+    [Header("Powerups")]
+    [SerializeField] private AudioEvent PURepairSfx;
+    [SerializeField] private AudioSource PURepairSource;
+
 
 
     private void Awake()
@@ -77,7 +81,7 @@ public class TankAudio : MonoBehaviour
 
 
 
-
+    //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     public IEnumerator EngineStartUpSound()
     {
         engineStartup.Play(engineStartupSource);
@@ -147,8 +151,14 @@ public class TankAudio : MonoBehaviour
         cannonBlast.Play(cannonBlastsource);
     }
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    public void PickupHPSound()
+    {
+        PURepairSfx.Play(PURepairSource);
+    }
+    //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
+    //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     public void OnLoadStats(TankRef i)
     {
         
