@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6725791690541019797}
   m_Layer: 0
   m_Name: BarrelExplosive
-  m_TagString: Untagged
+  m_TagString: BarrelExplosive
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -52,7 +52,6 @@ MonoBehaviour:
   barrelAmbienceSource: {fileID: 5137261767533907175}
   barrelCollisionSFX: {fileID: 11400000, guid: db6d055a08a563a469206a51716ef43c, type: 2}
   barrelCollisionSource: {fileID: 5337648784584219865}
-  collAudLength: 2.93
 --- !u!65 &6725791690541019797
 BoxCollider:
   m_ObjectHideFlags: 0

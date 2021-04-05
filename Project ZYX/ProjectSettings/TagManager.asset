@@ -12,6 +12,8 @@ TagManager:
   - PU-Multishot
   - PU-SpeedBoost
   - PU-Invincibility
+  - BarrelExplosive
+  - BarrelRadioactive
   layers:
   - Default
   - TransparentFX

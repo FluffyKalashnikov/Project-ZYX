@@ -221,7 +221,7 @@ GameObject:
   - component: {fileID: 7160290408951749066}
   m_Layer: 0
   m_Name: BarrelRadioactive
-  m_TagString: Untagged
+  m_TagString: BarrelRadioactive
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -260,7 +260,6 @@ MonoBehaviour:
   barrelAmbienceSource: {fileID: 3216160251615852945}
   barrelCollisionSFX: {fileID: 11400000, guid: 71e064ceb0185a54a82cb8a863845e65, type: 2}
   barrelCollisionSource: {fileID: 7467419858030009571}
-  collAudLength: 3.61
 --- !u!65 &7160290408951749066
 BoxCollider:
   m_ObjectHideFlags: 0
