@@ -11,6 +11,7 @@ public class Widget : MonoBehaviour
     public  GameObject  DefaultElement = null;
     public  GameObject  CurrentElement = null;
     public  Action      OnSelected     = null;
+    public  Action      OnDeselected   = null;
 
     private Animator    Animator       = null;
 
@@ -29,11 +30,13 @@ public class Widget : MonoBehaviour
     public void Enable()
     {
         gameObject.SetActive(true);
-        SetSelectedElement(DefaultElement, null);
+        OnSelected?.Invoke(); 
+        ResetSelection(() => { if (Animator) Animator.Play("OnSelected"); });
     }
     public void Disable()
     {
         gameObject.SetActive(false);
+        OnDeselected?.Invoke();
     }
     public bool ShownFirst()
     {
@@ -57,7 +60,6 @@ public class Widget : MonoBehaviour
 
             EventSystem.current.SetSelectedGameObject(Element);
             OnComplete?.Invoke();
-            Animator?.Play("OnSelected");
         }
     }
     public void ResetSelection   (Action OnComplete)

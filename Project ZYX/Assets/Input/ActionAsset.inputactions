@@ -36,6 +36,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "Pause",
+                    "type": "Button",
+                    "id": "3d097f53-c7e1-4b56-885b-750424db5047",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -313,6 +321,17 @@
                     "action": "Turret",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "56e5b903-0764-45b0-88f6-f6ff1d6838d9",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -381,6 +400,14 @@
                     "type": "PassThrough",
                     "id": "ec809184-501c-4b75-9154-1b64efe54126",
                     "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Resume",
+                    "type": "Button",
+                    "id": "763128ac-1843-4835-99ce-e248c2c640d4",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 }
@@ -671,31 +698,15 @@
                     "action": "RightClick",
                     "isComposite": false,
                     "isPartOfComposite": false
-                }
-            ]
-        },
-        {
-            "name": "Ingame UI",
-            "id": "63d4fec5-4f94-4b6c-8057-2f37eb50e817",
-            "actions": [
-                {
-                    "name": "Pause",
-                    "type": "Button",
-                    "id": "999173d7-c9cd-4601-a6be-95ebaf29317e",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": ""
-                }
-            ],
-            "bindings": [
+                },
                 {
                     "name": "",
-                    "id": "1ac8be55-0fef-4f5c-96ea-bcae337c7798",
+                    "id": "ac16bf3e-6f19-4857-8ae7-ace39c6ac585",
                     "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Pause",
+                    "action": "Resume",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

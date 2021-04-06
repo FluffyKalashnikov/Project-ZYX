@@ -13,13 +13,9 @@ public class WidgetSwitcher : MonoBehaviour
             if (Widgets.Count == 0) return;
             value = Mathf.Clamp(value, 0, Widgets.Count);
 
-            // 2. ENABLE/DISABLE
-            transform.GetChild(m_ActiveIndex)        ?.gameObject.SetActive(false);
-            transform.GetChild(m_ActiveIndex = value)?.gameObject.SetActive(true);
-        
-            // 3. ON ACTIVE LOGIC
-            Widget i = Widgets[m_ActiveIndex];
-            i.ResetSelection(i.OnSelected);
+            // 2. DISABLE/ENABLE
+            Widgets[m_ActiveIndex]        ?.Disable();
+            Widgets[m_ActiveIndex = value]?.Enable();
         }
     }
     public  Widget       ActiveWidget

@@ -13,7 +13,7 @@ public class Game : MonoBehaviour
 {
     // GAME PROPERTIES
     public static int          ReadyCount = 0;
-    public static EState       State
+    public static EFocus       Focus
     {
         get { return m_State; }
         set 
@@ -24,34 +24,18 @@ public class Game : MonoBehaviour
             // 2. END OLD LOGIC
             switch(m_State)
             {
-                case EState.Match:  Game.OnEndMatch?.Invoke(); break;
-                case EState.Lobby:  Game.OnEndLobby?.Invoke(); break;
-                case EState.Menu:   break;
+                case EFocus.Menu:  break;
+                case EFocus.Match: break;
+                case EFocus.Lobby: break;   
+                case EFocus.Pause: break;
             }
             // 3. BEGIN NEW LOGIC
             switch(m_State = value)
             {
-                case EState.Match:  Game.StartMatch(); break;
-                case EState.Lobby:  Game.StartLobby(); break;
-                case EState.Menu:   break;
-            }
-        }
-    }
-    public static EFocus       Focus
-    {
-        get { return m_Focus; }
-        set 
-        {   
-            // 1. BAIL IF SET
-            if (m_Focus == value)
-            return;
-            // 2. SWITCH INPUT MODE
-            switch(m_Focus = value)
-            {
-                case EFocus.Lobby: SetActiveInput(Tank.EInputMode.Lobby); break;
-                case EFocus.Match: SetActiveInput(Tank.EInputMode.Game);  break;
-                case EFocus.Menu:  SetActiveInput(Tank.EInputMode.Menu);  break;
-                case EFocus.Pause: SetActiveInput(Tank.EInputMode.Menu);  break;
+                case EFocus.Menu:  SetActiveWidget(MenuWidget);  break;
+                case EFocus.Match: SetActiveWidget(MatchWidget); break;
+                case EFocus.Lobby: SetActiveWidget(LobbyWidget); break;   
+                case EFocus.Pause: SetActiveWidget(PauseWidget); break;
             }
         }
     }
@@ -71,8 +55,7 @@ public class Game : MonoBehaviour
     public static List<ScoreWidget> ScoreElements = new List<ScoreWidget>();
 
 
-    private static EState      m_State     = EState.Empty;
-    private static EFocus      m_Focus     = EFocus.Empty;
+    private static EFocus      m_State     = EFocus.Empty;
 
     // GAME EVENTS
     public static event Action OnNewMatch;
@@ -88,10 +71,10 @@ public class Game : MonoBehaviour
     public static Action<Tank>             OnTankSpawn;
 
     // GAME WIDGETS
-    private static Widget MainMenuWidget = null;
-    private static Widget PauseWidget    = null;
-    private static Widget MatchWidget    = null;
-    private static Widget LobbyWidget    = null;
+    private static Widget MenuWidget  = null;
+    private static Widget PauseWidget = null;
+    private static Widget MatchWidget = null;
+    private static Widget LobbyWidget = null;
     
     // REFERENCES
     public static Camera                   Camera                  = null;
@@ -105,23 +88,15 @@ public class Game : MonoBehaviour
     public static CinemachineTargetGroup   CameraTargets           = null;
     public static CinemachineVirtualCamera MatchCamera             = null;
     public static CinemachineVirtualCamera LobbyCamera             = null;
-    private       ActionAsset              actionAsset             = null;
     private static WidgetSwitcher          MenuSwitch              = null;
 
-    public enum EState
-    {
-        Empty,
-        Match,
-        Lobby,
-        Menu
-    }
     public enum EFocus
     {
         Empty,
         Match,
         Lobby,
-        Menu,
-        Pause
+        Pause,
+        Menu
     }
 
     private void Awake()
@@ -146,44 +121,46 @@ public class Game : MonoBehaviour
         }
         {
             var i = GetComponentsInChildren<Widget>(true);
-            MatchWidget    = i[0];
-            LobbyWidget    = i[1];
-            MainMenuWidget = i[2];
-            PauseWidget    = i[3];
+            MatchWidget = i[0];
+            LobbyWidget = i[1];
+            MenuWidget  = i[2];
+            PauseWidget = i[3];
         }
 
-        // 3. INPUT SETUP
-        actionAsset = new ActionAsset();
-        actionAsset.IngameUI.Enable();
-
-        actionAsset.IngameUI.Pause.performed += ctx => 
-        { 
-            if (Focus == EFocus.Match || Focus == EFocus.Pause)
-            switch(Focus)
-            {
-                case EFocus.Match: PauseGame();  break;
-                case EFocus.Pause: ResumeGame(); break;
-                default: 
-                    Debug.LogError($"[GAME]: EGameFocus \"{Focus}\"not implemented."); 
-                return;
-            }
+        // 3. INIT WIDGETS
+        MenuWidget .OnSelected = () =>
+        {
+            SetActiveInput(Tank.EInputMode.Menu);
+            SetActiveCamera(LobbyCamera);
+            PauseReset();
+        };
+        PauseWidget.OnSelected = () =>
+        {
+            SetActiveInput(Tank.EInputMode.Menu);
+        };
+        MatchWidget.OnSelected = () =>
+        {
+            SetActiveInput(Tank.EInputMode.Game);
+            SetActiveCamera(MatchCamera);
+            PauseReset();
+        };
+        LobbyWidget.OnSelected = () =>
+        {
+            SetActiveInput(Tank.EInputMode.Lobby);
+            SetActiveCamera(LobbyCamera);
+            PauseReset();
         };
 
         // 4. EVENT SUBSCRIPTION
         OnNewLobby += InputManager.EnableJoining;
         OnEndLobby += InputManager.DisableJoining;
 
-        buttonMainMenuStart    .onClick.AddListener(() => Game.State = EState.Lobby);
-        buttonPauseMenuContinue.onClick.AddListener(() => ResumeGame());
-        buttonPauseMenuNewLobby.onClick.AddListener(() => Game.State = EState.Lobby);
-
         // 5. MISC
         CurrentMode = ModeList[1];
     }
     private void Start()
     {   
-        SetActiveWidget(MainMenuWidget);
-        Game.Focus = EFocus.Menu;
+        SetFocus(EFocus.Menu);
     }
     
 //  PLAYER LOGIC
@@ -199,7 +176,7 @@ public class Game : MonoBehaviour
         // 2. CHECK COUNT
         if (ReadyCount >= PlayerList.Count)
         {
-            StartMatch();
+            BeginMatch();
             ResetReady();
         }
     }
@@ -303,17 +280,38 @@ public class Game : MonoBehaviour
         foreach (Tank tank in FindObjectsOfType<Tank>())
         tank.DisableTank();
     }
+   
+    public static void BeginMatch()
+    {
+        SetFocus(EFocus.Match);
+        UpdateScoreboard();
+        CurrentMode.Init();
+        OnNewMatch?.Invoke();
+    }
+    public static void StopMatch()
+    {
 
+    }
+    public static void BeginLobby()
+    {
+        SetFocus(EFocus.Lobby);
+        OnNewLobby?.Invoke();
+    }
+    public static void StopLobby()
+    {
+        OnEndLobby?.Invoke();
+    }
+    
 //  MENU LOGIC
     public static void PauseGame()
     {
         Widget.AddWidget(PauseWidget);
-        Game.Focus = EFocus.Pause;
         PauseWidget.ResetSelection
         (
             () => 
             {
                 Time.timeScale = 0f;
+                SetFocus(EFocus.Pause);
                 OnPause?.Invoke();
             }
         );
@@ -327,7 +325,7 @@ public class Game : MonoBehaviour
     public static void ResumeGame()
     {
         PauseReset();
-        Game.Focus = EFocus.Match;
+        SetFocus(EFocus.Match);
         OnResume?.Invoke();
     }
     public static void ResetReady()
@@ -350,31 +348,12 @@ public class Game : MonoBehaviour
     {
         Tank.SwitchInputMode(InputMode);
     }
+    public static void SetFocus(EFocus Focus)
+    {
+        Game.Focus = Focus;
+    }
 
 //  MATCH LOGIC
-    public static void StartMatch()
-    {
-        SetActiveWidget(MatchWidget);
-        Game.Focus = EFocus.Match; 
-        PauseReset();
-        UpdateScoreboard();
-        SetActiveCamera(MatchCamera);
-        CurrentMode.Init();
-
-        Game.State = EState.Match;
-        OnNewMatch?.Invoke();
-    }
-    public static void StartLobby()
-    {
-        SetActiveWidget(LobbyWidget);
-        Focus = EFocus.Lobby;
-        DisableTanks();
-        PauseReset();
-        Cam.SetActiveCamera(LobbyCamera);
-
-        Game.State = EState.Lobby;
-        OnNewLobby?.Invoke();
-    }
     public static void MatchCleanup()
     {
         DisableTanks();

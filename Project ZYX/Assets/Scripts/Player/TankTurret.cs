@@ -1,13 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class TankTurret : MonoBehaviour
 {
     #region Setup Var
-    ActionAsset actionAsset;
     [SerializeField] private Tank tankScript;
     [SerializeField] private TankAudio tankAudioScript;
+
+    private InputAction LookAction = null;
     #endregion
 
     #region Audio
@@ -54,17 +56,15 @@ public class TankTurret : MonoBehaviour
     #region Setup
     private void Awake()
     {
-        actionAsset = new ActionAsset();
         tankScript = GetComponent<Tank>();
+
+        LookAction = tankScript.PlayerInput.actions.FindAction("Look");
     }
-    void Start()
-    {
-        actionAsset.Player.Enable();
-    }
+
     private void Update()
     {
-        TurretMovement(actionAsset.Player.Turret.ReadValue<Vector2>());
-        BarrelMovement(actionAsset.Player.Turret.ReadValue<Vector2>());
+        TurretMovement(LookAction.ReadValue<Vector2>());
+        BarrelMovement(LookAction.ReadValue<Vector2>());
     }
     #endregion
 

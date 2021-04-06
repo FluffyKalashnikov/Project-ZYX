@@ -27,7 +27,7 @@ public class TankOLD : MonoBehaviour
 
 
     // ACTIONS
-    private ActionAsset IAsset = null;
+    //private ActionAsset IAsset = null;
     private Action      OnTick;
     private Action      OnFire;
 
@@ -37,22 +37,22 @@ public class TankOLD : MonoBehaviour
     void Awake()
     {
         // ACTIONS
-        IAsset = new ActionAsset();
+        //IAsset = new ActionAsset();
 
         OnFire += IFire;
         OnTick += IMove;
         OnTick += ILook;
 
-        IAsset.Player.Fire.performed += ctx => OnFire();
+        //IAsset.Player.Fire.performed += ctx => OnFire();
 
         void IMove()
         {
-            if (IAsset.Player.Move.enabled)
-                Move(IAsset.Player.Move.ReadValue<Vector2>());
+            //if (IAsset.Player.Move.enabled)
+                //Move(IAsset.Player.Move.ReadValue<Vector2>());
         }
         void ILook()
         {
-            if (IAsset.Player.Look.enabled == false) return;
+            //if (IAsset.Player.Look.enabled == false) return;
 
             //Look(LookVector = VectorCalc());
 
@@ -98,8 +98,8 @@ public class TankOLD : MonoBehaviour
         }
         void IFire()
         {
-            if (IAsset.Player.Move.enabled)
-                Fire();
+            //if (IAsset.Player.Move.enabled)
+                //Fire();
         }
     }
 
@@ -143,6 +143,6 @@ public class TankOLD : MonoBehaviour
 
 
 
-    private void OnEnable()  => IAsset.Player.Enable();
-    private void OnDisable() => IAsset.Player.Disable();
+    //private void OnEnable()  => IAsset.Player.Enable();
+    //private void OnDisable() => IAsset.Player.Disable();
 }

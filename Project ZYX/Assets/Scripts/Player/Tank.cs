@@ -204,6 +204,20 @@ public class Tank : MonoBehaviour, IDamageable
             Animator?.Play("Shoot", 1); 
         };
         OnTankDead += DamageInfo => Game.OnTankKill((Tank) DamageInfo.Reciever, DamageInfo);
+    
+        // 4. INPUT SETUP
+        InputAction PauseAction  = PlayerInput.actions.FindAction("Pause");
+        InputAction ResumeAction = PlayerInput.actions.FindAction("Resume");
+        PauseAction .performed += ctx => 
+        { 
+            if (Game.IsPlaying()) 
+            Game.PauseGame();
+        };
+        ResumeAction.performed += ctx => 
+        { 
+            if (Game.IsPaused())  
+            Game.ResumeGame(); 
+        };
     }
 
 //  TANK SETUP
@@ -338,7 +352,7 @@ public class Tank : MonoBehaviour, IDamageable
         
         // 5. FINAL SETUP
         DisablePreview();
-        if (Game.State == Game.EState.Lobby)
+        if (Game.Focus == Game.EFocus.Lobby)
         EnablePreview();
     }
     public void EnablePreview()

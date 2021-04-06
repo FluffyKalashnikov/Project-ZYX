@@ -6,12 +6,14 @@ using System;
 
 public class TankMovement : MonoBehaviour
 {
-    ActionAsset actionAsset;
+    //ActionAsset actionAsset;
     [SerializeField] private Tank tankScript;
     [SerializeField] private TankAudio tankAudioScript;
     [SerializeField] private TankAnimation tankAnimationScript;
 
     public bool moveable = false;
+
+    private InputAction MoveAction = null;
 
     #region Stats
     [Header("Force Values")]
@@ -43,21 +45,21 @@ public class TankMovement : MonoBehaviour
     #region Setup
     private void Awake()
     {
-        actionAsset = new ActionAsset();
         tankScript = GetComponent<Tank>();
+
+        MoveAction = tankScript.PlayerInput.actions.FindAction("Move");
     }
     void Start()
     {
         StartCoroutine(tankAudioScript.EngineStartUpSound());
-        actionAsset.Player.Enable();
     }
     private void Update()
     {
         if (moveable)
         {
-            BaseMovement(actionAsset.Player.Move.ReadValue<Vector2>());
-            EngineRev(actionAsset.Player.Move.ReadValue<Vector2>());
-            //MovementAnimations(actionAsset.Player.Move.ReadValue<Vector2>());
+            BaseMovement      (MoveAction.ReadValue<Vector2>());
+            EngineRev         (MoveAction.ReadValue<Vector2>());
+            //MovementAnimations(MoveAction.ReadValue<Vector2>());
         }
         VolumeManager();
 
