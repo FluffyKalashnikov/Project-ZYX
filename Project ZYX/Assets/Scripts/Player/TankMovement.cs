@@ -42,7 +42,7 @@ public class TankMovement : MonoBehaviour
     public float Timer;
 
     private Animator animator = null;
-    private ParticleSystem tankBubbles = null;
+    private ParticleSystem tankBubblesParticles = null;
 
     #region Setup
     private void Awake()
@@ -66,6 +66,7 @@ public class TankMovement : MonoBehaviour
             //MovementAnimations(actionAsset.Player.Move.ReadValue<Vector2>());
         }
         VolumeManager();
+        ParticleManager();
 
         if (Timer < 0)
         {
@@ -161,6 +162,11 @@ public class TankMovement : MonoBehaviour
 
         tankAudioScript.EngineSounds(velocityScale);
     }
+    private void ParticleManager()
+    {
+        //var main = tankBubbles.main;
+        //main.simulationSpeed *= (1 * currentVel.z);
+    }
 
     public void EnableTankMovement()
     {
@@ -170,6 +176,6 @@ public class TankMovement : MonoBehaviour
     public void OnLoadStats(TankRef i)
     {
         animator = i.GetComponent<Animator>();
-        tankBubbles = i.tankBubbles;
+        //tankBubblesParticles = i.tankBubblesParticle;
     }
 }

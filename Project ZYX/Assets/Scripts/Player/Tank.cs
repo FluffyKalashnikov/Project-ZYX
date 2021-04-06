@@ -201,7 +201,8 @@ public class Tank : MonoBehaviour, IDamageable
         OnTankFire += tank => 
         { 
             if (tank != this) return;
-            Animator?.Play("Shoot", 1); 
+            Animator?.Play("Shoot", 1);
+            TankRef.tankShootParticles.Play();
         };
         OnTankDead += DamageInfo => Game.OnTankDead((Tank) DamageInfo.Reciever, DamageInfo);
     }
