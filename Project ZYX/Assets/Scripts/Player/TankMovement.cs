@@ -36,13 +36,13 @@ public class TankMovement : MonoBehaviour
     private Vector3 driveForce;
     private Vector3 currentVel;
     private Vector3 direction;
-    private Vector3 propellerVector;
 
     private bool ifReving = false;
 
     public float Timer;
 
     private Animator animator = null;
+    private ParticleSystem tankBubbles = null;
 
     #region Setup
     private void Awake()
@@ -170,5 +170,6 @@ public class TankMovement : MonoBehaviour
     public void OnLoadStats(TankRef i)
     {
         animator = i.GetComponent<Animator>();
+        tankBubbles = i.tankBubbles;
     }
 }
