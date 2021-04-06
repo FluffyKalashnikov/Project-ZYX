@@ -62,8 +62,16 @@ public class TankAudio : MonoBehaviour
     [SerializeField] private AudioEvent PURepairSfx;
     [SerializeField] private AudioSource PURepairSource;
 
+    [Header("Speed Boost")]
+    [SerializeField] private AudioEvent PUSpeedBoostStartSfx;
+    [SerializeField] private AudioSource PUSpeedBoostStartSource;
+    [SerializeField] private AudioEvent PUSpeedBoostLoopSfx;
+    [SerializeField] private AudioSource PUSpeedBoostLoopSource;
+    [SerializeField] private AudioEvent PUSpeedBoostEndSfx;
+    [SerializeField] private AudioSource PUSpeedBoostEndSource;
 
 
+    private float velocityScaleAUDIO;
     private void Awake()
     {
         // 1. GET REFERENCES
@@ -94,6 +102,7 @@ public class TankAudio : MonoBehaviour
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     public void EngineSounds(float velocityScale)
     {
+        velocityScaleAUDIO = velocityScale;
         engineIdleSource.volume = Mathf.Lerp(idleVolumeMax, idleVolumeMin, velocityScale);
         engineThrottleSource.pitch = Mathf.Lerp(throttlePitchMin, throttlePitchMax, velocityScale);
         engineThrottleSource.volume = Mathf.Lerp(throttleVolumeMin, throttleVolumeMax, velocityScale);
@@ -154,6 +163,20 @@ public class TankAudio : MonoBehaviour
     public void PickupHPSound()
     {
         PURepairSfx.Play(PURepairSource);
+    }
+    public void PickupSpeedBoostSTARTSound()
+    {
+        PUSpeedBoostStartSfx.Play(PUSpeedBoostStartSource);
+        PUSpeedBoostLoopSfx.Play(PUSpeedBoostLoopSource);
+    }
+    public void PickupSpeedBoostLOOPSound()
+    {
+        PUSpeedBoostLoopSource.volume = Mathf.Lerp(throttleVolumeMin, throttleVolumeMax*2, velocityScaleAUDIO);
+    }
+    public void PickupSpeedBoostENDSound()
+    {
+        PUSpeedBoostLoopSource.Stop();
+        PUSpeedBoostEndSfx.Play(PUSpeedBoostEndSource);
     }
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

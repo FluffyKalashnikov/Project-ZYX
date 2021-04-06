@@ -183,6 +183,8 @@ public class TankPowerups : MonoBehaviour
     }
     private void SpeedBoostMethod()
     {
+        tankAudioScript.PickupSpeedBoostSTARTSound();
+        tankAudioScript.PickupSpeedBoostLOOPSound();
         currentSpeedBoostDuration = SpeedBoost_Duration;
         if (currentSpeedBoostDuration != 0)
         {
@@ -228,6 +230,7 @@ public class TankPowerups : MonoBehaviour
                 tankMovementScript.motorForce = currentMotorforce;
                 tankAudioScript.throttlePitchMax = currentThrottlePitch;
                 SpeedBoost_Picked = false;
+                tankAudioScript.PickupSpeedBoostENDSound();
             }
         }
     }

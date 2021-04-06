@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4b5e4568f40bc8549ae14507fb6ad9a5, type: 3}
-  m_Name: Battle Theme
+  m_Name: PickupSpeedLOOP
   m_EditorClassIdentifier: 
   clips:
-  - {fileID: 8300000, guid: 422c5647ca7ab464ca2b001a05a8c537, type: 3}
+  - {fileID: 8300000, guid: 370798db5132eea4fa2bf537ab2786eb, type: 3}
   loop: 1
   playOneShot: 0
   volume:
     type: 0
     slider: 0
-    single: 0
+    single: 1
     min: 0
     max: 1
     minLimit: 1
