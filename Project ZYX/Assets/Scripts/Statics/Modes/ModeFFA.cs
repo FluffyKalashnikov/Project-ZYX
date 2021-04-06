@@ -36,6 +36,6 @@ public class ModeFFA : Gamemode
     {
         base.StopPlay();
         Game.MatchCleanup();
-        Game.SetFocus(Game.EFocus.Lobby);
+        Game.SetActiveFocus(Game.EFocus.Lobby);
     }
 }   

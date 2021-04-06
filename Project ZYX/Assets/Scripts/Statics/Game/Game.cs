@@ -160,7 +160,7 @@ public class Game : MonoBehaviour
     }
     private void Start()
     {   
-        SetFocus(EFocus.Menu);
+        SetActiveFocus(EFocus.Menu);
     }
     
 //  PLAYER LOGIC
@@ -283,7 +283,7 @@ public class Game : MonoBehaviour
    
     public static void BeginMatch()
     {
-        SetFocus(EFocus.Match);
+        SetActiveFocus(EFocus.Match);
         UpdateScoreboard();
         CurrentMode.Init();
         OnNewMatch?.Invoke();
@@ -294,7 +294,7 @@ public class Game : MonoBehaviour
     }
     public static void BeginLobby()
     {
-        SetFocus(EFocus.Lobby);
+        SetActiveFocus(EFocus.Lobby);
         OnNewLobby?.Invoke();
     }
     public static void StopLobby()
@@ -311,7 +311,7 @@ public class Game : MonoBehaviour
             () => 
             {
                 Time.timeScale = 0f;
-                SetFocus(EFocus.Pause);
+                SetActiveFocus(EFocus.Pause);
                 OnPause?.Invoke();
             }
         );
@@ -325,7 +325,7 @@ public class Game : MonoBehaviour
     public static void ResumeGame()
     {
         PauseReset();
-        SetFocus(EFocus.Match);
+        SetActiveFocus(EFocus.Match);
         OnResume?.Invoke();
     }
     public static void ResetReady()
@@ -348,7 +348,7 @@ public class Game : MonoBehaviour
     {
         Tank.SwitchInputMode(InputMode);
     }
-    public static void SetFocus(EFocus Focus)
+    public static void SetActiveFocus(EFocus Focus)
     {
         Game.Focus = Focus;
     }
