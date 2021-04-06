@@ -4,33 +4,36 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-[RequireComponent(typeof(Canvas))]
+[RequireComponent(typeof(RectTransform))]
 public class Widget : MonoBehaviour
 {
     [Header("REFERENCES")]
-    public Canvas      canvas         = null;
-    public GameObject  defaultElement = null;
-    public GameObject  currentElement = null;
-    
+    public  GameObject  DefaultElement = null;
+    public  GameObject  CurrentElement = null;
+    public  Action      OnSelected     = null;
+
+    private Animator    Animator       = null;
+
     private static IEnumerator  IE_SetSelected = null;
     private static List<Widget> OverlayWidgets = new List<Widget>();
 
     private void Awake()
     {
         // 1. GET REFERENCES
-        canvas         = GetComponent<Canvas>(); 
-        currentElement = defaultElement;
+        Animator = GetComponent<Animator>();
+        // 2. INIT
+        CurrentElement = DefaultElement;
     }
 
     // WIDGET FUNCTIONS
     public void Enable()
     {
-        canvas.enabled = true;
-        SetSelectedElement(defaultElement, null, true);
+        gameObject.SetActive(true);
+        SetSelectedElement(DefaultElement, null);
     }
     public void Disable()
     {
-        canvas.enabled = false;
+        gameObject.SetActive(false);
     }
     public bool ShownFirst()
     {
@@ -38,9 +41,9 @@ public class Widget : MonoBehaviour
     }
 
     // WIDGET SELECTION
-    public void SetSelectedElement(GameObject element,  Action OnComplete, bool ignoreNull = false)
+    public void SetSelectedElement(GameObject Element,  Action OnComplete)
     {
-        if (ignoreNull && element == null) return;
+        if (Element == null) return;
 
         // 1. STOP ACTIVE SETTERS
         if (IE_SetSelected != null)
@@ -50,32 +53,24 @@ public class Widget : MonoBehaviour
         // 2. SET ELEMENT WHEN EXISTS
         IEnumerator Logic()
         {
-            yield return new WaitUntil(() => canvas.enabled);
+            yield return new WaitUntil(() => gameObject.activeInHierarchy);
 
-            EventSystem.current.SetSelectedGameObject(element);
+            EventSystem.current.SetSelectedGameObject(Element);
             OnComplete?.Invoke();
+            Animator?.Play("OnSelected");
         }
     }
-    public static void SetSelectedWidget(Widget widget, Action OnComplete, bool ignoreNull = false)
+    public void ResetSelection   (Action OnComplete)
     {
-        if (widget == null && !ignoreNull)
-        {
-            Debug.LogError("Null Widget detected!");
-            return;
-        }
-        
-        // 1. DEACTIVATE ALL WIDGETS
-        Widget[] widgets = FindObjectsOfType<Widget>();
-        foreach (var i in widgets) 
-        i.Disable();
-
-        // 2. ENABLE SELECTED WIDGET
-        widget?.Enable();
-        OnComplete?.Invoke();
+        SetSelectedElement(DefaultElement, OnComplete);
     }
-    
+    public void ContinueSelection(Action OnComplete)
+    {
+        SetSelectedElement(CurrentElement, OnComplete);
+    }
+
     // WIDGET ORDER
-    public static void AddWidget(Widget Widget)
+    public static void AddWidget   (Widget Widget)
     {
         // 1. ENABLE
         Widget.ShowFirst();

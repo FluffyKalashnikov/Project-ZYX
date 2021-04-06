@@ -48,10 +48,10 @@ public class Game : MonoBehaviour
             // 2. SWITCH INPUT MODE
             switch(m_Focus = value)
             {
-                case EFocus.Lobby: SwitchInputMode(Tank.EInputMode.Lobby); break;
-                case EFocus.Match: SwitchInputMode(Tank.EInputMode.Game);  break;
-                case EFocus.Menu:  SwitchInputMode(Tank.EInputMode.Menu);  break;
-                case EFocus.Pause: SwitchInputMode(Tank.EInputMode.Menu);  break;
+                case EFocus.Lobby: SetActiveInput(Tank.EInputMode.Lobby); break;
+                case EFocus.Match: SetActiveInput(Tank.EInputMode.Game);  break;
+                case EFocus.Menu:  SetActiveInput(Tank.EInputMode.Menu);  break;
+                case EFocus.Pause: SetActiveInput(Tank.EInputMode.Menu);  break;
             }
         }
     }
@@ -106,6 +106,7 @@ public class Game : MonoBehaviour
     public static CinemachineVirtualCamera MatchCamera             = null;
     public static CinemachineVirtualCamera LobbyCamera             = null;
     private       ActionAsset              actionAsset             = null;
+    private static WidgetSwitcher          MenuSwitch              = null;
 
     public enum EState
     {
@@ -135,15 +136,16 @@ public class Game : MonoBehaviour
 
         // 2. REFERENCES
         InputManager  = GetComponent<PlayerInputManager>();
-        Camera        = GetComponentInChildren<Camera>();
-        CameraTargets = GetComponentInChildren<CinemachineTargetGroup>(); 
+        Camera        = GetComponentInChildren<Camera>(true);
+        CameraTargets = GetComponentInChildren<CinemachineTargetGroup>(true); 
+        MenuSwitch    = GetComponentInChildren<WidgetSwitcher>(true);
         {
             var i = GetComponentsInChildren<CinemachineVirtualCamera>();
             MatchCamera = i[0];
             LobbyCamera = i[1];
         }
         {
-            var i = GetComponentsInChildren<Widget>();
+            var i = GetComponentsInChildren<Widget>(true);
             MatchWidget    = i[0];
             LobbyWidget    = i[1];
             MainMenuWidget = i[2];
@@ -180,8 +182,8 @@ public class Game : MonoBehaviour
     }
     private void Start()
     {   
+        SetActiveWidget(MainMenuWidget);
         Game.Focus = EFocus.Menu;
-        Widget.SetSelectedWidget(MainMenuWidget, null);
     }
     
 //  PLAYER LOGIC
@@ -303,17 +305,13 @@ public class Game : MonoBehaviour
     }
 
 //  MENU LOGIC
-    public static void SelectWidget(Widget widget, Action OnComplete = null, bool ignoreNull = false)
-    {
-        Widget.SetSelectedWidget(widget, OnComplete, ignoreNull);
-    }
     public static void PauseGame()
     {
         Widget.AddWidget(PauseWidget);
         Game.Focus = EFocus.Pause;
-        PauseWidget.SetSelectedElement
+        PauseWidget.ResetSelection
         (
-            PauseWidget.defaultElement, () => 
+            () => 
             {
                 Time.timeScale = 0f;
                 OnPause?.Invoke();
@@ -339,8 +337,16 @@ public class Game : MonoBehaviour
         i.Ready = false;
     }
 
-//  INPUT LOGIC
-    private static void SwitchInputMode(Tank.EInputMode InputMode)
+//  SETTERS
+    public static void SetActiveWidget(Widget Widget)
+    {
+        MenuSwitch.SetWidget(Widget);
+    }
+    public static void SetActiveCamera(CinemachineVirtualCamera Camera)
+    {
+        Cam.SetActiveCamera(Camera);
+    }
+    public static void SetActiveInput(Tank.EInputMode InputMode)
     {
         Tank.SwitchInputMode(InputMode);
     }
@@ -348,36 +354,26 @@ public class Game : MonoBehaviour
 //  MATCH LOGIC
     public static void StartMatch()
     {
-        SelectWidget
-        (
-            MatchWidget, () =>
-            {
-                Game.Focus = EFocus.Match; 
-                PauseReset();
-                UpdateScoreboard();
-                Cam.SetActiveCamera(MatchCamera);
-                CurrentMode.Init();
+        SetActiveWidget(MatchWidget);
+        Game.Focus = EFocus.Match; 
+        PauseReset();
+        UpdateScoreboard();
+        SetActiveCamera(MatchCamera);
+        CurrentMode.Init();
 
-                Game.State = EState.Match;
-                OnNewMatch?.Invoke();
-            }
-        );
+        Game.State = EState.Match;
+        OnNewMatch?.Invoke();
     }
     public static void StartLobby()
     {
-        SelectWidget
-        (
-            LobbyWidget, () => 
-            {
-                Focus = EFocus.Lobby;
-                DisableTanks();
-                PauseReset();
-                Cam.SetActiveCamera(LobbyCamera);
+        SetActiveWidget(LobbyWidget);
+        Focus = EFocus.Lobby;
+        DisableTanks();
+        PauseReset();
+        Cam.SetActiveCamera(LobbyCamera);
 
-                Game.State = EState.Lobby;
-                OnNewLobby?.Invoke();
-            }
-        );
+        Game.State = EState.Lobby;
+        OnNewLobby?.Invoke();
     }
     public static void MatchCleanup()
     {
