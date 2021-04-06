@@ -8,4 +8,5 @@ public class TankRef : MonoBehaviour
     [Space(5)]
     public Transform MuzzlePoint     = null;
     public Transform TurretTransform = null;
+    public Transform SeaminePoint = null;
 }

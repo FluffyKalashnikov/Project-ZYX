@@ -519,7 +519,7 @@ MonoBehaviour:
   pickupDestroyer: {fileID: 11400000, guid: 53020d8b124d1a547b819c7181d644c6, type: 2}
   seamineList: []
   tankTransform: {fileID: 838318968599533946}
-  seamineObject: {fileID: 6562246226451581440, guid: ad0c960a873911c4eb18fcf988ebd01e, type: 3}
+  seamineObject: {fileID: 8340017461182487510, guid: a98f388baa203074cac329bf81a7fd7d, type: 3}
   SpeedBoost_AudioMultiplier: 1.3
   HP_Ammount: 25
   Seamine_Ammount: 3

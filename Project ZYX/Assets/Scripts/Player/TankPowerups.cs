@@ -20,7 +20,7 @@ public class TankPowerups : MonoBehaviour
 
     [Header("Seamine")]
     [SerializeField] private List<GameObject> seamineList = new List<GameObject>();
-    [SerializeField] private Transform tankTransform;
+    [SerializeField] private Transform SeaminePoint;
     [SerializeField] private GameObject seamineObject;
     private bool seamineActive;
 
@@ -205,7 +205,7 @@ public class TankPowerups : MonoBehaviour
     {
         if (seamineList.Count >= 1 && seamineActive == true)
         {
-            Instantiate(seamineObject, new Vector3(tankTransform.position.x, tankTransform.position.y, tankTransform.position.z + 1.7f), Quaternion.identity);
+            Instantiate(seamineObject, new Vector3(SeaminePoint.position.x, SeaminePoint.position.y, SeaminePoint.position.z), Quaternion.identity);
         }
     }
     #endregion
@@ -267,4 +267,18 @@ public class TankPowerups : MonoBehaviour
         QuickCharge_TimerBool = false;
     }
     #endregion
+
+
+
+
+
+
+
+
+
+
+    public void OnLoadStats(TankRef i)
+    {
+        SeaminePoint = i.SeaminePoint;
+    }
 }
