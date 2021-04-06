@@ -17,7 +17,7 @@ public class TankAudio : MonoBehaviour
     [SerializeField] float idleVolumeMin;
     [SerializeField] float idleVolumeMax;
     [SerializeField] float throttlePitchMin;
-    [SerializeField] float throttlePitchMax;
+    public float throttlePitchMax;
     [SerializeField] float throttleVolumeMin;
     [SerializeField] float throttleVolumeMax;
 

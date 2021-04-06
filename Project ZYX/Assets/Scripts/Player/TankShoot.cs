@@ -8,8 +8,8 @@ public class TankShoot : MonoBehaviour
 {
     [Header("Firing Stats")]
     [SerializeField] private float bulletVelocity = 25f;
-    [SerializeField] private float minCharge      = 0.6f;
-    [SerializeField] private float maxCharge      = 1f;
+    public float minCharge      = 0.3f;
+    public float maxCharge      = 1f;
     [SerializeField] private float chargeTime     = 1f;
     [SerializeField] private float inputTolerance = 0.5f;
     [SerializeField] private float fireRate       = 1f;

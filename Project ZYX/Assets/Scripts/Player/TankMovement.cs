@@ -19,7 +19,7 @@ public class TankMovement : MonoBehaviour
 
     #region Stats
     [Header("Force Values")]
-    [SerializeField] private float motorForce;
+    public float motorForce;
     [SerializeField] private float accelerationForce;
     [SerializeField] private float decelerationForce;
     [SerializeField] private float rotationForce;
