@@ -19,7 +19,7 @@ public class TankPowerups : MonoBehaviour
     [SerializeField] private DestructEvent pickupDestroyer;
 
     [Header("Seamine")]
-    [SerializeField] private List<GameObject> seamineList = new List<GameObject>();
+    [SerializeField] private List<GameObject> SeamineList = new List<GameObject>();
     [SerializeField] private Transform SeaminePoint;
     [SerializeField] private GameObject seamineObject;
     private bool seamineActive;
@@ -97,7 +97,7 @@ public class TankPowerups : MonoBehaviour
                 break;
             //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
             case "PU-Seamine":
-                if (seamineList.Count != Seamine_Ammount)
+                if (SeamineList.Count != Seamine_Ammount)
                 {
                     SeamineMethod();
                     pickupDestroyer.Play(powerup.gameObject);
@@ -157,9 +157,10 @@ public class TankPowerups : MonoBehaviour
     }
     private void SeamineMethod()
     {
+        SeamineList.Clear();
         for (int i = 0; i < Seamine_Ammount; ++i)
         {
-            seamineList.Add(seamineObject);
+            SeamineList.Add(seamineObject);
         }
         seamineActive = true;
     }
@@ -203,9 +204,10 @@ public class TankPowerups : MonoBehaviour
     #region Pickup Operators
     private void SeamineOperator()
     {
-        if (seamineList.Count >= 1 && seamineActive == true)
+        if (SeamineList.Count >= 1 && seamineActive == true)
         {
             Instantiate(seamineObject, new Vector3(SeaminePoint.position.x, SeaminePoint.position.y, SeaminePoint.position.z), Quaternion.identity);
+            SeamineList.RemoveAt(0);
         }
     }
     #endregion

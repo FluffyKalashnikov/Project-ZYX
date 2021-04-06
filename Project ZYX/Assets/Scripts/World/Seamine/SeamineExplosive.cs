@@ -5,27 +5,52 @@ using UnityEngine;
 public class SeamineExplosive : MonoBehaviour
 {
     [Header("Model")]
-    public GameObject seamineModel;
-    public BoxCollider seamineCollider;
+    [SerializeField] private GameObject seamineModel;
+    [SerializeField] private BoxCollider seamineCollider;
 
     [Header("Audio")]
-    public AudioEvent seamineAmbienceSFX;
-    public AudioSource seamineAmbienceSource;
-    public AudioEvent seamineCollisionSFX;
-    public AudioSource seamineCollisionSource;
+    [SerializeField] private AudioEvent seamineSonarAmbienceSFX;
+    [SerializeField] private AudioSource seamineSonarAmbienceSource;
+    [SerializeField] private AudioEvent seamineSwingAmbienceSFX;
+    [SerializeField] private AudioSource seamineSwingAmbienceSource;
+    [SerializeField] private AudioEvent seamineCollisionSFX;
+    [SerializeField] private AudioSource seamineCollisionSource;
 
     [Header("DestructEvent")]
     public DestructEvent seamineDestructEvent;
 
+    private bool destroyed = false;
+
     private void Start()
     {
-        //seamineAmbienceSFX.Play(seamineAmbienceSource);
+        seamineSonarAmbienceSFX.Play(seamineSonarAmbienceSource);
+    }
+
+    private void Update()
+    {
+        SwingSound();
+    }
+    private void SwingSound()
+    {
+        if(seamineSwingAmbienceSource.isPlaying == false && !destroyed)
+        {
+            seamineSwingAmbienceSFX.Play(seamineSwingAmbienceSource);
+        }
+        else if (destroyed)
+        {
+            seamineSwingAmbienceSource.Stop();
+        }
+        else
+        {
+            return;
+        }
     }
     private void OnTriggerEnter(Collider seamine)
     {
         if (seamine.gameObject.layer == 8 || seamine.gameObject.layer == 9)
         {
             seamineCollider.enabled = false;
+            destroyed = true;
             SeamineCollisionSound();
             DeleteSeamineModel();
             //Some kind of tank damage code here and some fire animations aswell
@@ -40,7 +65,7 @@ public class SeamineExplosive : MonoBehaviour
 
     public void SeamineCollisionSound()
     {
-        seamineAmbienceSource.Stop();
+        seamineSonarAmbienceSource.Stop();
         seamineCollisionSFX.Play(seamineCollisionSource);
     }
 
