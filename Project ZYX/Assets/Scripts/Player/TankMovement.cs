@@ -24,13 +24,8 @@ public class TankMovement : MonoBehaviour
     [SerializeField] private float decelerationForce;
     [SerializeField] private float rotationForce;
 
-    [Header("Porpeller Values")]
-    [SerializeField] private GameObject propellerBlades;
-    [SerializeField] private float propellerIdleSpeed;
-    [SerializeField] private float propellerForceMultiplier;
-
     [Header("Velocity Max for engine sounds")]
-    [SerializeField] public float velocityMax;
+    public float velocityMax;
     #endregion
 
     private Vector3 driveForce;
@@ -150,6 +145,7 @@ public class TankMovement : MonoBehaviour
     public void OnLoadStats(TankRef i)
     {
         animator = i.GetComponent<Animator>();
+        motorForce = tankScript.TankAsset.Speed;
         velocityMax = tankScript.TankAsset.VelocityMax;
     }
 }

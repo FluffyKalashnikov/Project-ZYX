@@ -340,14 +340,11 @@ MonoBehaviour:
   tankAudioScript: {fileID: 838318969809300737}
   tankAnimationScript: {fileID: 0}
   moveable: 1
-  motorForce: 5
+  motorForce: 0
   accelerationForce: 3
   decelerationForce: 1
   rotationForce: 100
-  propellerBlades: {fileID: 0}
-  propellerIdleSpeed: 150
-  propellerForceMultiplier: 500
-  velocityMax: 5
+  velocityMax: 0
   Timer: 0
 --- !u!114 &838318969809300760
 MonoBehaviour:
