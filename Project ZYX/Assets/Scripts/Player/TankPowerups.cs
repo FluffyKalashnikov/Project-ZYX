@@ -30,7 +30,8 @@ public class TankPowerups : MonoBehaviour
     [Header("PowerUp Ammounts")]
     [SerializeField] private float HP_Ammount;
     [SerializeField] private int Seamine_Ammount;
-    [SerializeField] private float Multishot_Ammount;
+    [SerializeField] public float Multishot_Ammount;
+    [SerializeField] public float Multishot_Angle;
 
     [Header("PowerUp durations")]
     [SerializeField] private float EMP_Duration;
@@ -60,6 +61,14 @@ public class TankPowerups : MonoBehaviour
     //[QUICK_CHARGE] Backup variables
     private float currentMinCharge;
     private float currentQuickChargeDuration;
+
+    //[MULTISHOT] Powerup bools
+    [HideInInspector] 
+    public bool Multishot_Picked = false;
+    private bool Multishot_TimerBool = false;
+
+    //[QUICK_CHARGE] Backup variables
+    private float currentMultishotDuration;
     #endregion
 
     private void Awake()
@@ -77,7 +86,9 @@ public class TankPowerups : MonoBehaviour
     private void Update()
     {
         SpeedBoostTimerMethod();
+        MultishotTimerMethod();
         QuickChargeTimerMethod();
+        tankAudioScript.PickupSpeedBoostLOOPSound();
     }
 
     private void OnTriggerEnter(Collider powerup)
@@ -126,7 +137,16 @@ public class TankPowerups : MonoBehaviour
                 break;
             //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
             case "PU-Multishot":
-                MultishotMethod();
+                if (Multishot_Picked == false)
+                {
+                    Multishot_Picked = true;
+                    MultishotMethod();
+                    pickupDestroyer.Play(powerup.gameObject);
+                }
+                else
+                {
+                    return;
+                }
                 break;
             //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
             case "PU-SpeedBoost":
@@ -179,12 +199,16 @@ public class TankPowerups : MonoBehaviour
     }
     private void MultishotMethod()
     {
-        Debug.Log("multishot");
+        currentMultishotDuration = Multishot_Duration;
+        if (currentMultishotDuration != 0)
+        {
+            currentMinCharge = tankShootScript.minCharge;
+            tankShootScript.minCharge = tankShootScript.maxCharge;
+        }
     }
     private void SpeedBoostMethod()
     {
         tankAudioScript.PickupSpeedBoostSTARTSound();
-        tankAudioScript.PickupSpeedBoostLOOPSound();
         currentSpeedBoostDuration = SpeedBoost_Duration;
         if (currentSpeedBoostDuration != 0)
         {
@@ -234,6 +258,20 @@ public class TankPowerups : MonoBehaviour
             }
         }
     }
+    private void MultishotTimerMethod()
+    {
+        if (Multishot_Picked == true)
+        {
+            if (Multishot_TimerBool == false && currentMultishotDuration > 0)
+            {
+                StartCoroutine(MultishotTimer());
+            }
+            else if (currentMultishotDuration == 0)
+            {
+                Multishot_Picked = false;
+            }
+        }
+    }
     private void QuickChargeTimerMethod()
     {
         if (QuickCharge_Picked == true)
@@ -270,6 +308,15 @@ public class TankPowerups : MonoBehaviour
 
         //Set bool to false
         QuickCharge_TimerBool = false;
+    }
+    IEnumerator MultishotTimer()
+    {
+        Multishot_TimerBool = true;
+        yield return new WaitForSeconds(1);
+        currentMultishotDuration -= 1;
+
+        //Set bool to false
+        Multishot_TimerBool = false;
     }
     #endregion
 

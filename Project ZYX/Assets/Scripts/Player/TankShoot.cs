@@ -6,6 +6,9 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Tank), typeof(PlayerInput))]
 public class TankShoot : MonoBehaviour
 {
+    [Header("Script")]
+    [SerializeField] private TankPowerups tankPowerupsScript;
+
     [Header("Firing Stats")]
     [SerializeField] private float bulletVelocity = 25f;
     public float minCharge      = 0.3f;
@@ -55,17 +58,39 @@ public class TankShoot : MonoBehaviour
 
     private void Fire(float charge)
     {
-        // 1. CREATE BULLET
-        var Shell = Instantiate
-        (
-            ShellPrefab, 
-            MuzzlePoint.position, 
-            MuzzlePoint.rotation
-        ).GetComponent<Shell>();
+        if(tankPowerupsScript.Multishot_Picked)
+        {
+            for (int i = 0; i < tankPowerupsScript.Multishot_Ammount; i++)
+            {
+                Quaternion target = Quaternion.AngleAxis(tankPowerupsScript.Multishot_Angle * (i - (tankPowerupsScript.Multishot_Ammount / 2)) - -1 * (tankPowerupsScript.Multishot_Angle / 2), transform.up);
+                // 1. CREATE BULLET
+                var Shell = Instantiate
+                (
+                    ShellPrefab,
+                    MuzzlePoint.position,
+                    target * MuzzlePoint.rotation
+                ).GetComponent<Shell>();
 
-        // 2. INIT BULLET
-        Shell.Init(bulletVelocity * charge, TankScript);
-        Tank.OnTankFire.Invoke(TankScript);
+                // 2. INIT BULLET
+                Shell.Init(bulletVelocity * charge, TankScript);
+                Tank.OnTankFire.Invoke(TankScript);
+            }
+        }
+
+        else if (!tankPowerupsScript.Multishot_Picked)
+        {
+            // 1. CREATE BULLET
+            var Shell = Instantiate
+            (
+                ShellPrefab,
+                MuzzlePoint.position,
+                MuzzlePoint.rotation
+            ).GetComponent<Shell>();
+
+            // 2. INIT BULLET
+            Shell.Init(bulletVelocity * charge, TankScript);
+            Tank.OnTankFire.Invoke(TankScript);
+        }
     }
 
     private void Fire(InputAction.CallbackContext ctx)
