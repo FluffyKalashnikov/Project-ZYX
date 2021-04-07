@@ -13,6 +13,7 @@ using TMPro;
 [RequireComponent(typeof(MultiplayerEventSystem), typeof(InputSystemUIInputModule), typeof(PlayerInput))]
 public class Tank : MonoBehaviour, IDamageable
 {
+    public TankAudio TankAudioScript;
     public TankAsset  TankAsset
     {
         get 
@@ -60,6 +61,10 @@ public class Tank : MonoBehaviour, IDamageable
     {
         get { return TankAsset ? TankAsset.Speed : 42069; }
     }
+    public float VelocityMax
+    {
+        get { return TankAsset ? TankAsset.VelocityMax : 42069; }
+    }
 
     public AudioEvent AudioIdle
     {
@@ -73,7 +78,19 @@ public class Tank : MonoBehaviour, IDamageable
     {
         get { return TankAsset ? TankAsset.AudioThrottle : null; }
     }
-    
+    public AudioEvent AudioRevLow
+    {
+        get { return TankAsset ? TankAsset.AudioRevLow : null; }
+    }
+    public AudioEvent AudioRevMid
+    {
+        get { return TankAsset ? TankAsset.AudioRevMid : null; }
+    }
+    public AudioEvent AudioRevHigh
+    {
+        get { return TankAsset ? TankAsset.AudioRevHigh : null; }
+    }
+
     [Header("Player Bools")]
     public bool       Alive = true;
     public bool       Ready = false;
@@ -258,7 +275,7 @@ public class Tank : MonoBehaviour, IDamageable
         Game.CameraTargets.AddMember(Controller.transform, 1f, 0f);
         ShowTank();
         EnableHUD();
-
+        StartCoroutine(TankAudioScript.EngineStartUpSound());
         Alive = true;
     }
     public void DisableTank()

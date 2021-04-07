@@ -5,10 +5,17 @@ using UnityEngine;
 [RequireComponent(typeof(Tank))]
 public class TankAudio : MonoBehaviour
 {
-    private Tank TankScript = null;
+    #region knas
+    private Tank TankScript
+    {
+        get { return m_TankScript ? m_TankScript : m_TankScript = GetComponent<Tank>(); }
+        set { m_TankScript = value;}
+    }
+    private Tank m_TankScript = null;
+    #endregion
 
 
-
+    #region Sounds
     [Tooltip("Sync the ‟play engine sounds‟ function with the start up sound")]
     [Header("Engine Start Up Time (In seconds)")]
     [SerializeField] private float engineStartUpTime;
@@ -31,7 +38,9 @@ public class TankAudio : MonoBehaviour
     private AudioEvent engineThrottle;
     [SerializeField] private AudioSource engineThrottleSource;
 
-    [SerializeField] private AudioEvent[] engineRev;
+    private AudioEvent engineRevLOW;
+    private AudioEvent engineRevMID;
+    private AudioEvent engineRevHIGH;
     [SerializeField] private AudioSource engineRevSource;
 
     [Header("Tank Turret Audio")]
@@ -72,6 +81,8 @@ public class TankAudio : MonoBehaviour
 
 
     private float velocityScaleAUDIO;
+    #endregion
+
     private void Awake()
     {
         // 1. GET REFERENCES
@@ -111,17 +122,17 @@ public class TankAudio : MonoBehaviour
     public void EngineRevLow()
     {
         engineRevSource.Stop();
-        engineRev[0].Play(engineRevSource);
+        engineRevLOW.Play(engineRevSource);
     }
     public void EngineRevMid()
     {
         engineRevSource.Stop();
-        engineRev[1].Play(engineRevSource);
+        engineRevMID.Play(engineRevSource);
     }
     public void EngineRevHigh()
     {
         engineRevSource.Stop();
-        engineRev[2].Play(engineRevSource);
+        engineRevHIGH.Play(engineRevSource);
     }
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     public void TurretSoundPlay()
@@ -187,5 +198,9 @@ public class TankAudio : MonoBehaviour
         engineIdle = TankScript.TankAsset.AudioIdle;
         engineStartup = TankScript.TankAsset.AudioIdle;
         engineThrottle = TankScript.TankAsset.AudioThrottle;
+
+        engineRevLOW = TankScript.TankAsset.AudioRevLow;
+        engineRevMID = TankScript.TankAsset.AudioRevMid;
+        engineRevHIGH = TankScript.TankAsset.AudioRevHigh;
     }
 }

@@ -42,7 +42,6 @@ public class TankMovement : MonoBehaviour
     public float Timer;
 
     private Animator animator = null;
-    private ParticleSystem tankBubblesParticles = null;
 
     #region Setup
     private void Awake()
@@ -55,7 +54,7 @@ public class TankMovement : MonoBehaviour
     }
     void Start()
     {
-        StartCoroutine(tankAudioScript.EngineStartUpSound());
+        //StartCoroutine(tankAudioScript.EngineStartUpSound());
     }
     private void Update()
     {
@@ -63,10 +62,8 @@ public class TankMovement : MonoBehaviour
         {
             BaseMovement(moveAction.ReadValue<Vector2>());
             EngineRev(moveAction.ReadValue<Vector2>());
-            //MovementAnimations(actionAsset.Player.Move.ReadValue<Vector2>());
         }
         VolumeManager();
-        ParticleManager();
 
         if (Timer < 0)
         {
@@ -138,22 +135,6 @@ public class TankMovement : MonoBehaviour
         }
     }
 
-    /*private void MovementAnimations(Vector2 input)
-    {
-        if(input.y > 1)
-        {
-            tankAnimationScript.MoveForwardAnim();
-        }
-        else if(input.y < 1)
-        {
-            tankAnimationScript.MoveBackwardAnim();
-        }
-        else
-        {
-            tankAnimationScript.IdleAnim();
-        }
-    }*/
-
     private void VolumeManager()
     {
         //Absolutes currentVel
@@ -161,12 +142,6 @@ public class TankMovement : MonoBehaviour
         float velocityScale = tankVelAbs / velocityMax;
         tankAudioScript.EngineSounds(velocityScale);
     }
-    private void ParticleManager()
-    {
-        //var main = tankBubbles.main;
-        //main.simulationSpeed *= (1 * currentVel.z);
-    }
-
     public void EnableTankMovement()
     {
         moveable = true;
@@ -175,6 +150,6 @@ public class TankMovement : MonoBehaviour
     public void OnLoadStats(TankRef i)
     {
         animator = i.GetComponent<Animator>();
-        //tankBubblesParticles = i.tankBubblesParticle;
+        velocityMax = tankScript.TankAsset.VelocityMax;
     }
 }
