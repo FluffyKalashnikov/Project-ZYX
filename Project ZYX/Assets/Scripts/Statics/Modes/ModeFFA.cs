@@ -29,8 +29,8 @@ public class ModeFFA : Gamemode
     protected override IEnumerator BeginPlay()
     {
         Game.ResetScore();
-        Game.AddCountdown(5f);
-        Game.SpawnTanks(5f);
+        Game.AddCountdown(30f);
+        Game.SpawnTanks(30f);
         
         yield return null;
     }
