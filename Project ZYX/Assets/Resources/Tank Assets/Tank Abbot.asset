@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Abbot
   Model: {fileID: 7613571533282335637, guid: ce60d599190d8bb4183df0080b5f02f4, type: 3}
-  Damage: 1
+  Damage: 20
   Health: 100
   Speed: 5
   AudioIdle: {fileID: 11400000, guid: 0166dd06cd772ec44bd672d6bfa21f0f, type: 2}

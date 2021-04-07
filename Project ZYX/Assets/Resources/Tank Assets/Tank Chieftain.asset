@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Chieftain
   Model: {fileID: 8518340098196470987, guid: 033d5b93e48006c408971b2861ee73a7, type: 3}
-  Damage: 1
+  Damage: 10
   Health: 200
-  Speed: 5
+  Speed: 2.5
   AudioIdle: {fileID: 11400000, guid: fa7b7d3b3fc24c045a3a5e0dba6c68b0, type: 2}
   AudioStartup: {fileID: 11400000, guid: db673f6fbf617f741b800be9176987de, type: 2}
   AudioThrottle: {fileID: 11400000, guid: 303a23b2945d1ca468847f89fd5245eb, type: 2}
