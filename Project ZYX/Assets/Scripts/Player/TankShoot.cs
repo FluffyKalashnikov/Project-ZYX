@@ -58,7 +58,7 @@ public class TankShoot : MonoBehaviour
 
     private void Fire(float charge)
     {
-        if(tankPowerupsScript.Multishot_Picked)
+        if(tankPowerupsScript.Multishot_Enabled)
         {
             for (int i = 0; i < tankPowerupsScript.Multishot_Ammount; i++)
             {
@@ -77,7 +77,7 @@ public class TankShoot : MonoBehaviour
             }
         }
 
-        else if (!tankPowerupsScript.Multishot_Picked)
+        else if (!tankPowerupsScript.Multishot_Enabled)
         {
             // 1. CREATE BULLET
             var Shell = Instantiate

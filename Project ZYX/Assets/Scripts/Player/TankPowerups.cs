@@ -51,6 +51,7 @@ public class TankPowerups : MonoBehaviour
 
     //[SPEED_BOOST] Backup variables
     private float currentMotorforce;
+    private float currentMaxVel;
     private float currentThrottlePitch;
     private float currentSpeedBoostDuration;
 
@@ -63,8 +64,9 @@ public class TankPowerups : MonoBehaviour
     private float currentQuickChargeDuration;
 
     //[MULTISHOT] Powerup bools
-    [HideInInspector] 
-    public bool Multishot_Picked = false;
+    [HideInInspector]
+    public bool Multishot_Enabled = false;
+    private bool Multishot_Picked = false;
     private bool Multishot_TimerBool = false;
 
     //[QUICK_CHARGE] Backup variables
@@ -202,8 +204,7 @@ public class TankPowerups : MonoBehaviour
         currentMultishotDuration = Multishot_Duration;
         if (currentMultishotDuration != 0)
         {
-            currentMinCharge = tankShootScript.minCharge;
-            tankShootScript.minCharge = tankShootScript.maxCharge;
+            Multishot_Enabled = true;
         }
     }
     private void SpeedBoostMethod()
@@ -214,6 +215,9 @@ public class TankPowerups : MonoBehaviour
         {
             currentMotorforce = tankMovementScript.motorForce;
             tankMovementScript.motorForce *= SpeedBoost_Multiplier;
+
+            currentMaxVel = tankMovementScript.velocityMax;
+            tankMovementScript.velocityMax *= SpeedBoost_Multiplier;
 
             currentThrottlePitch = tankAudioScript.throttlePitchMax;
             tankAudioScript.throttlePitchMax *= SpeedBoost_AudioMultiplier;
@@ -252,6 +256,7 @@ public class TankPowerups : MonoBehaviour
             else if (currentSpeedBoostDuration == 0)
             {
                 tankMovementScript.motorForce = currentMotorforce;
+                tankMovementScript.velocityMax = currentMaxVel;
                 tankAudioScript.throttlePitchMax = currentThrottlePitch;
                 SpeedBoost_Picked = false;
                 tankAudioScript.PickupSpeedBoostENDSound();
@@ -268,6 +273,7 @@ public class TankPowerups : MonoBehaviour
             }
             else if (currentMultishotDuration == 0)
             {
+                Multishot_Enabled = false;
                 Multishot_Picked = false;
             }
         }

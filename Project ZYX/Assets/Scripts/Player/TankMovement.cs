@@ -30,7 +30,7 @@ public class TankMovement : MonoBehaviour
     [SerializeField] private float propellerForceMultiplier;
 
     [Header("Velocity Max for engine sounds")]
-    [SerializeField] float velocityMax;
+    [SerializeField] public float velocityMax;
     #endregion
 
     private Vector3 driveForce;
@@ -159,7 +159,6 @@ public class TankMovement : MonoBehaviour
         //Absolutes currentVel
         float tankVelAbs = Mathf.Abs(currentVel.z);
         float velocityScale = tankVelAbs / velocityMax;
-
         tankAudioScript.EngineSounds(velocityScale);
     }
     private void ParticleManager()

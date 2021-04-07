@@ -346,7 +346,7 @@ MonoBehaviour:
   propellerBlades: {fileID: 0}
   propellerIdleSpeed: 150
   propellerForceMultiplier: 500
-  velocityMax: 0.03
+  velocityMax: 5
   Timer: 0
 --- !u!114 &838318969809300760
 MonoBehaviour:
@@ -534,7 +534,7 @@ MonoBehaviour:
   Multishot_Angle: 30
   EMP_Duration: 10
   QuickCharge_Duration: 5
-  Multishot_Duration: 10
+  Multishot_Duration: 5
   SpeedBoost_Duration: 3
   Invincibility_Duration: 0
   SpeedBoost_Multiplier: 2
