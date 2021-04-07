@@ -63,12 +63,48 @@ public class WidgetSwitcher : MonoBehaviour
         ActiveIndex = ActiveIndex;
     }
  
-    public void SetIndex(int Index)
+//  WIDGET ACTIVATION
+    public void SetActiveIndex(int Index)
     {
         ActiveIndex = Index;
     }
-    public void SetWidget(Widget Widget)
+    public void SetActiveWidget(Widget Widget)
     {
         ActiveWidget = Widget;
+    }
+
+//  WIDGET ORDER
+    public void SetWidgetIndex(Widget Widget, int Index)
+    {
+        // 1. CHECK IF CHILD
+        if (!Contains(Widget))
+        return;
+        // 2. SHOW FIRST
+        Widget.transform.SetSiblingIndex(Index);
+    }
+    public void ShowWidgetFirst(Widget Widget)
+    {
+        // 1. CHECK IF CHILD
+        if (!Contains(Widget))
+        return;
+        // 2. SHOW FIRST
+        Widget.transform.SetAsLastSibling();
+    }
+    public void ShowWidgetLast(Widget Widget)
+    {
+        // 1. CHECK IF CHILD
+        if (!Contains(Widget))
+        return;
+        // 2. SHOW FIRST
+        Widget.transform.SetAsFirstSibling();
+    }
+
+//  BOOLS
+    public bool Contains(Widget Widget)
+    {
+        if (Widgets.Contains(Widget))
+        return true;
+        Debug.Log($"[WIDGET SWITCHER] Widget \"{Widget}\" not found!");
+        return false;
     }
 }

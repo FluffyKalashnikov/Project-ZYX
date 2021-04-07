@@ -8,12 +8,13 @@ using UnityEngine.EventSystems;
 public class Widget : MonoBehaviour
 {
     [Header("REFERENCES")]
-    public  GameObject  DefaultElement = null;
-    public  GameObject  CurrentElement = null;
-    public  Action      OnSelected     = null;
-    public  Action      OnDeselected   = null;
-
-    private Animator    Animator       = null;
+    public WidgetSwitcher Parent         = null;
+    public  GameObject    DefaultElement = null;
+    public  GameObject    CurrentElement = null;
+    public  Action        OnEnabled      = null;
+    public  Action        OnDisabled     = null;
+    
+    private Animator      Animator       = null;
 
     private static IEnumerator  IE_SetSelected = null;
     private static List<Widget> OverlayWidgets = new List<Widget>();
@@ -22,6 +23,7 @@ public class Widget : MonoBehaviour
     {
         // 1. GET REFERENCES
         Animator = GetComponent<Animator>();
+        Parent   = transform.parent.GetComponent<WidgetSwitcher>();
         // 2. INIT
         CurrentElement = DefaultElement;
     }
@@ -29,14 +31,16 @@ public class Widget : MonoBehaviour
     // WIDGET FUNCTIONS
     public void Enable()
     {
+        if (IsActive()) return;
         gameObject.SetActive(true);
-        OnSelected?.Invoke(); 
+        OnEnabled?.Invoke(); 
         ResetSelection(() => { if (Animator) Animator.Play("OnSelected"); });
     }
     public void Disable()
     {
+        if (!IsActive()) return;
         gameObject.SetActive(false);
-        OnDeselected?.Invoke();
+        OnDisabled?.Invoke();
     }
     public bool ShownFirst()
     {
@@ -98,19 +102,20 @@ public class Widget : MonoBehaviour
         RemoveWidget(OverlayWidgets[i]);
     }
 
-    public void SetOrder(int order)
+    public void SetIndex(int Index)
     {
-        Transform root = Game.Instance.transform.Find("UI");
-        transform.SetSiblingIndex(order);
+        Parent?.SetWidgetIndex(this, Index);
     }
     public void ShowFirst()
     {
-        Transform root = Game.Instance.transform.Find("UI");
-        transform.SetAsFirstSibling();
+        Parent?.ShowWidgetFirst(this);
     }
     public void ShowLast()
     {
-        Transform root = Game.Instance.transform.Find("UI");
-        transform.SetAsFirstSibling();
+        Parent?.ShowWidgetLast(this);
+    }
+    public bool IsActive()
+    {
+        return gameObject.activeInHierarchy;
     }
 }

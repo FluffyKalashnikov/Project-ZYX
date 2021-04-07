@@ -211,12 +211,12 @@ public class Tank : MonoBehaviour, IDamageable
         PauseAction .performed += ctx => 
         { 
             if (Game.IsPlaying()) 
-            Game.PauseGame();
+            { Game.PauseGame(); Debug.Log("Player Pausing..."); }
         };
         ResumeAction.performed += ctx => 
         { 
             if (Game.IsPaused())  
-            Game.ResumeGame(); 
+            { Game.ResumeGame(); Debug.Log("Player Resuming..."); }
         };
     }
 

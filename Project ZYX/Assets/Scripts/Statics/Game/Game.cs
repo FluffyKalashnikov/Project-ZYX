@@ -21,21 +21,14 @@ public class Game : MonoBehaviour
             // 1. BAIL IF SET
             if (m_State == value)
             return;
-            // 2. END OLD LOGIC
-            switch(m_State)
-            {
-                case EFocus.Menu:  break;
-                case EFocus.Match: break;
-                case EFocus.Lobby: break;   
-                case EFocus.Pause: break;
-            }
-            // 3. BEGIN NEW LOGIC
+            // 2. BEGIN NEW LOGIC
             switch(m_State = value)
             {
                 case EFocus.Menu:  SetActiveWidget(MenuWidget);  break;
                 case EFocus.Match: SetActiveWidget(MatchWidget); break;
                 case EFocus.Lobby: SetActiveWidget(LobbyWidget); break;   
-                case EFocus.Pause: SetActiveWidget(PauseWidget); break;
+                //case EFocus.Pause: SetActiveWidget(PauseWidget); break;
+                case EFocus.Pause: AddActiveWidget(PauseWidget); break;
             }
         }
     }
@@ -128,28 +121,48 @@ public class Game : MonoBehaviour
         }
 
         // 3. INIT WIDGETS
-        MenuWidget .OnSelected = () =>
+        MenuWidget .OnEnabled = () =>
         {
             SetActiveInput(Tank.EInputMode.Menu);
             SetActiveCamera(LobbyCamera);
-            PauseReset();
         };
-        PauseWidget.OnSelected = () =>
+        PauseWidget.OnEnabled = () =>
         {
             SetActiveInput(Tank.EInputMode.Menu);
+            Time.timeScale = 0f;
+            OnPause?.Invoke();
+
+            Debug.Log("Pause Enabled.");
         };
-        MatchWidget.OnSelected = () =>
+        MatchWidget.OnEnabled = () =>
         {
             SetActiveInput(Tank.EInputMode.Game);
             SetActiveCamera(MatchCamera);
-            PauseReset();
         };
-        LobbyWidget.OnSelected = () =>
+        LobbyWidget.OnEnabled = () =>
         {
             SetActiveInput(Tank.EInputMode.Lobby);
             SetActiveCamera(LobbyCamera);
-            PauseReset();
         };
+
+        MenuWidget .OnDisabled = () =>
+        {
+            
+        };
+        PauseWidget.OnDisabled = () =>
+        {
+            PauseReset();
+            Debug.Log("Pause Disabled.");
+        };
+        MatchWidget.OnDisabled = () =>
+        {
+            
+        };
+        LobbyWidget.OnDisabled = () =>
+        {
+            
+        };
+
 
         // 4. EVENT SUBSCRIPTION
         OnNewLobby += InputManager.EnableJoining;
@@ -305,28 +318,18 @@ public class Game : MonoBehaviour
 //  MENU LOGIC
     public static void PauseGame()
     {
-        Widget.AddWidget(PauseWidget);
-        PauseWidget.ResetSelection
-        (
-            () => 
-            {
-                Time.timeScale = 0f;
-                SetActiveFocus(EFocus.Pause);
-                OnPause?.Invoke();
-            }
-        );
+        SetActiveFocus(EFocus.Pause);
+    }
+    public static void ResumeGame()
+    {
+        SetActiveFocus(EFocus.Match);
+        OnResume?.Invoke();
     }
     public static void PauseReset()
     {
         Widget.RemoveOverlays();
         Time.timeScale = 1f;
         OnPauseReset?.Invoke();
-    }
-    public static void ResumeGame()
-    {
-        PauseReset();
-        SetActiveFocus(EFocus.Match);
-        OnResume?.Invoke();
     }
     public static void ResetReady()
     {
@@ -336,9 +339,14 @@ public class Game : MonoBehaviour
     }
 
 //  SETTERS
+    public static void AddActiveWidget(Widget Widget)
+    {
+        Widget.AddWidget(Widget);
+    }
     public static void SetActiveWidget(Widget Widget)
     {
-        MenuSwitch.SetWidget(Widget);
+        Widget.RemoveOverlays();
+        MenuSwitch.SetActiveWidget(Widget);
     }
     public static void SetActiveCamera(CinemachineVirtualCamera Camera)
     {

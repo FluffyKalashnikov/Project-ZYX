@@ -53,8 +53,8 @@ public class Cam : MonoBehaviour
             while (amplitude != 0f && frequency != 0f)
             {
                 // UPDATES VALUES
-                amplitude = Mathf.MoveTowards(amplitude, 0f, (initAmp  * Time.deltaTime)/time);
-                frequency = Mathf.MoveTowards(frequency, 0f, (initFreq * Time.deltaTime)/time);
+                amplitude = Mathf.MoveTowards(amplitude, 0f, (initAmp  * Time.unscaledDeltaTime)/time);
+                frequency = Mathf.MoveTowards(frequency, 0f, (initFreq * Time.unscaledDeltaTime)/time);
 
                 // UPDATES SHAKE
                 if (constAmpl <= amplitude)
