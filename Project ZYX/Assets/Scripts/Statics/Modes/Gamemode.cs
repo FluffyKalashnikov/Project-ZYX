@@ -14,6 +14,11 @@ public abstract class Gamemode : ScriptableObject
     private IEnumerator IE_Exec = null;
     private IEnumerator IE_Main = null;
 
+//  ** NOTES **
+//  Destruct has to be called at 
+//  the end of the lifecycle.
+//
+
 //  TANK LOGIC
     protected virtual void OnTankKill (Tank Tank, DamageInfo DamageInfo)
     {
@@ -25,21 +30,23 @@ public abstract class Gamemode : ScriptableObject
     }
 
 //  EVENTS
-    protected virtual void BeginPlay()
+    protected virtual IEnumerator BeginPlay()
     {
         Debug.Log($"[{Name}]: Begun playing!");
+        yield return null;
     }
-    protected virtual void Tick()
+    protected virtual IEnumerator Tick()
     {
-
+        yield return null;
     }
-    protected virtual void StopPlay()
+    protected virtual IEnumerator StopPlay()
     {
         Debug.Log($"[{Name}]: Stopped playing!");
+        yield return null;
     }
     
 //  LIFE CYCLE
-    public void Init()
+    public  void        Init()
     {
         Game.OnTankKill  += OnTankKill;
         Game.OnTankSpawn += OnTankSpawn;
@@ -47,7 +54,7 @@ public abstract class Gamemode : ScriptableObject
         Game.Instance.StartCoroutine(IE_Exec = Exec());
         Debug.Log("[FFA]: Initialized.");
     }
-    private void Destruct()
+    private void        Destruct()
     {
         Game.OnTankKill  -= OnTankKill;
         Game.OnTankSpawn -= OnTankSpawn;
@@ -56,16 +63,11 @@ public abstract class Gamemode : ScriptableObject
         if (IE_Main != null) Game.Instance.StopCoroutine(IE_Main);
         Debug.Log("[FFA]: Destroyed.");
     }
-    protected virtual IEnumerator Main()
-    {
-        yield return null;
-    }
     private IEnumerator Exec()
     {
         float time = Time.time;
 
-        BeginPlay();
-        Game.Instance.StartCoroutine(IE_Main = Main());
+        Game.Instance.StartCoroutine(BeginPlay());
         yield return new WaitWhile
         (
             () => 
@@ -75,6 +77,6 @@ public abstract class Gamemode : ScriptableObject
             }
         );
         StopPlay();
-        //Destruct();
+        Destruct();
     }
 }

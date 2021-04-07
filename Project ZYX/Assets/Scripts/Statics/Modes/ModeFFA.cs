@@ -26,16 +26,20 @@ public class ModeFFA : Gamemode
     }
 
 //  LIFE CYCLE
-    protected override void BeginPlay()
+    protected override IEnumerator BeginPlay()
     {
-        base.BeginPlay();
         Game.ResetScore();
-        Game.SpawnTanks();
+        Game.AddCountdown(5f);
+        Game.SpawnTanks(5f);
+        
+        yield return null;
     }
-    protected override void StopPlay()
+    protected override IEnumerator StopPlay()
     {
-        base.StopPlay();
         Game.MatchCleanup();
         Game.SetActiveFocus(Game.EFocus.Lobby);
+
+        yield return null;
     }
+
 }   

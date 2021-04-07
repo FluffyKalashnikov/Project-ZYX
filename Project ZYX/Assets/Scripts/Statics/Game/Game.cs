@@ -3,10 +3,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Users;
 using UnityEngine.UI;
+using TMPro;
 
 [RequireComponent(typeof(PlayerInputManager))]
 public class Game : MonoBehaviour
@@ -68,6 +67,7 @@ public class Game : MonoBehaviour
     private static Widget PauseWidget = null;
     private static Widget MatchWidget = null;
     private static Widget LobbyWidget = null;
+    private static Widget CountWidget = null;
     
     // REFERENCES
     public static Camera                   Camera                  = null;
@@ -82,6 +82,9 @@ public class Game : MonoBehaviour
     public static CinemachineVirtualCamera MatchCamera             = null;
     public static CinemachineVirtualCamera LobbyCamera             = null;
     private static WidgetSwitcher          MenuSwitch              = null;
+    private static WidgetSwitcher          PopupSwitch             = null;
+    private static IEnumerator             IE_Count                = null;
+    
 
     public enum EFocus
     {
@@ -106,7 +109,11 @@ public class Game : MonoBehaviour
         InputManager  = GetComponent<PlayerInputManager>();
         Camera        = GetComponentInChildren<Camera>(true);
         CameraTargets = GetComponentInChildren<CinemachineTargetGroup>(true); 
-        MenuSwitch    = GetComponentInChildren<WidgetSwitcher>(true);
+        {
+            var i = GetComponentsInChildren<WidgetSwitcher>(true);
+            MenuSwitch  = i[0];
+            PopupSwitch = i[1];
+        }
         {
             var i = GetComponentsInChildren<CinemachineVirtualCamera>();
             MatchCamera = i[0];
@@ -118,6 +125,7 @@ public class Game : MonoBehaviour
             LobbyWidget = i[1];
             MenuWidget  = i[2];
             PauseWidget = i[3];
+            CountWidget = i[4];
         }
 
         // 3. INIT WIDGETS
@@ -339,15 +347,6 @@ public class Game : MonoBehaviour
     }
 
 //  SETTERS
-    public static void AddActiveWidget(Widget Widget)
-    {
-        Widget.AddWidget(Widget);
-    }
-    public static void SetActiveWidget(Widget Widget)
-    {
-        Widget.RemoveOverlays();
-        MenuSwitch.SetActiveWidget(Widget);
-    }
     public static void SetActiveCamera(CinemachineVirtualCamera Camera)
     {
         Cam.SetActiveCamera(Camera);
@@ -359,6 +358,45 @@ public class Game : MonoBehaviour
     public static void SetActiveFocus(EFocus Focus)
     {
         Game.Focus = Focus;
+    }
+
+//  WIDGET LOGIC
+    public static void AddActiveWidget(Widget Widget)
+    {
+        Widget.AddWidget(Widget);
+    }
+    public static void SetActiveWidget(Widget Widget)
+    {
+        Widget.RemoveOverlays();
+        MenuSwitch.SetActiveWidget(Widget);
+    }
+    public static void AddCountdown(float Time)
+    {
+        if (!IsPlaying()) return;
+        if (IE_Count != null)
+        Game.Instance.StopCoroutine(IE_Count);
+        Game.Instance.StartCoroutine(IE_Count = Logic());
+
+        IEnumerator Logic()
+        {
+            Widget.AddWidget(CountWidget);
+            TextMeshProUGUI Text = CountWidget.GetComponent<TextMeshProUGUI>();
+            while (Time > 0)
+            {
+                int   min = Mathf.FloorToInt(Time/60f);
+                float sec = Time - (float) min * 60f;
+
+                Text.SetText
+                (
+                    min == 0 
+                    ? $"{Time}"
+                    : $"{min}:{(sec >= 10 ? $"{sec}" : $"0{sec}")}"
+                );
+                Time--;
+                yield return new WaitForSecondsRealtime(1f);
+            }
+            Widget.RemoveWidget(CountWidget);
+        }
     }
 
 //  MATCH LOGIC

@@ -8,13 +8,13 @@ using UnityEngine.EventSystems;
 public class Widget : MonoBehaviour
 {
     [Header("REFERENCES")]
-    public WidgetSwitcher Parent         = null;
-    public  GameObject    DefaultElement = null;
-    public  GameObject    CurrentElement = null;
-    public  Action        OnEnabled      = null;
-    public  Action        OnDisabled     = null;
+    public  WidgetSwitcher Parent         = null;
+    public  GameObject     DefaultElement = null;
+    public  GameObject     CurrentElement = null;
+    public  Action         OnEnabled      = null;
+    public  Action         OnDisabled     = null;
     
-    private Animator      Animator       = null;
+    private Animator       Animator       = null;
 
     private static IEnumerator  IE_SetSelected = null;
     private static List<Widget> OverlayWidgets = new List<Widget>();
@@ -44,7 +44,9 @@ public class Widget : MonoBehaviour
     }
     public bool ShownFirst()
     {
-        return transform.GetSiblingIndex() == 0;
+        return Parent 
+         ? transform.GetSiblingIndex() == Parent.Widgets.Count-1 
+         : false;
     }
 
     // WIDGET SELECTION

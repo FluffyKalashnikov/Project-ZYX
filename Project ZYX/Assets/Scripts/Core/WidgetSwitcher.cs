@@ -60,7 +60,6 @@ public class WidgetSwitcher : MonoBehaviour
     {
         for (int i = 0; i < transform.childCount; i++)
         Widgets.Add(transform.GetChild(i).GetComponent<Widget>());
-        ActiveIndex = ActiveIndex;
     }
  
 //  WIDGET ACTIVATION
@@ -71,6 +70,12 @@ public class WidgetSwitcher : MonoBehaviour
     public void SetActiveWidget(Widget Widget)
     {
         ActiveWidget = Widget;
+    }
+    public void Add(Widget Widget)
+    {
+        Widget.transform.SetParent(transform);
+        Widget.Parent = this;
+        Widget.ShowFirst();
     }
 
 //  WIDGET ORDER

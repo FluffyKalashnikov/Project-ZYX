@@ -210,13 +210,13 @@ public class Tank : MonoBehaviour, IDamageable
         InputAction ResumeAction = PlayerInput.actions.FindAction("Resume");
         PauseAction .performed += ctx => 
         { 
-            if (Game.IsPlaying()) 
-            { Game.PauseGame(); Debug.Log("Player Pausing..."); }
+            if (Game.IsPlaying())
+            Game.PauseGame();
         };
         ResumeAction.performed += ctx => 
         { 
-            if (Game.IsPaused())  
-            { Game.ResumeGame(); Debug.Log("Player Resuming..."); }
+            if (Game.IsPaused())
+            Game.ResumeGame();
         };
     }
 
