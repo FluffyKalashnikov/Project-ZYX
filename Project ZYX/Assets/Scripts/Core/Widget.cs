@@ -100,6 +100,7 @@ public class Widget : MonoBehaviour
     }
     public static void RemoveOverlays()
     {
+        if (OverlayWidgets.Count == 0) return;
         for (int i = OverlayWidgets.Count-1; i>=0; i--)
         RemoveWidget(OverlayWidgets[i]);
     }
