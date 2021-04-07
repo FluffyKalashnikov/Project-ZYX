@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 74fc2d861b7bfea40abe774742ef3ba1, type: 3}
-  m_Name: Tank Barbar
+  m_Name: Tank Chieftain
   m_EditorClassIdentifier: 
-  Name: Tank Barbar
-  Model: {fileID: 7613571533282335637, guid: 43a1c5641f99a5245bd5b45644220a1e, type: 3}
+  Name: Chieftain
+  Model: {fileID: 8518340098196470987, guid: 033d5b93e48006c408971b2861ee73a7, type: 3}
   Damage: 1
-  Health: 100
+  Health: 200
   Speed: 5
-  AudioIdle: {fileID: 0}
-  AudioStartup: {fileID: 0}
-  AudioThrottle: {fileID: 0}
+  AudioIdle: {fileID: 11400000, guid: fa7b7d3b3fc24c045a3a5e0dba6c68b0, type: 2}
+  AudioStartup: {fileID: 11400000, guid: db673f6fbf617f741b800be9176987de, type: 2}
+  AudioThrottle: {fileID: 11400000, guid: 303a23b2945d1ca468847f89fd5245eb, type: 2}

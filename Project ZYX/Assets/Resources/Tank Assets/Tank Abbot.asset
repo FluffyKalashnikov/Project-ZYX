@@ -17,6 +17,6 @@ MonoBehaviour:
   Damage: 1
   Health: 100
   Speed: 5
-  AudioIdle: {fileID: 0}
-  AudioStartup: {fileID: 0}
-  AudioThrottle: {fileID: 0}
+  AudioIdle: {fileID: 11400000, guid: 0166dd06cd772ec44bd672d6bfa21f0f, type: 2}
+  AudioStartup: {fileID: 11400000, guid: 4045cf4dbe878b64fa54bb4cd27d4355, type: 2}
+  AudioThrottle: {fileID: 11400000, guid: 6e42d13bebd4b3140b9526fbe72ac7b6, type: 2}

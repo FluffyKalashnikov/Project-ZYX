@@ -22,13 +22,13 @@ public class TankAudio : MonoBehaviour
     [SerializeField] float throttleVolumeMax;
 
     [Header("Tank Movement Audio")]
-    [SerializeField] private AudioEvent engineStartup;
+    private AudioEvent engineStartup;
     [SerializeField] private AudioSource engineStartupSource;
 
-    [SerializeField] private AudioEvent engineIdle;
+    private AudioEvent engineIdle;
     [SerializeField] private AudioSource engineIdleSource;
 
-    [SerializeField] private AudioEvent engineThrottle;
+    private AudioEvent engineThrottle;
     [SerializeField] private AudioSource engineThrottleSource;
 
     [SerializeField] private AudioEvent[] engineRev;
@@ -184,6 +184,8 @@ public class TankAudio : MonoBehaviour
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     public void OnLoadStats(TankRef i)
     {
-        
+        engineIdle = TankScript.TankAsset.AudioIdle;
+        engineStartup = TankScript.TankAsset.AudioIdle;
+        engineThrottle = TankScript.TankAsset.AudioThrottle;
     }
 }
