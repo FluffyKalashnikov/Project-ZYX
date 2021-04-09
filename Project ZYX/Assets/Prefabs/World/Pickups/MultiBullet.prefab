@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3654740387327859042}
   - component: {fileID: 8152466383238781570}
   - component: {fileID: 7377467769462453813}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: MultiBullet
   m_TagString: PU-Multishot
   m_Icon: {fileID: 0}

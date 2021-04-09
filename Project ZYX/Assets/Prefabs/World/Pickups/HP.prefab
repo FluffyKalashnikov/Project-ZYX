@@ -112,7 +112,7 @@ GameObject:
   - component: {fileID: 1790528126400932366}
   - component: {fileID: 4706928375432437957}
   - component: {fileID: 6512958258388771014}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: HP
   m_TagString: PU-HP
   m_Icon: {fileID: 0}

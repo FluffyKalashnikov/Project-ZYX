@@ -112,7 +112,7 @@ GameObject:
   - component: {fileID: 858144629958806315}
   - component: {fileID: 8781254233928455530}
   - component: {fileID: 3051077702823917388}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: FastBullet
   m_TagString: PU-QuickCharge
   m_Icon: {fileID: 0}

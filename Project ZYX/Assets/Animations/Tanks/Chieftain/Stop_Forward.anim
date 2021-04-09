@@ -56,7 +56,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Tank_02_Threads/Tank_02_Body
+    path: Tank_02_Body
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -108,7 +108,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Tank_02_Threads/Tank_02_Body/Tank_02_Hatch/Tank_02_Antenna
+    path: Tank_02_Body/Tank_02_Hatch/Tank_02_Antenna
   m_PositionCurves: []
   m_ScaleCurves: []
   m_FloatCurves: []
@@ -121,14 +121,14 @@ AnimationClip:
   m_ClipBindingConstant:
     genericBindings:
     - serializedVersion: 2
-      path: 727069822
+      path: 1235223626
       attribute: 4
       script: {fileID: 0}
       typeID: 4
       customType: 4
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 2727854913
+      path: 3465012458
       attribute: 4
       script: {fileID: 0}
       typeID: 4
@@ -199,7 +199,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: Tank_02_Threads/Tank_02_Body
+    path: Tank_02_Body
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -245,7 +245,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: Tank_02_Threads/Tank_02_Body
+    path: Tank_02_Body
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -291,7 +291,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: Tank_02_Threads/Tank_02_Body
+    path: Tank_02_Body
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -346,7 +346,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: Tank_02_Threads/Tank_02_Body/Tank_02_Hatch/Tank_02_Antenna
+    path: Tank_02_Body/Tank_02_Hatch/Tank_02_Antenna
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -401,7 +401,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: Tank_02_Threads/Tank_02_Body/Tank_02_Hatch/Tank_02_Antenna
+    path: Tank_02_Body/Tank_02_Hatch/Tank_02_Antenna
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -456,7 +456,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: Tank_02_Threads/Tank_02_Body/Tank_02_Hatch/Tank_02_Antenna
+    path: Tank_02_Body/Tank_02_Hatch/Tank_02_Antenna
     classID: 4
     script: {fileID: 0}
   m_EulerEditorCurves:
@@ -466,8 +466,8 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.x
-    path: Tank_02_Threads/Tank_02_Body
+    attribute: m_LocalEulerAngles.z
+    path: Tank_02_Body
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -477,17 +477,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: Tank_02_Threads/Tank_02_Body
-    classID: 4
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.z
-    path: Tank_02_Threads/Tank_02_Body
+    path: Tank_02_Body
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -497,7 +487,17 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: Tank_02_Threads/Tank_02_Body/Tank_02_Hatch/Tank_02_Antenna
+    path: Tank_02_Body
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.x
+    path: Tank_02_Body/Tank_02_Hatch/Tank_02_Antenna
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -507,7 +507,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: Tank_02_Threads/Tank_02_Body/Tank_02_Hatch/Tank_02_Antenna
+    path: Tank_02_Body/Tank_02_Hatch/Tank_02_Antenna
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -517,7 +517,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: Tank_02_Threads/Tank_02_Body/Tank_02_Hatch/Tank_02_Antenna
+    path: Tank_02_Body/Tank_02_Hatch/Tank_02_Antenna
     classID: 4
     script: {fileID: 0}
   m_HasGenericRootTransform: 0

@@ -106,7 +106,7 @@ GameObject:
   - component: {fileID: 3891652821791357039}
   - component: {fileID: -2686972121690521270}
   - component: {fileID: 1318569672518655174}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Speed
   m_TagString: PU-SpeedBoost
   m_Icon: {fileID: 0}

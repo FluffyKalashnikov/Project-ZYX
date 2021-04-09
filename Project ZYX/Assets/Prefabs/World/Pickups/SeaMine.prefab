@@ -112,7 +112,7 @@ GameObject:
   - component: {fileID: 4530968311985034600}
   - component: {fileID: 52249829230416885}
   - component: {fileID: 9021786712708618108}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: SeaMine
   m_TagString: PU-Seamine
   m_Icon: {fileID: 0}
