@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class TankRef : MonoBehaviour
 {
@@ -8,4 +9,7 @@ public class TankRef : MonoBehaviour
     [Space(5)]
     public Transform MuzzlePoint     = null;
     public Transform TurretTransform = null;
+    public Transform SeaminePoint = null;
+    public ParticleSystem tankBubblesParticles = null;
+    public VisualEffect tankShootParticles = null;
 }

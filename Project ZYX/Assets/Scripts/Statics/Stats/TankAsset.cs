@@ -11,8 +11,12 @@ public class TankAsset : ScriptableObject
     public float Damage = 1f;
     public float Health = 100f;
     public float Speed  = 5f;
+    public float VelocityMax = 5f;
     [Space(10)]
-    public AudioClip AudioIdle     = null;
-    public AudioClip AudioStartup  = null;
-    public AudioClip AudioThrottle = null;
+    public AudioEvent AudioIdle     = null;
+    public AudioEvent AudioStartup  = null;
+    public AudioEvent AudioThrottle = null;
+    public AudioEvent AudioRevLow = null;
+    public AudioEvent AudioRevMid = null;
+    public AudioEvent AudioRevHigh = null;
 }

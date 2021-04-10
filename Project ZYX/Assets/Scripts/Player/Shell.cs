@@ -1,10 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class Shell : MonoBehaviour
 {
     [SerializeField] private float damage = 0f;
+    [SerializeField] private VisualEffect bulletImpactParticle;
+    [SerializeField] private AudioEvent bulletEXPLSfx;
+    [SerializeField] private AudioSource bulletEXPLSource;
 
     private Rigidbody    rb       = null;
     private Tank         owner    = null;
@@ -55,6 +59,10 @@ public class Shell : MonoBehaviour
         hasHit = true;
         rb.useGravity = true;
         Tank.IgnoreCollision(collider);
+
+        //CREATE IMPACT PARTICLE FOR BULLET
+        bulletImpactParticle.Play();
+        bulletEXPLSfx.Play(bulletEXPLSource);
     }
     public void Destroy()
     {

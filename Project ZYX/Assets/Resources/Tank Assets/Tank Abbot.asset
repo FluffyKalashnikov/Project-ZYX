@@ -14,9 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Abbot
   Model: {fileID: 7613571533282335637, guid: ce60d599190d8bb4183df0080b5f02f4, type: 3}
-  Damage: 1
+  Damage: 20
   Health: 100
   Speed: 5
-  AudioIdle: {fileID: 0}
-  AudioStartup: {fileID: 0}
-  AudioThrottle: {fileID: 0}
+  VelocityMax: 5
+  AudioIdle: {fileID: 11400000, guid: 0166dd06cd772ec44bd672d6bfa21f0f, type: 2}
+  AudioStartup: {fileID: 11400000, guid: 4045cf4dbe878b64fa54bb4cd27d4355, type: 2}
+  AudioThrottle: {fileID: 11400000, guid: 6e42d13bebd4b3140b9526fbe72ac7b6, type: 2}
+  AudioRevLow: {fileID: 11400000, guid: da6a16cf2d256ae40864524f814bab6b, type: 2}
+  AudioRevMid: {fileID: 11400000, guid: ca035b26f7afa314084ce732fcdcb8e7, type: 2}
+  AudioRevHigh: {fileID: 11400000, guid: d29e01db6c8a77546bfcfb9abb6ae61f, type: 2}

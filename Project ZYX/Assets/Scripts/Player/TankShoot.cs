@@ -6,10 +6,13 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Tank), typeof(PlayerInput))]
 public class TankShoot : MonoBehaviour
 {
+    [Header("Script")]
+    [SerializeField] private TankPowerups tankPowerupsScript;
+
     [Header("Firing Stats")]
     [SerializeField] private float bulletVelocity = 25f;
-    [SerializeField] private float minCharge      = 0.6f;
-    [SerializeField] private float maxCharge      = 1f;
+    public float minCharge      = 0.3f;
+    public float maxCharge      = 1f;
     [SerializeField] private float chargeTime     = 1f;
     [SerializeField] private float inputTolerance = 0.5f;
     [SerializeField] private float fireRate       = 1f;
@@ -55,17 +58,39 @@ public class TankShoot : MonoBehaviour
 
     private void Fire(float charge)
     {
-        // 1. CREATE BULLET
-        var Shell = Instantiate
-        (
-            ShellPrefab, 
-            MuzzlePoint.position, 
-            MuzzlePoint.rotation
-        ).GetComponent<Shell>();
+        if(tankPowerupsScript.Multishot_Enabled)
+        {
+            for (int i = 0; i < tankPowerupsScript.Multishot_Ammount; i++)
+            {
+                Quaternion target = Quaternion.AngleAxis(tankPowerupsScript.Multishot_Angle * (i - (tankPowerupsScript.Multishot_Ammount / 2)) - -1 * (tankPowerupsScript.Multishot_Angle / 2), transform.up);
+                // 1. CREATE BULLET
+                var Shell = Instantiate
+                (
+                    ShellPrefab,
+                    MuzzlePoint.position,
+                    target * MuzzlePoint.rotation
+                ).GetComponent<Shell>();
 
-        // 2. INIT BULLET
-        Shell.Init(bulletVelocity * charge, TankScript);
-        Tank.OnTankFire.Invoke(TankScript);
+                // 2. INIT BULLET
+                Shell.Init(bulletVelocity * charge, TankScript);
+                Tank.OnTankFire.Invoke(TankScript);
+            }
+        }
+
+        else if (!tankPowerupsScript.Multishot_Enabled)
+        {
+            // 1. CREATE BULLET
+            var Shell = Instantiate
+            (
+                ShellPrefab,
+                MuzzlePoint.position,
+                MuzzlePoint.rotation
+            ).GetComponent<Shell>();
+
+            // 2. INIT BULLET
+            Shell.Init(bulletVelocity * charge, TankScript);
+            Tank.OnTankFire.Invoke(TankScript);
+        }
     }
 
     private void Fire(InputAction.CallbackContext ctx)

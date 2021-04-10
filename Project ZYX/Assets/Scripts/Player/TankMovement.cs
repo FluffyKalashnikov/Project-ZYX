@@ -6,35 +6,31 @@ using System;
 
 public class TankMovement : MonoBehaviour
 {
-    //ActionAsset actionAsset;
+    ActionAsset actionAsset;
     [SerializeField] private Tank tankScript;
     [SerializeField] private TankAudio tankAudioScript;
     [SerializeField] private TankAnimation tankAnimationScript;
 
-    public bool moveable = false;
+    // PRIVATE REFERENCES
+    InputAction moveAction;
+    PlayerInput playerInput;
 
-    private InputAction MoveAction = null;
+    public bool moveable = false;
 
     #region Stats
     [Header("Force Values")]
-    [SerializeField] private float motorForce;
+    public float motorForce;
     [SerializeField] private float accelerationForce;
     [SerializeField] private float decelerationForce;
     [SerializeField] private float rotationForce;
 
-    [Header("Porpeller Values")]
-    [SerializeField] private GameObject propellerBlades;
-    [SerializeField] private float propellerIdleSpeed;
-    [SerializeField] private float propellerForceMultiplier;
-
     [Header("Velocity Max for engine sounds")]
-    [SerializeField] float velocityMax;
+    public float velocityMax;
     #endregion
 
     private Vector3 driveForce;
     private Vector3 currentVel;
     private Vector3 direction;
-    private Vector3 propellerVector;
 
     private bool ifReving = false;
 
@@ -45,21 +41,22 @@ public class TankMovement : MonoBehaviour
     #region Setup
     private void Awake()
     {
+        // 1. GET REFERENCES
         tankScript = GetComponent<Tank>();
+        playerInput = GetComponent<PlayerInput>();
 
-        MoveAction = tankScript.PlayerInput.actions.FindAction("Move");
+        moveAction = playerInput.actions.FindAction("Move");
     }
     void Start()
     {
-        StartCoroutine(tankAudioScript.EngineStartUpSound());
+        //StartCoroutine(tankAudioScript.EngineStartUpSound());
     }
     private void Update()
     {
         if (moveable)
         {
-            BaseMovement      (MoveAction.ReadValue<Vector2>());
-            EngineRev         (MoveAction.ReadValue<Vector2>());
-            //MovementAnimations(MoveAction.ReadValue<Vector2>());
+            BaseMovement(moveAction.ReadValue<Vector2>());
+            EngineRev(moveAction.ReadValue<Vector2>());
         }
         VolumeManager();
 
@@ -133,31 +130,13 @@ public class TankMovement : MonoBehaviour
         }
     }
 
-    /*private void MovementAnimations(Vector2 input)
-    {
-        if(input.y > 1)
-        {
-            tankAnimationScript.MoveForwardAnim();
-        }
-        else if(input.y < 1)
-        {
-            tankAnimationScript.MoveBackwardAnim();
-        }
-        else
-        {
-            tankAnimationScript.IdleAnim();
-        }
-    }*/
-
     private void VolumeManager()
     {
         //Absolutes currentVel
         float tankVelAbs = Mathf.Abs(currentVel.z);
         float velocityScale = tankVelAbs / velocityMax;
-
         tankAudioScript.EngineSounds(velocityScale);
     }
-
     public void EnableTankMovement()
     {
         moveable = true;
@@ -166,5 +145,7 @@ public class TankMovement : MonoBehaviour
     public void OnLoadStats(TankRef i)
     {
         animator = i.GetComponent<Animator>();
+        motorForce = tankScript.TankAsset.Speed;
+        velocityMax = tankScript.TankAsset.VelocityMax;
     }
 }
