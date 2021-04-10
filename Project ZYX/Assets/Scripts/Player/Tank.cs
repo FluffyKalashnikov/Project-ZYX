@@ -207,7 +207,7 @@ public class Tank : MonoBehaviour, IDamageable
             if (tank != this) return;
             Animator?.Play("Shoot", 1); 
         };
-        OnTankDead += DamageInfo => Game.OnTankKill((Tank) DamageInfo.Reciever, DamageInfo);
+        //OnTankDead += DamageInfo => Game.OnTankKill((Tank) DamageInfo.Reciever, DamageInfo);
     
         // 4. INPUT SETUP
         InputAction PauseAction  = PlayerInput.actions.FindAction("Pause");
@@ -259,8 +259,8 @@ public class Tank : MonoBehaviour, IDamageable
     }
     public void Die(DamageInfo damageInfo)
     {
-        Game.OnTankKill((Tank) damageInfo.Reciever, damageInfo);
         DisableTank();
+        Game.OnTankKill((Tank) damageInfo.Reciever, damageInfo);
     }
     public void Spawn(float delay = 0f)
     {
@@ -277,7 +277,7 @@ public class Tank : MonoBehaviour, IDamageable
     {
         if (Alive) return;
 
-        Game.AliveListAddPlayer(this);
+        Game.AliveList.Add(this);
         Game.CameraTargets.AddMember(Controller.transform, 1f, 0f);
         ShowTank();
         EnableHUD();
@@ -288,7 +288,7 @@ public class Tank : MonoBehaviour, IDamageable
     {
         if (!Alive) return;
 
-        Game.AliveListRemovePlayer(this);
+        Game.AliveList.Remove(this);
         Game.CameraTargets.RemoveMember(Controller.transform);
         HideTank();
         DisableHUD();

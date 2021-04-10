@@ -8,7 +8,6 @@ public abstract class Gamemode : ScriptableObject
     [SerializeField] protected string DisplayName  =  "GAMEMODE";
     [SerializeField] protected string Name         =  "GMODE";
     [SerializeField] protected float  MatchLength  =  320f;
-    [SerializeField] protected float  Score        =  10f;
     [SerializeField] protected GameObject[] Prefabs;
 
 //  ** NOTES **

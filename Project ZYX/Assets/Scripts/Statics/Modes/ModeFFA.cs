@@ -7,6 +7,7 @@ public class ModeFFA : Gamemode
 {
     [Space(10, order = 0)]
     [Header("Free For All", order = 1)]
+    [SerializeField] private float PointsToWin = 10f;
     [SerializeField] private float PointsPerKill = 2f;
     
 //  LOGIC
@@ -16,11 +17,15 @@ public class ModeFFA : Gamemode
         Tank Dealer = (Tank) DamageInfo.Dealer;
         Dealer.Score += PointsPerKill;
 
-        // 2. IF ONLY ONE ALIVE, SPAWN ALL
-        if (Game.AliveList.Count == 1)
-        Game.SpawnTanks(2f);
+        // 2. CHECK IF WON
+        if (Dealer.Score >= PointsToWin)
+        StopGame();
 
-        Debug.Log($"[{Name}]: \"{DamageInfo.Reciever}\" was killed by \"{DamageInfo.Dealer}\"");
+        // 3. IF ONLY ONE ALIVE, SPAWN ALL
+        if (Game.AliveList.Count <= 1)
+        Game.SpawnTanks(4f);
+
+        
         yield return null;
     }
 

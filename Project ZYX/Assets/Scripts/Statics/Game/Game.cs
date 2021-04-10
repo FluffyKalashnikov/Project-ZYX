@@ -205,16 +205,6 @@ public class Game : MonoBehaviour
             ResetReady();
         }
     }
-    public static void AliveListAddPlayer(Tank tank)
-    {
-        if (!AliveList.Contains(tank))
-        AliveList.Add(tank);
-    }
-    public static void AliveListRemovePlayer(Tank tank)
-    {
-        if (AliveList.Contains(tank))
-        AliveList.Remove(tank);
-    }
     public static void ResetScore()
     {
         foreach (var i in PlayerList)
@@ -231,7 +221,17 @@ public class Game : MonoBehaviour
     }
 
 //  GAMEMODE LOGIC
-    public static void SpawnTank(Tank tank, float delay = 0f)
+    public static void SpawnTank(Tank Tank, float Delay = 0f)
+    {
+        if (!Tank.Alive)
+        RespawnTank(Tank, Delay);
+    }
+    public static void SpawnTanks(float Delay = 0f)
+    {
+        foreach (Tank Tank in PlayerList)
+        SpawnTank(Tank, Delay);
+    }
+    public static void RespawnTank(Tank tank, float delay = 0f)
     {
         MatchContext.Add(Spawn());
         IEnumerator Spawn()
@@ -298,10 +298,10 @@ public class Game : MonoBehaviour
             }
         }
     }
-    public static void SpawnTanks(float delay = 0f)
+    public static void RespawnTanks(float delay = 0f)
     {
         foreach (Tank tank in PlayerList)
-        SpawnTank(tank, delay);
+        RespawnTank(tank, delay);
     }
     public static void EnableTanks()
     {
