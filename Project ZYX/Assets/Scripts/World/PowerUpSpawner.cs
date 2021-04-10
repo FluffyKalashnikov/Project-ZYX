@@ -7,25 +7,25 @@ public class PowerUpSpawner : MonoBehaviour
     [Header("Pickup respawn time")]
     [SerializeField] private int respawnTime;
 
-    [Header("Pickup Spawning Variables")]
-
+    [Header("Pickup Spawning Type")]
     [Tooltip("If unselected, then you're able to control what pickup the barrel should spawn. If selected, then the game randomly selects a value for you")]
     [SerializeField] private bool RandomizePickups;
 
     [Space(10)]
 
+    [Tooltip("Check the elements numbers!")]
     [SerializeField] private int selectedPickup;
+
+    [Header("Pickup List")]
     [SerializeField] private List<GameObject> PowerupList = new List<GameObject>();
 
-    [Space(10)]
-
+    [Header("Other (DON'T TOUCH)")]
     [SerializeField] private LayerMask layerMask;
 
     private int randomizedPickup;
     private int currentRespawnTimerValue;
     private bool spawned;
     private bool spawnerTimerBool;
-    private bool addtotimer = false;
 
     private void Update()
     {
@@ -40,32 +40,25 @@ public class PowerUpSpawner : MonoBehaviour
         }
         #endregion
 
-        Debug.Log(currentRespawnTimerValue);
-
         RaycastHit hit;
         if (Physics.Raycast(transform.position - new Vector3(0, 1, 0), transform.TransformDirection(Vector3.up), out hit, Mathf.Infinity, layerMask, QueryTriggerInteraction.Collide))
         {
-            addtotimer = false;
             spawned = true;
         }
 
         else
         {
-            PowerupSpawnerTimerMethod();
-            addtotimer = true;
-
-            if (addtotimer == true)
+            if (spawned && currentRespawnTimerValue == 0)
             {
                 currentRespawnTimerValue = respawnTime;
-                addtotimer = false;
             }
+            PowerupSpawnerTimerMethod();
         }
     }
 
     private void Start()
     {
         spawned = true;
-        addtotimer = false;
 
         if (RandomizePickups)
         {

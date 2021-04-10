@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class BarrelStandardPickups : BarrelBaseCode
 {
-    [Header("Pickup Spawning Variables")]
-    
+    [Header("Pickup Spawning Type")]
     [Tooltip("If unselected, then you're able to control what pickup the barrel should spawn. If selected, then the game randomly selects a value for you")]
     [SerializeField] private bool RandomizePickups;
     
     [Space(10)]
     
+    [Tooltip("Check the elements numbers!")]
     [SerializeField] private int selectedPickup;
+
+    [Header("Pickup List")]
     [SerializeField] private List<GameObject> PowerupList = new List<GameObject>();
     
     private int randomizedPickup;

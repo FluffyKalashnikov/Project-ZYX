@@ -43,7 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f87a2abc66bded45b2e81a69c846e4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  respawnTime: 5
+  respawnTime: 30
   RandomizePickups: 1
   selectedPickup: 0
   PowerupList:
