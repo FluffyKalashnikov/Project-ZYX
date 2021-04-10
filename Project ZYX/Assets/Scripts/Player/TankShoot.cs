@@ -42,6 +42,12 @@ public class TankShoot : MonoBehaviour
         // 2. EVENT SUBSCRIPTION
         FireAction.canceled += Fire;
 
+        Tank.OnTankFire += tank => 
+        {
+            if (tank != TankScript) return;
+
+            Cam.Shake(15f, 5f, 1f);
+        };
         Game.OnPauseReset += () => 
         {
             if (IE_Fire != null) 
@@ -116,16 +122,6 @@ public class TankShoot : MonoBehaviour
                 )
             );
         }
-    }
-
-
-    public void Enable()
-    {
-        FireAction.Enable();
-    }
-    public void Disable()
-    {
-        FireAction.Disable();
     }
 
 

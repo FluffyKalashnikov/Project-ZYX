@@ -15,7 +15,6 @@ TagManager:
   - BarrelExplosive
   - BarrelRadioactive
   - SeamineDamageable
-  - Disposable
   layers:
   - Default
   - TransparentFX

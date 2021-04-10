@@ -14,6 +14,8 @@ public class TankMovement : MonoBehaviour
     InputAction moveAction;
     PlayerInput playerInput;
 
+    public bool moveable = false;
+
     #region Stats
     [Header("Force Values")]
     public float motorForce;
@@ -50,10 +52,11 @@ public class TankMovement : MonoBehaviour
     }
     private void Update()
     {
-        BaseMovement(moveAction.ReadValue<Vector2>());
-        EngineRev  (moveAction.ReadValue<Vector2>());
-        tankScript.Tick(currentVel.magnitude);
-        
+        if (moveable)
+        {
+            BaseMovement(moveAction.ReadValue<Vector2>());
+            EngineRev(moveAction.ReadValue<Vector2>());
+        }
         VolumeManager();
 
         if (Timer < 0)
@@ -133,13 +136,9 @@ public class TankMovement : MonoBehaviour
         float velocityScale = tankVelAbs / velocityMax;
         tankAudioScript.EngineSounds(velocityScale);
     }
-    public void Enable()
+    public void EnableTankMovement()
     {
-        moveAction.Enable();
-    }
-    public void Disable()
-    {
-        moveAction.Disable();
+        moveable = true;
     }
 
     public void OnLoadStats(TankRef i)

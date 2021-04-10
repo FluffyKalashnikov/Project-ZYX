@@ -7,7 +7,7 @@ public class ModeFFA : Gamemode
 {
     [Space(10, order = 0)]
     [Header("Free For All", order = 1)]
-    [SerializeField] private float PointsToWin   = 10f;
+    [SerializeField] private float PointsToWin = 10f;
     [SerializeField] private float PointsPerKill = 2f;
     
 //  LOGIC
@@ -33,25 +33,19 @@ public class ModeFFA : Gamemode
     protected override IEnumerator BeginPlay()
     {
         Game.ResetScore();
-        Game.SpawnTanks();
-        Game.EnableLookOnly();
-        //Game.DisableInput();
         Game.AddCountdown(5f);
+        Game.SpawnTanks(5f);
 
-        yield return new WaitForSeconds(5f);
-
-        Game.EnableInput();
-        yield return new WaitForSeconds(MatchLength-5f);
-        Game.AddCountdown(5f);
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(MatchLength);
 
         StopGame();
     }
     protected override IEnumerator StopPlay()
     {
-        Game.EnableLookOnly();
-        yield return new WaitForSeconds(3f);
-        Game.DisableInput();
+        Game.MatchCleanup();
+
+        yield return new WaitForSeconds(2f);
+
         Game.SetActiveState(Game.EState.WinScreen);
     }
 
