@@ -253,6 +253,7 @@ public class Tank : MonoBehaviour, IDamageable
     }
     public void Die(DamageInfo damageInfo)
     {
+        TankAudio.TankEXPLSfx();
         Game.OnTankDead((Tank) damageInfo.Reciever, damageInfo);
         DisableTank();
     }

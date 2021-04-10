@@ -10,13 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4b5e4568f40bc8549ae14507fb6ad9a5, type: 3}
-  m_Name: BarrelEXPLODE
+  m_Name: BulletEXPL
   m_EditorClassIdentifier: 
   clips:
-  - {fileID: 8300000, guid: 9b6944c482e4129448896061f5f154e8, type: 3}
-  - {fileID: 8300000, guid: 7fec056fa7391e74990ad2ad333c9313, type: 3}
+  - {fileID: 8300000, guid: a327fdac5636af544b28c8d207e31292, type: 3}
   loop: 0
-  playOneShot: 1
+  playOneShot: 0
   volume:
     type: 0
     slider: 0
@@ -32,11 +31,11 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   pitch:
-    type: 0
+    type: 1
     slider: 0
     single: 1
-    min: 0
-    max: 1
+    min: 0.7
+    max: 1.3
     minLimit: 1
     maxLimit: 1
     curve:

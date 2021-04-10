@@ -53,16 +53,6 @@ public class TankAudio : MonoBehaviour
     [SerializeField] private AudioEvent spinStop;
     [SerializeField] private AudioSource spinStopSource;
 
-    [Header("Tank Barrel Audio")]
-    [SerializeField] private AudioEvent barrelLoop;
-    [SerializeField] private AudioSource barrelLoopSource;
-
-    [SerializeField] private AudioEvent barrelStuckStart;
-    [SerializeField] private AudioSource barrelStuckStartSource;
-
-    [SerializeField] private AudioEvent barrelStuckLoop;
-    [SerializeField] private AudioSource barrelStuckLoopSource;
-
     [Header("Tank Shoot Audio")]
     [SerializeField] private AudioEvent cannonBlast;
     [SerializeField] private AudioSource cannonBlastsource;
@@ -79,6 +69,9 @@ public class TankAudio : MonoBehaviour
     [SerializeField] private AudioEvent PUSpeedBoostEndSfx;
     [SerializeField] private AudioSource PUSpeedBoostEndSource;
 
+    [Header("Tank Explosion")]
+    [SerializeField] private AudioEvent tankEXPLSFX;
+    [SerializeField] private AudioSource tankEXPLSource;
 
     private float velocityScaleAUDIO;
     #endregion
@@ -146,24 +139,9 @@ public class TankAudio : MonoBehaviour
         spinStop.Play(spinStopSource);
     }
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    /*public void BarrelSoundPlay()
+    public void TankEXPLSfx()
     {
-        spinStart.Play(spinStartSource);
-        barrelLoop.Play(barrelLoopSource);
-    }*/
-    //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    /*public void BarrelStuckPlay()
-    {
-        barrelLoopSource.Stop();
-        barrelStuckStart.Play(barrelStuckStartSource);
-        barrelStuckLoop.Play(barrelStuckLoopSource);
-    }*/
-    //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    public void BarrelSoundStop()
-    {
-        barrelLoopSource.Stop();
-        barrelStuckLoopSource.Stop();
-        spinStop.Play(spinStopSource);
+        tankEXPLSFX.Play(tankEXPLSource);
     }
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     public void CannonFire()

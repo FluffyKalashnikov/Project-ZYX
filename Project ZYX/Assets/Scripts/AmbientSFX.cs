@@ -12,6 +12,7 @@ public class AmbientSFX : MonoBehaviour
     [SerializeField] private AudioSource battleTrackSource;
     [SerializeField] private AudioEvent battleTrack;
 
+    #region Ambience
     [Header("Played on start")]
     [SerializeField] private AudioEvent[] backgroundAmbientSound;
 
@@ -38,6 +39,7 @@ public class AmbientSFX : MonoBehaviour
     [SerializeField] private AudioSource whaleAmbientSourceMISC;
     [SerializeField] private float minWaitTimeMISC;
     [SerializeField] private float maxWaitTimeMISC;
+    #endregion
 
     private int songstate;
     private void Awake()
@@ -70,7 +72,6 @@ public class AmbientSFX : MonoBehaviour
         {
             PlayBattleTheme();
         }
-
     }
     private void PlayMenuTheme()
     {
@@ -84,7 +85,6 @@ public class AmbientSFX : MonoBehaviour
         battleTrack.Play(battleTrackSource);
         songstate = 0;
     }
-
 
     IEnumerator WhaleSFX()
     {

@@ -31,13 +31,13 @@ public class TankPowerups : MonoBehaviour
     [SerializeField] private float HP_Ammount;
     [SerializeField] private int Seamine_Ammount;
     [SerializeField] public float Multishot_Ammount;
-    [SerializeField] public float Multishot_Angle;
 
     [Header("PowerUp durations")]
     [SerializeField] private float EMP_Duration;
     [SerializeField] private float QuickCharge_Duration;
     [SerializeField] private float Multishot_Duration;
     [SerializeField] private float SpeedBoost_Duration;
+    [SerializeField] public float Multishot_Angle;
     [SerializeField] private float Invincibility_Duration;
 
     [Header("PowerUp Multipliers")]

@@ -3556,10 +3556,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2258071005565761308, guid: 2b91c019c2b90e144b1c359ef5267188, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2258071005565761309, guid: 2b91c019c2b90e144b1c359ef5267188, type: 3}
       propertyPath: m_Name
       value: Audio
@@ -3606,10 +3602,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2258071005565761311, guid: 2b91c019c2b90e144b1c359ef5267188, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5849127532958015337, guid: 2b91c019c2b90e144b1c359ef5267188, type: 3}
-      propertyPath: m_Volume
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -10552,11 +10544,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 378456680, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 3e-45
+      value: -1e-45
       objectReference: {fileID: 0}
     - target: {fileID: 378456680, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -1e-45
+      value: 1e-45
       objectReference: {fileID: 0}
     - target: {fileID: 868862682, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
       propertyPath: m_LocalRotation.w
