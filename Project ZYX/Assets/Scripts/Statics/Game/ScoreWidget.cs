@@ -21,12 +21,13 @@ public class ScoreWidget : MonoBehaviour
     }
 
     // REFERENCES
-    [HideInInspector] public Tank  Owner       = null;
-    [HideInInspector] public Image ColorImage  = null;
-    [HideInInspector] public Image BorderImage = null;
+    [HideInInspector] 
+    public Tank  Owner       = null;
+    public Image ColorImage  = null;
+    public Image BorderImage = null;
 
-    [HideInInspector] public TextMeshProUGUI NameText  = null;
-    [HideInInspector] public TextMeshProUGUI ScoreText = null;
+    public TextMeshProUGUI NameText  = null;
+    public TextMeshProUGUI ScoreText = null;
 
 
 
@@ -35,18 +36,6 @@ public class ScoreWidget : MonoBehaviour
     {
         // 1. ADD TO LIST
         Game.ScoreElements.Add(this);
-
-        // 2. GER REFS
-        {
-            var i = GetComponentsInChildren<Image>(true);
-            BorderImage = i[0];
-            ColorImage  = i[1];
-        }
-        {
-            var i = GetComponentsInChildren<TextMeshProUGUI>(true);
-            NameText  = i[0];
-            ScoreText = i[1];
-        }   
     }
     private void OnDestroy()
     {
@@ -66,25 +55,6 @@ public class ScoreWidget : MonoBehaviour
         SetScore(Score);
         SetColor(Color);
     }
-    public static void UpdateScores()
-    {
-        foreach(var i in Game.ScoreElements)
-        i.UpdateElement();
-    }
-    public static int SortFunction(ScoreWidget a, ScoreWidget b)
-    {
-        if      (a.Score > b.Score)  return -1;
-        else if (a.Score == b.Score) return 0;
-                                     return 1;
-    }
-    public static void SortElements()
-    {
-        Game.ScoreElements.Sort(SortFunction);
-        for (int i = 0; i < Game.ScoreElements.Count; i++)
-        {
-            Game.ScoreElements[i].transform.SetAsLastSibling();
-        }
-    }
 
 //  SET LOGIC
     private void SetName(string Name)
@@ -93,7 +63,7 @@ public class ScoreWidget : MonoBehaviour
     }
     private void SetScore(float Score)
     {
-        ScoreText.SetText($"{Score}");/*$"{0:0}", Score*/
+        ScoreText.SetText($"{Score}");
     }
     private void SetColor(Color Color)
     {

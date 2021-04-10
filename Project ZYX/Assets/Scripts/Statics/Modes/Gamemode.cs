@@ -10,9 +10,6 @@ public abstract class Gamemode : ScriptableObject
     [SerializeField] protected float  MatchLength  =  320f;
     [SerializeField] protected float  Score        =  10f;
     [SerializeField] protected GameObject[] Prefabs;
-    
-    private IEnumerator IE_Exec = null;
-    private IEnumerator IE_Main = null;
 
 //  ** NOTES **
 //  Destruct has to be called at 
@@ -20,13 +17,15 @@ public abstract class Gamemode : ScriptableObject
 //
 
 //  TANK LOGIC
-    protected virtual void OnTankKill (Tank Tank, DamageInfo DamageInfo)
+    protected virtual IEnumerator OnTankKill (Tank Tank, DamageInfo DamageInfo)
     {
         Debug.Log($"[{Name}]: Tank Died!");
+        yield return null;
     }
-    protected virtual void OnTankSpawn(Tank Tank)
+    protected virtual IEnumerator OnTankSpawn(Tank Tank)
     {
         Debug.Log($"[{Name}]: Tank Spawned!");
+        yield return null;
     }
 
 //  EVENTS
@@ -45,38 +44,51 @@ public abstract class Gamemode : ScriptableObject
         yield return null;
     }
     
+//  EVENT STARTERS
+    private void StartTankKill(Tank Tank, DamageInfo DamageInfo)
+    {
+        MatchContext.Add(OnTankKill(Tank, DamageInfo));
+    }
+    private void StartTankSpawn(Tank Tank)
+    {
+        MatchContext.Add(OnTankSpawn(Tank));
+    }
+
 //  LIFE CYCLE
-    public  void        Init()
+    protected void StopGame()
     {
-        Game.OnTankKill  += OnTankKill;
-        Game.OnTankSpawn += OnTankSpawn;
-
-        Game.Instance.StartCoroutine(IE_Exec = Exec());
-        Debug.Log("[FFA]: Initialized.");
+        MatchContext.Add(StopPlay());
     }
-    private void        Destruct()
+    public    void Init()
     {
-        Game.OnTankKill  -= OnTankKill;
-        Game.OnTankSpawn -= OnTankSpawn;
+        Game.OnTankKill  += StartTankKill;
+        Game.OnTankSpawn += StartTankSpawn;
 
-        if (IE_Exec != null) Game.Instance.StopCoroutine(IE_Exec);
-        if (IE_Main != null) Game.Instance.StopCoroutine(IE_Main);
-        Debug.Log("[FFA]: Destroyed.");
+        MatchContext.Add(Exec());
+        Debug.Log($"[{Name}]: Initialized.");
     }
-    private IEnumerator Exec()
+    public    void Destruct()
+    {
+        Game.OnTankKill  -= StartTankKill;
+        Game.OnTankSpawn -= StartTankSpawn;
+
+        MatchContext.Stop();
+
+        Debug.Log($"[{Name}]: Destroyed.");
+    }
+
+    private   IEnumerator Exec()
     {
         float time = Time.time;
-
-        Game.Instance.StartCoroutine(BeginPlay());
+        MatchContext.Add(BeginPlay());
         yield return new WaitWhile
         (
             () => 
             { 
-                Tick(); 
-                return Time.time < time + MatchLength; 
+                // LOOPS UNTIL COROUTINE STOPPED
+                MatchContext.Add(Tick()); 
+                return true; 
             }
         );
-        StopPlay();
-        Destruct();
     }
 }

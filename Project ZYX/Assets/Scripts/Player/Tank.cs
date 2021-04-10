@@ -104,12 +104,16 @@ public class Tank : MonoBehaviour, IDamageable
             Name = $"Player {PlayerIndex+1}";
             return m_Name;
         }
-        set {m_Name = value; ScoreElement?.UpdateElement();}
+        set 
+        {
+            m_Name = value; 
+            Game.UpdateScoreboards();
+        }
     }
     public float  Score
     {
         get { return m_Score; }
-        set { m_Score = value; Game.UpdateScoreboard(); }
+        set { m_Score = value; Game.UpdateScoreboards(); }
     }
     public int    PlayerIndex 
     {
@@ -148,7 +152,6 @@ public class Tank : MonoBehaviour, IDamageable
     public GameObject             PreviewPrefab      = null;
     public GameObject             PreviewInstance    = null;
     public GameObject             ScorePrefab        = null;
-    public ScoreWidget            ScoreElement       = null;
     [Space(5)]
     public Button                 PreviewButtonReady = null;
     public Button                 PreviewButtonRight = null;
@@ -156,9 +159,9 @@ public class Tank : MonoBehaviour, IDamageable
     public TMP_InputField         PreviewNameField   = null;
     public RawImage               PreviewTankImage   = null;
     public Image                  PreviewBackground  = null;
-    public ParentConstraint HudConstraint = null;
-    public GameObject       HudRoot       = null;
-    public Image            HealthBar     = null;
+    public ParentConstraint       HudConstraint      = null;
+    public GameObject             HudRoot            = null;
+    public Image                  HealthBar          = null;
     #endregion
 
     IEnumerator IE_ResetSelect = null;
@@ -192,6 +195,7 @@ public class Tank : MonoBehaviour, IDamageable
         UpdateTank();
         InitPreview();
         InitHUD();
+        InitScore();
 
         // 3. EVENT SUBSCRIPTION
         Game.OnNewLobby += EnablePreview;
@@ -211,12 +215,18 @@ public class Tank : MonoBehaviour, IDamageable
         PauseAction .performed += ctx => 
         { 
             if (Game.IsPlaying())
-            Game.PauseGame();
+            {
+                Debug.Log($"PAUSED: {Game.State}");
+                Game.PauseGame();
+            }
         };
         ResumeAction.performed += ctx => 
         { 
             if (Game.IsPaused())
-            Game.ResumeGame();
+            {
+                Debug.Log($"RESUME: {Game.State}");
+                Game.ResumeGame();
+            }
         };
     }
 
@@ -352,7 +362,7 @@ public class Tank : MonoBehaviour, IDamageable
         
         // 5. FINAL SETUP
         DisablePreview();
-        if (Game.Focus == Game.EFocus.Lobby)
+        if (Game.State == Game.EState.Lobby)
         EnablePreview();
     }
     public void EnablePreview()
@@ -419,18 +429,21 @@ public class Tank : MonoBehaviour, IDamageable
 
     public void InitScore()
     {
-        // 1. CREATE SCOREBOARD
-        ScoreWidget i = Instantiate
-        (
-            ScorePrefab, 
-            Game.Instance.ScoreboardLayout.transform
-        ).GetComponent<ScoreWidget>();
+        // 1. CREATE ELEMENT
+        foreach (var scoreboard in Game.Instance.Scoreboards)
+        {
+            ScoreWidget i = Instantiate
+            (
+                Refs.i.ScoreboardElement, 
+                scoreboard.transform
+            ).GetComponent<ScoreWidget>();
 
-        // 2. INIT AND GET REF
-        ScoreElement = i;
-        i.Init(this);
+            // 2. INIT AND GET REF
+            scoreboard.AddWidget(i);
+            i.Init(this);
+        }
     }
-
+    
 //  PLAYER STATE
     public void InitPlayer()
     {
@@ -530,4 +543,30 @@ public class Tank : MonoBehaviour, IDamageable
             }
         }
     }
+
+//  DEBUG
+    #if UNITY_EDITOR
+    [ContextMenu("Add Score")]
+    private void DEBUG_AddScore()
+    {
+        Score++;
+    }
+    [ContextMenu("Add Health")]
+    private void DEBUG_AddHealth()
+    {
+        Health += 20;
+    }
+    [ContextMenu("Take Damage")]
+    private void DEBUG_TakeDamage()
+    {
+        DamageInfo i = new DamageInfo
+        (
+            20f,
+            DamageType.OutOfBounds,
+            this,
+            this
+        );
+        TakeDamage(i);
+    }
+    #endif
 }

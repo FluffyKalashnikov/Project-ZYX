@@ -10,8 +10,9 @@ public class WidgetSwitcher : MonoBehaviour
         set 
         {
             // 1. CLAMP VALUE
-            if (Widgets.Count == 0) return;
-            value = Mathf.Clamp(value, 0, Widgets.Count);
+            if (Widgets.Count == 0)     return;
+            if (m_ActiveIndex == value) return;
+            value = Mathf.Clamp(value, 0, Widgets.Count-1);
 
             // 2. DISABLE/ENABLE
             Widgets[m_ActiveIndex]        ?.Disable();

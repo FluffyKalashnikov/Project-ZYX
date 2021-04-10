@@ -88,15 +88,14 @@ public class Widget : MonoBehaviour
         if (!OverlayWidgets.Contains(Widget))
         OverlayWidgets.Add(Widget);
     }
-    public static void RemoveWidget(Widget widget)
+    public static void RemoveWidget(Widget Widget)
     {
         // 1. DISABLE
-        widget.ShowLast();
-        widget.Disable();
+        Widget.Disable();
 
         // 2. REMOVE FROM LIST
-        if (OverlayWidgets.Contains(widget))
-        OverlayWidgets.Remove(widget);
+        if (OverlayWidgets.Contains(Widget))
+        OverlayWidgets.Remove(Widget);
     }
     public static void RemoveOverlays()
     {

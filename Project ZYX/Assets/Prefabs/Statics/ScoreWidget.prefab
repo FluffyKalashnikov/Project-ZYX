@@ -113,10 +113,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Owner: {fileID: 0}
-  ColorImage: {fileID: 0}
-  BorderImage: {fileID: 0}
-  NameText: {fileID: 0}
-  ScoreText: {fileID: 0}
+  ColorImage: {fileID: 5240189322230518376}
+  BorderImage: {fileID: 9130426778115442342}
+  NameText: {fileID: 6377512571170839684}
+  ScoreText: {fileID: 7601160286885046928}
 --- !u!1 &1799408940227103102
 GameObject:
   m_ObjectHideFlags: 0

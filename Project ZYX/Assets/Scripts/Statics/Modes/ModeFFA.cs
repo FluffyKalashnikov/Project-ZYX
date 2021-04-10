@@ -10,36 +10,38 @@ public class ModeFFA : Gamemode
     [SerializeField] private float PointsPerKill = 2f;
     
 //  LOGIC
-    protected override void OnTankKill(Tank Tank, DamageInfo DamageInfo)
+    protected override IEnumerator OnTankKill(Tank Tank, DamageInfo DamageInfo)
     {
-        base.OnTankKill(Tank, DamageInfo);
-        
         // 1. GIVE SCORE TO KILLER
         Tank Dealer = (Tank) DamageInfo.Dealer;
         Dealer.Score += PointsPerKill;
 
         // 2. IF ONLY ONE ALIVE, SPAWN ALL
         if (Game.AliveList.Count == 1)
-        Game.SpawnTanks(4f);
+        Game.SpawnTanks(2f);
 
         Debug.Log($"[{Name}]: \"{DamageInfo.Reciever}\" was killed by \"{DamageInfo.Dealer}\"");
+        yield return null;
     }
 
 //  LIFE CYCLE
     protected override IEnumerator BeginPlay()
     {
         Game.ResetScore();
-        Game.AddCountdown(30f);
-        Game.SpawnTanks(30f);
-        
-        yield return null;
+        Game.AddCountdown(5f);
+        Game.SpawnTanks(5f);
+
+        yield return new WaitForSeconds(MatchLength);
+
+        StopGame();
     }
     protected override IEnumerator StopPlay()
     {
         Game.MatchCleanup();
-        Game.SetActiveFocus(Game.EFocus.Lobby);
 
-        yield return null;
+        yield return new WaitForSeconds(2f);
+
+        Game.SetActiveState(Game.EState.WinScreen);
     }
 
 }   

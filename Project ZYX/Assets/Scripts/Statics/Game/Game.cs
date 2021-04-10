@@ -1,4 +1,4 @@
-﻿using Cinemachine;
+using Cinemachine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ public class Game : MonoBehaviour
 {
     // GAME PROPERTIES
     public static int          ReadyCount = 0;
-    public static EFocus       Focus
+    public static EState       State
     {
         get { return m_State; }
         set 
@@ -20,14 +20,19 @@ public class Game : MonoBehaviour
             // 1. BAIL IF SET
             if (m_State == value)
             return;
+            switch(m_State)
+            {
+                case EState.Pause: RemoveWidget(PauseWidget); break;
+                default: break;
+            }
             // 2. BEGIN NEW LOGIC
             switch(m_State = value)
             {
-                case EFocus.Menu:  SetActiveWidget(MenuWidget);  break;
-                case EFocus.Match: SetActiveWidget(MatchWidget); break;
-                case EFocus.Lobby: SetActiveWidget(LobbyWidget); break;   
-                //case EFocus.Pause: SetActiveWidget(PauseWidget); break;
-                case EFocus.Pause: AddActiveWidget(PauseWidget); break;
+                case EState.MainMenu:  SetActiveWidget(MenuWidget);  break;
+                case EState.Match:     SetActiveWidget(MatchWidget); break;
+                case EState.Lobby:     SetActiveWidget(LobbyWidget); break;
+                case EState.Pause:     AddActiveWidget(PauseWidget); break;
+                case EState.WinScreen: SetActiveWidget(WinWidget);   break;
             }
         }
     }
@@ -47,7 +52,7 @@ public class Game : MonoBehaviour
     public static List<ScoreWidget> ScoreElements = new List<ScoreWidget>();
 
 
-    private static EFocus      m_State     = EFocus.Empty;
+    private static EState      m_State     = EState.Empty;
 
     // GAME EVENTS
     public static event Action OnNewMatch;
@@ -67,16 +72,12 @@ public class Game : MonoBehaviour
     private static Widget PauseWidget = null;
     private static Widget MatchWidget = null;
     private static Widget LobbyWidget = null;
-    private static Widget CountWidget = null;
+    private static Widget WinWidget   = null;
     
     // REFERENCES
     public static Camera                   Camera                  = null;
     public static PlayerInputManager       InputManager            = null;
     public static Game                     Instance                = null;
-    [SerializeField] private Button        buttonMainMenuStart     = null;
-    [SerializeField] private Button        buttonPauseMenuContinue = null;
-    [SerializeField] private Button        buttonPauseMenuNewLobby = null;
-    public        VerticalLayoutGroup      ScoreboardLayout        = null;
     public        HorizontalLayoutGroup    PreviewRootUI           = null;
     public static CinemachineTargetGroup   CameraTargets           = null;
     public static CinemachineVirtualCamera MatchCamera             = null;
@@ -84,15 +85,19 @@ public class Game : MonoBehaviour
     private static WidgetSwitcher          MenuSwitch              = null;
     private static WidgetSwitcher          PopupSwitch             = null;
     private static IEnumerator             IE_Count                = null;
+    public         TextMeshProUGUI         CountdownText           = null;
+    public         List<Scoreboard>        Scoreboards             = new List<Scoreboard>();
+    public         TextMeshProUGUI         WinText                 = null;
     
 
-    public enum EFocus
+    public enum EState
     {
         Empty,
         Match,
         Lobby,
         Pause,
-        Menu
+        MainMenu,
+        WinScreen
     }
 
     private void Awake()
@@ -125,7 +130,7 @@ public class Game : MonoBehaviour
             LobbyWidget = i[1];
             MenuWidget  = i[2];
             PauseWidget = i[3];
-            CountWidget = i[4];
+            WinWidget   = i[4];
         }
 
         // 3. INIT WIDGETS
@@ -138,9 +143,6 @@ public class Game : MonoBehaviour
         {
             SetActiveInput(Tank.EInputMode.Menu);
             Time.timeScale = 0f;
-            OnPause?.Invoke();
-
-            Debug.Log("Pause Enabled.");
         };
         MatchWidget.OnEnabled = () =>
         {
@@ -151,38 +153,40 @@ public class Game : MonoBehaviour
         {
             SetActiveInput(Tank.EInputMode.Lobby);
             SetActiveCamera(LobbyCamera);
+            EnableJoining();
+        };
+        WinWidget  .OnEnabled = () =>
+        {
+            SetActiveInput(Tank.EInputMode.Menu);
+            UpdateWinText();
         };
 
         MenuWidget .OnDisabled = () =>
         {
-            
+
         };
         PauseWidget.OnDisabled = () =>
         {
-            PauseReset();
-            Debug.Log("Pause Disabled.");
+            Time.timeScale = 1f;
         };
         MatchWidget.OnDisabled = () =>
-        {
-            
+        { 
+            CurrentMode.Destruct();
         };
         LobbyWidget.OnDisabled = () =>
         {
-            
+            DisableJoining();
+        };
+        WinWidget  .OnDisabled = () =>
+        {
+
         };
 
-
-        // 4. EVENT SUBSCRIPTION
-        OnNewLobby += InputManager.EnableJoining;
-        OnEndLobby += InputManager.DisableJoining;
-
-        // 5. MISC
+        // 4. MISC
         CurrentMode = ModeList[1];
     }
-    private void Start()
-    {   
-        SetActiveFocus(EFocus.Menu);
-    }
+    private void Start() => LoadMainMenu();
+    
     
 //  PLAYER LOGIC
     public static void UpdateReady(Tank tank)
@@ -215,13 +219,21 @@ public class Game : MonoBehaviour
     {
         foreach (var i in PlayerList)
         i.Score = 0;
-        UpdateScoreboard();
+        UpdateScoreboards();
+    }
+    public static void EnableJoining()
+    {
+        Game.InputManager.EnableJoining();
+    }
+    public static void DisableJoining()
+    {
+        Game.InputManager.DisableJoining();
     }
 
 //  GAMEMODE LOGIC
     public static void SpawnTank(Tank tank, float delay = 0f)
     {
-        Instance.StartCoroutine(Spawn());
+        MatchContext.Add(Spawn());
         IEnumerator Spawn()
         {
             tank.DisableTank();
@@ -304,8 +316,8 @@ public class Game : MonoBehaviour
    
     public static void BeginMatch()
     {
-        SetActiveFocus(EFocus.Match);
-        UpdateScoreboard();
+        SetActiveState(EState.Match);
+        UpdateScoreboards();
         CurrentMode.Init();
         OnNewMatch?.Invoke();
     }
@@ -315,7 +327,7 @@ public class Game : MonoBehaviour
     }
     public static void BeginLobby()
     {
-        SetActiveFocus(EFocus.Lobby);
+        SetActiveState(EState.Lobby);
         OnNewLobby?.Invoke();
     }
     public static void StopLobby()
@@ -326,17 +338,18 @@ public class Game : MonoBehaviour
 //  MENU LOGIC
     public static void PauseGame()
     {
-        SetActiveFocus(EFocus.Pause);
+        SetActiveState(EState.Pause);
+        OnPause?.Invoke();
     }
     public static void ResumeGame()
     {
-        SetActiveFocus(EFocus.Match);
+        SetActiveState(EState.Match);
+        SetActiveInput(Tank.EInputMode.Game);
         OnResume?.Invoke();
     }
-    public static void PauseReset()
+    public static void ResetOverlay()
     {
         Widget.RemoveOverlays();
-        Time.timeScale = 1f;
         OnPauseReset?.Invoke();
     }
     public static void ResetReady()
@@ -344,6 +357,10 @@ public class Game : MonoBehaviour
         ReadyCount = 0;
         foreach (var i in PlayerList)
         i.Ready = false;
+    }
+    public static void LoadMainMenu()
+    {
+        SetActiveState(EState.MainMenu);
     }
 
 //  SETTERS
@@ -355,9 +372,9 @@ public class Game : MonoBehaviour
     {
         Tank.SwitchInputMode(InputMode);
     }
-    public static void SetActiveFocus(EFocus Focus)
+    public static void SetActiveState(EState State)
     {
-        Game.Focus = Focus;
+        Game.State = State;
     }
 
 //  WIDGET LOGIC
@@ -367,35 +384,37 @@ public class Game : MonoBehaviour
     }
     public static void SetActiveWidget(Widget Widget)
     {
-        Widget.RemoveOverlays();
         MenuSwitch.SetActiveWidget(Widget);
+    }
+    public static void RemoveWidget(Widget Widget)
+    {
+        Widget.RemoveWidget(Widget);
     }
     public static void AddCountdown(float Time)
     {
         if (!IsPlaying()) return;
         if (IE_Count != null)
-        Game.Instance.StopCoroutine(IE_Count);
-        Game.Instance.StartCoroutine(IE_Count = Logic());
+        MatchContext.I.StopCoroutine(IE_Count);
+        MatchContext.I.StartCoroutine(IE_Count = Logic());
 
         IEnumerator Logic()
         {
-            Widget.AddWidget(CountWidget);
-            TextMeshProUGUI Text = CountWidget.GetComponent<TextMeshProUGUI>();
+            Game.Instance.CountdownText.gameObject.SetActive(true);
             while (Time > 0)
             {
                 int   min = Mathf.FloorToInt(Time/60f);
                 float sec = Time - (float) min * 60f;
 
-                Text.SetText
+                Game.Instance.CountdownText.SetText
                 (
                     min == 0 
-                    ? $"{Time}"
-                    : $"{min}:{(sec >= 10 ? $"{sec}" : $"0{sec}")}"
+                     ? $"{Time}"
+                     : $"{min}:{(sec >= 10 ? $"{sec}" : $"0{sec}")}"
                 );
                 Time--;
-                yield return new WaitForSecondsRealtime(1f);
+                yield return new WaitForSeconds(1f);
             }
-            Widget.RemoveWidget(CountWidget);
+            Game.Instance.CountdownText.gameObject.SetActive(false);
         }
     }
 
@@ -406,35 +425,66 @@ public class Game : MonoBehaviour
 
         Debug.Log($"[GAME]: Cleanup Finished!");
     }
-    public static void UpdateScoreboard()
+    public static void UpdateScoreboards()
     {
-        // 1. CREATE SCOREBOARDS
-        foreach(var i in PlayerList)
+        foreach(var i in Instance.Scoreboards)
         {
-            // 1. IF EXIST
-            if (i.ScoreElement)
-            i.ScoreElement.UpdateElement();
-            // 2. ELSE CREATE
-            i.InitScore();
-        } 
-        // 2. DESTROY UNPARENTED SCOREBOARDS
-        foreach(var i in ScoreElements)
-        {
-            if (i.Owner && i.Owner.ScoreElement == i) 
-            continue;
-            Destroy(i.gameObject);
+            i.Validate();
+            i.UpdateWidgets();
+            i.Sort();
         }
-        // 3. SORT
-        SortScoreboard();
     }
-    public static void SortScoreboard()
+    public static void SortScoreboards()
     {
-        ScoreWidget.SortElements();
+        foreach(var i in Instance.Scoreboards)
+        i.Sort();
     }
-    public static void RemoveScoreboard()
+    public static void ResetScoreboard()
     {
-        for (int i = ScoreElements.Count; i >= 0; i--)
-        Destroy(ScoreElements[i].gameObject);
+        foreach (var i in Instance.Scoreboards)
+        i.Reset();
+    }
+    public static void UpdateWinText()
+    {
+        // 1. GET WINNERS
+        List<Tank> Winners   = GetWinners();
+        string     WinString = string.Empty; 
+
+        // 2. BUILD STRING
+        switch (Winners.Count)
+        {
+            // 3. IF SINGLE WINNER, SET
+            case 1: WinString = $"{Winners[0].Name} won!"; break;
+            default:
+            // 4. IF MULTIPLE, BUILD STRING
+                WinString = $"{Winners[0].Name}";
+                for (int i = 1; i < Winners.Count-1; i++)
+                {
+                    WinString += $", {Winners[i].Name}";
+                }
+                WinString += $" and {Winners[Winners.Count-1].Name} won!";
+            break;
+        }
+
+        // 5. SET TEXT
+        Instance.WinText.SetText(WinString);
+
+
+
+        List<Tank> GetWinners()
+        {
+            // 1. GET HIGHEST SCORE
+            float highestScore = 0;
+            foreach (var player in PlayerList)
+            {
+                highestScore = player.Score > highestScore
+                 ? player.Score
+                 : highestScore;
+            }
+
+            // 2. RETURN PLAYERS WITH SCORE
+            return PlayerList.FindAll(tank => tank.Score >= highestScore);
+        }
     }
 
 //  APPLICATION LOGIC
@@ -445,10 +495,10 @@ public class Game : MonoBehaviour
     }
     public static bool IsPaused()
     {
-        return Focus == EFocus.Pause;
+        return State == EState.Pause;
     }
     public static bool IsPlaying()
     {
-        return Focus == EFocus.Match;
+        return State == EState.Match;
     }
 }

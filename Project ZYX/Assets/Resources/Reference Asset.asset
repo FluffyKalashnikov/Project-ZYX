@@ -9,12 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ccf88e9f7ad3f34c801df113cd291ce, type: 3}
-  m_Name: Free For All
+  m_Script: {fileID: 11500000, guid: 10a3cc6e14613bf4d88f22fce8d5a9fa, type: 3}
+  m_Name: Reference Asset
   m_EditorClassIdentifier: 
-  DisplayName: Free For All
-  Name: FFA
-  MatchLength: 10
-  Score: 10
-  Prefabs: []
-  PointsPerKill: 2
+  ScoreboardElement: {fileID: 152477876357035898, guid: b5f403f8294a9484eb29ab68f96cb433, type: 3}
