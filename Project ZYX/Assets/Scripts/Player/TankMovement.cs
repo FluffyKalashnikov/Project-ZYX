@@ -51,7 +51,8 @@ public class TankMovement : MonoBehaviour
     private void Update()
     {
         BaseMovement(moveAction.ReadValue<Vector2>());
-        EngineRev(moveAction.ReadValue<Vector2>());
+        EngineRev  (moveAction.ReadValue<Vector2>());
+        tankScript.Tick(currentVel.magnitude);
         
         VolumeManager();
 

@@ -169,6 +169,8 @@ public class Tank : MonoBehaviour, IDamageable
     public static Action<Tank>       OnTankFire;
     public static Action<DamageInfo> OnTankDead;
 
+    public Action<float> Tick;
+
 
     public int Power = 0;
     public float PowerUpTimer;
@@ -256,12 +258,12 @@ public class Tank : MonoBehaviour, IDamageable
     }
     
 //  TANK HEALTH
-    public void TakeDamage(DamageInfo damageInfo)
+    public void TakeDamage(DamageInfo DamageInfo)
     {
         if (Game.IsPlaying())
-        if ((Health -= damageInfo.Damage) <= 0f)
+        if ((Health -= DamageInfo.Damage) <= 0f)
         {
-            Die(damageInfo);
+            Die(DamageInfo);
         }
     }
     public void Die(DamageInfo damageInfo)
