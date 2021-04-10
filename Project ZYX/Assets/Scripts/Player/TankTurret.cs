@@ -9,7 +9,15 @@ public class TankTurret : MonoBehaviour
     [SerializeField] private Tank tankScript;
     [SerializeField] private TankAudio tankAudioScript;
 
-    private InputAction LookAction = null;
+    // PRIVATE REFERENCES
+    InputAction moveAction;
+    PlayerInput playerInput;
+
+    private Vector3 LookVector = Vector2.zero;
+
+    private bool spinningBool;
+
+    private float rotationSpeed;
     #endregion
 
     #region Audio
@@ -34,102 +42,88 @@ public class TankTurret : MonoBehaviour
     #endregion
 
     #region Stats
-    [Header("Force Values")]
-    [SerializeField] private float spinForce = 50;
     [Header("Turret Objects")]
     [SerializeField] private GameObject turret;
-    [SerializeField] private GameObject barrel;
-    [Header("Clamp Values")]
-    [SerializeField] private float gunClampMin = -100;
-    [SerializeField] private float gunClampMax = -70;
-
-    private Vector3 turretSpin;
-
-    private float gunElevation = -90f;
-
-    private bool spinningBool;
-    private bool barrelSpinningBool;
-
-    private bool barrelStuckBool;
     #endregion
 
     #region Setup
     private void Awake()
     {
+        // 1. GET REFERENCES
         tankScript = GetComponent<Tank>();
+        playerInput = GetComponent<PlayerInput>();
 
-        LookAction = tankScript.PlayerInput.actions.FindAction("Look");
+        moveAction = playerInput.actions.FindAction("Look");
     }
-
     private void Update()
     {
-        TurretMovement(LookAction.ReadValue<Vector2>());
-        BarrelMovement(LookAction.ReadValue<Vector2>());
+        ILook();
     }
     #endregion
 
     #region Spin Functions
-    private void TurretMovement(Vector2 input)
+    private void TurretRotation(Vector2 input)
     {
-        float multipliedSpinForce = input.x * spinForce;
-        turretSpin = new Vector3(0, multipliedSpinForce, 0) * Time.deltaTime;
-        turret.transform.Rotate(turretSpin);
+        turret.transform.rotation = Quaternion.LookRotation(-LookVector, Vector3.up);
 
-        #region Audio
-        if (input.x != 0 && !spinningBool)
+
+        /*#region Audio
+        if (mousepos.x != 0 && !spinningBool)
         {
             tankAudioScript.TurretSoundPlay();
             spinningBool = true;
         }
-        else if (input.x == 0 && spinningBool)
+        else if (mousepos.x == 0 && spinningBool)
         {
             tankAudioScript.TurretSoundStop();
             spinningBool = false;
         }
-        #endregion
+        #endregion*/
     }
-    private void BarrelMovement(Vector2 input)
+    void ILook()
     {
-        /*
-        gunElevation += input.y * spinForce * Time.deltaTime;
-        gunElevation = Mathf.Clamp(gunElevation, gunClampMin, gunClampMax);
+        TurretRotation(LookVector = VectorCalc());
 
-        barrel.transform.localRotation = Quaternion.Euler(gunElevation, 0, 0);
-
-        #region Audio
-        if (input.y != 0 && !barrelSpinningBool)
+        Vector3 VectorCalc()
         {
-            tankAudioScript.BarrelSoundPlay();
-            barrelSpinningBool = true;
-        }
-        else if (input.y == 0 && barrelSpinningBool)
-        {
-            tankAudioScript.BarrelSoundStop();
-            barrelSpinningBool = false;
-        }
 
-
-        if (gunElevation == gunClampMin || gunElevation == gunClampMax)
-        {
-            if (input.y != 0 && !barrelStuckBool)
+            switch (playerInput.currentControlScheme)
             {
-                tankAudioScript.BarrelStuckPlay();
-                barrelStuckBool = true;
+                case "Gamepad":
+
+                    Vector2 input = moveAction.ReadValue<Vector2>();
+
+
+                    return new Vector3(input.x, 0f, input.y);
+                case "Keyboard&Mouse":
+
+
+                    // VARIABLES
+                    Vector3 delta = Vector3.zero;
+                    float distance = 0f;
+                    Ray ray = Camera.main.ScreenPointToRay(moveAction.ReadValue<Vector2>());
+                    Plane plane = new Plane(Vector3.up, 0f);
+
+                    plane.Raycast(ray, out distance);
+                    {
+                        Vector3 point = ray.GetPoint(distance);
+
+                        delta.x = point.x;
+                        delta.z = point.z;
+                    }
+
+                    delta -= tankScript.Controller.transform.position;
+                    delta.y = 0f;
+
+                    return delta.normalized;
+                default: Debug.Log("Input Device not supported!"); return Vector3.zero;
             }
 
-            else if (input.y == 0 && barrelStuckBool)
-            {
-                if (gunElevation != gunClampMin || gunElevation != gunClampMax)
-                {
-                    barrelStuckBool = false;
-                }
-            }
         }
-        #endregion
-        */
+
     }
+    //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     #endregion
-
 
     public void OnLoadStats(TankRef i)
     {
