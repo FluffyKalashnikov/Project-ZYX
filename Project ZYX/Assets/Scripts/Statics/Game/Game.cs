@@ -179,7 +179,7 @@ public class Game : MonoBehaviour
         };
         WinWidget  .OnDisabled = () =>
         {
-
+            Game.MatchCleanup();
         };
 
         // 4. MISC
@@ -237,6 +237,7 @@ public class Game : MonoBehaviour
         IEnumerator Spawn()
         {
             tank.DisableTank();
+            if (delay > 0)
             yield return new WaitForSeconds(delay);
             tank.Controller.transform.position = RespawnPosition();
             tank.OnSpawned();
@@ -303,6 +304,7 @@ public class Game : MonoBehaviour
         foreach (Tank tank in PlayerList)
         RespawnTank(tank, delay);
     }
+    
     public static void EnableTanks()
     {
         foreach (Tank tank in FindObjectsOfType<Tank>())
@@ -313,7 +315,22 @@ public class Game : MonoBehaviour
         foreach (Tank tank in FindObjectsOfType<Tank>())
         tank.DisableTank();
     }
-   
+    public static void EnableInput()
+    {
+        foreach (var i in PlayerList)
+        i.EnableInput();
+    }
+    public static void DisableInput()
+    {
+        foreach (var i in PlayerList)
+        i.DisableInput();
+    }
+    public static void EnableLookOnly()
+    {
+        foreach (var i in PlayerList)
+        i.EnableLookOnly();
+    }
+
     public static void BeginMatch()
     {
         SetActiveState(EState.Match);
@@ -421,7 +438,14 @@ public class Game : MonoBehaviour
 //  MATCH LOGIC
     public static void MatchCleanup()
     {
+        // 1. DEACTIVATE PLAYERS
+        MatchContext.Stop();
         DisableTanks();
+        
+        // 2. DELETE OBJECTS
+        foreach (var i in GameObject.FindGameObjectsWithTag("Disposable"))
+        Destroy(i);
+        
 
         Debug.Log($"[GAME]: Cleanup Finished!");
     }

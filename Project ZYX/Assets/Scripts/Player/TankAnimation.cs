@@ -2,9 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Tank))]
 public class TankAnimation : MonoBehaviour
 {
     [SerializeField] private Animator tankAnimator;
+                     private Tank tank;
+                     private ParticleSystem bubbleParticle;
+
+    private void Awake()
+    {
+        tank = GetComponent<Tank>();
+        tank.Tick += UpdateBubbles;
+    }
+
 
     public void IdleAnim()
     {
@@ -37,4 +47,18 @@ public class TankAnimation : MonoBehaviour
     }
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+
+    private void UpdateBubbles(float Velocity)
+    {
+        ParticleSystem.EmissionModule i = bubbleParticle.emission;
+        ParticleSystem.MinMaxCurve tempCurve = i.rateOverTime;
+        tempCurve.constant = 9f * Velocity;
+        i.rateOverTime = tempCurve;
+    }
+
+
+    private void OnLoadStats(TankRef i)
+    {
+        bubbleParticle = i.tankBubblesParticles;
+    }
 }
