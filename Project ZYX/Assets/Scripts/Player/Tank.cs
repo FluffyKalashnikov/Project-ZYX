@@ -61,15 +61,15 @@ public class Tank : MonoBehaviour, IDamageable
         get { return TankAsset ? TankAsset.Speed : 42069; }
     }
 
-    public AudioClip  AudioIdle
+    public AudioEvent  AudioIdle
     {
         get { return TankAsset ? TankAsset.AudioIdle : null; }
     }
-    public AudioClip  AudioStartup
+    public AudioEvent AudioStartup
     {
         get { return TankAsset ? TankAsset.AudioStartup : null; }
     }
-    public AudioClip  AudioThrottle
+    public AudioEvent AudioThrottle
     {
         get { return TankAsset ? TankAsset.AudioThrottle : null; }
     }

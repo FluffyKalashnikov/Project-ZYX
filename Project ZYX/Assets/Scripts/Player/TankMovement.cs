@@ -6,7 +6,6 @@ using System;
 
 public class TankMovement : MonoBehaviour
 {
-    ActionAsset actionAsset;
     [SerializeField] private Tank tankScript;
     [SerializeField] private TankAudio tankAudioScript;
     [SerializeField] private TankAnimation tankAnimationScript;
