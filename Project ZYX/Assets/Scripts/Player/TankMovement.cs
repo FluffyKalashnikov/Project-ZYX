@@ -6,7 +6,6 @@ using System;
 
 public class TankMovement : MonoBehaviour
 {
-    ActionAsset actionAsset;
     [SerializeField] private Tank tankScript;
     [SerializeField] private TankAudio tankAudioScript;
     [SerializeField] private TankAnimation tankAnimationScript;
@@ -14,8 +13,6 @@ public class TankMovement : MonoBehaviour
     // PRIVATE REFERENCES
     InputAction moveAction;
     PlayerInput playerInput;
-
-    public bool moveable = false;
 
     #region Stats
     [Header("Force Values")]
@@ -53,11 +50,9 @@ public class TankMovement : MonoBehaviour
     }
     private void Update()
     {
-        if (moveable)
-        {
-            BaseMovement(moveAction.ReadValue<Vector2>());
-            EngineRev(moveAction.ReadValue<Vector2>());
-        }
+        BaseMovement(moveAction.ReadValue<Vector2>());
+        EngineRev(moveAction.ReadValue<Vector2>());
+        
         VolumeManager();
 
         if (Timer < 0)
@@ -137,9 +132,13 @@ public class TankMovement : MonoBehaviour
         float velocityScale = tankVelAbs / velocityMax;
         tankAudioScript.EngineSounds(velocityScale);
     }
-    public void EnableTankMovement()
+    public void Enable()
     {
-        moveable = true;
+        moveAction.Enable();
+    }
+    public void Disable()
+    {
+        moveAction.Disable();
     }
 
     public void OnLoadStats(TankRef i)

@@ -61,15 +61,15 @@ public class Tank : MonoBehaviour, IDamageable
         get { return TankAsset ? TankAsset.Speed : 42069; }
     }
 
-    public AudioClip  AudioIdle
+    public AudioEvent  AudioIdle
     {
         get { return TankAsset ? TankAsset.AudioIdle : null; }
     }
-    public AudioClip  AudioStartup
+    public AudioEvent  AudioStartup
     {
         get { return TankAsset ? TankAsset.AudioStartup : null; }
     }
-    public AudioClip  AudioThrottle
+    public AudioEvent  AudioThrottle
     {
         get { return TankAsset ? TankAsset.AudioThrottle : null; }
     }
@@ -180,7 +180,7 @@ public class Tank : MonoBehaviour, IDamageable
         Menu
     }
 
-    public void Awake()
+    private void Awake()
     {
         // 1. REFERENCES
         this.TankMovement     = GetComponent<TankMovement>();
@@ -191,7 +191,6 @@ public class Tank : MonoBehaviour, IDamageable
 
         // 2. INIT LOGIC
         InitPlayer();
-        DisableTank();
         UpdateTank();
         InitPreview();
         InitHUD();
@@ -205,10 +204,10 @@ public class Tank : MonoBehaviour, IDamageable
         OnTankFire += tank => 
         { 
             if (tank != this) return;
-            Animator?.Play("Shoot", 1); 
+            Animator?.Play("Shoot", 1);
+            Cam.Shake(15f, 5f, 1f);
         };
-        //OnTankDead += DamageInfo => Game.OnTankKill((Tank) DamageInfo.Reciever, DamageInfo);
-    
+
         // 4. INPUT SETUP
         InputAction PauseAction  = PlayerInput.actions.FindAction("Pause");
         InputAction ResumeAction = PlayerInput.actions.FindAction("Resume");
@@ -229,6 +228,13 @@ public class Tank : MonoBehaviour, IDamageable
             }
         };
     }
+    private void Start()
+    {
+        DisableTank();
+    }
+
+
+
 
 //  TANK SETUP
     public void UpdateTank()
@@ -252,6 +258,7 @@ public class Tank : MonoBehaviour, IDamageable
 //  TANK HEALTH
     public void TakeDamage(DamageInfo damageInfo)
     {
+        if (Game.IsPlaying())
         if ((Health -= damageInfo.Damage) <= 0f)
         {
             Die(damageInfo);
@@ -281,6 +288,7 @@ public class Tank : MonoBehaviour, IDamageable
         Game.CameraTargets.AddMember(Controller.transform, 1f, 0f);
         ShowTank();
         EnableHUD();
+        EnableInput();
 
         Alive = true;
     }
@@ -292,9 +300,49 @@ public class Tank : MonoBehaviour, IDamageable
         Game.CameraTargets.RemoveMember(Controller.transform);
         HideTank();
         DisableHUD();
+        DisableInput();
 
         Alive = false;
     }
+
+    public void EnableInput()
+    {
+        EnableMove();
+        EnableLook();
+        EnableFire();
+    }
+    public void EnableMove()
+    {
+        TankMovement.Enable();
+    }
+    public void EnableLook()
+    {
+        TankTurret.Enable();
+    }
+    public void EnableFire()
+    {
+        TankShoot.Enable();
+    }
+    
+    public void DisableInput()
+    {
+        DisableMove();
+        DisableLook();
+        DisableFire();
+    }
+    public void DisableMove()
+    {
+        TankMovement.Disable();
+    }
+    public void DisableLook()
+    {
+        TankTurret.Disable();
+    }
+    public void DisableFire()
+    {
+        TankShoot.Disable();
+    }
+
     public void HideTank()
     {
         foreach (var i in Model.GetComponentsInChildren<MeshRenderer>(true))
@@ -308,6 +356,13 @@ public class Tank : MonoBehaviour, IDamageable
         i.forceRenderingOff = false;
         foreach (var i in Model.GetComponentsInChildren<Light>(true))
         i.enabled = true;
+    }
+
+    public void EnableLookOnly()
+    {
+        DisableMove();
+        EnableLook();
+        DisableFire();
     }
 
 //  TANK STATS
