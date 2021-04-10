@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class AmbientSFX : MonoBehaviour
 {
+    [Header("Operation Aquatic (MENU THEME)")]
+    [SerializeField] private AudioSource menuTrackSource;
+    [SerializeField] private AudioEvent menuTrack;
+
     [Header("Operation Aquatic (BATTLE THEME)")]
     [SerializeField] private AudioSource battleTrackSource;
     [SerializeField] private AudioEvent battleTrack;
@@ -35,6 +39,7 @@ public class AmbientSFX : MonoBehaviour
     [SerializeField] private float minWaitTimeMISC;
     [SerializeField] private float maxWaitTimeMISC;
 
+    private int songstate;
     private void Awake()
     {
         #region Starts background SFX
@@ -49,16 +54,35 @@ public class AmbientSFX : MonoBehaviour
     }
     private void Start()
     {
-        PlayBattleTheme();
-
+        songstate = 0;
         StartCoroutine(WhaleSFX());
         StartCoroutine(BubblesSFX());
         StartCoroutine(DarkSFX());
         StartCoroutine(MiscSFX());
     }
+    private void Update()
+    {
+        if (!Game.IsPlaying() && songstate == 0)
+        {
+            PlayMenuTheme();
+        }
+        else if (Game.IsPlaying() && songstate == 1)
+        {
+            PlayBattleTheme();
+        }
+
+    }
+    private void PlayMenuTheme()
+    {
+        battleTrackSource.Stop();
+        menuTrack.Play(menuTrackSource);
+        songstate = 1;
+    }
     private void PlayBattleTheme()
     {
+        menuTrackSource.Stop();
         battleTrack.Play(battleTrackSource);
+        songstate = 0;
     }
 
 
