@@ -23,6 +23,7 @@ public class MatchContext : MonoBehaviour
 
     public static void Add(IEnumerator Enumerator)
     {
+        if (Game.IsPlaying())
         I.StartCoroutine(Enumerator);
     }
     public static void Remove(IEnumerator Enumerator)

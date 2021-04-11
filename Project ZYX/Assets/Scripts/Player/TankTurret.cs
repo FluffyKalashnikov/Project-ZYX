@@ -11,7 +11,7 @@ public class TankTurret : MonoBehaviour
     [SerializeField] private TankAudio tankAudioScript;
 
     // PRIVATE REFERENCES
-    InputAction moveAction;
+    InputAction LookAction;
     PlayerInput playerInput;
 
     private Vector3 LookVector = Vector2.zero;
@@ -54,7 +54,7 @@ public class TankTurret : MonoBehaviour
         tankScript = GetComponent<Tank>();
         playerInput = GetComponent<PlayerInput>();
 
-        moveAction = playerInput.actions.FindAction("Look");
+        LookAction = playerInput.actions.FindAction("Look");
     }
     private void Update()
     {
@@ -83,6 +83,9 @@ public class TankTurret : MonoBehaviour
     }
     void ILook()
     {
+        if (!LookAction.enabled) return;
+        if (!enabled) return;
+
         TurretRotation(LookVector = VectorCalc());
 
         Vector3 VectorCalc()
@@ -91,18 +94,16 @@ public class TankTurret : MonoBehaviour
             switch (playerInput.currentControlScheme)
             {
                 case "Gamepad":
+                    Vector2 input = LookAction.ReadValue<Vector2>();
+                    return input != Vector2.zero 
+                     ? new Vector3(input.x, 0f, input.y).normalized
+                     : LookVector;
 
-                    Vector2 input = moveAction.ReadValue<Vector2>();
-
-
-                    return new Vector3(input.x, 0f, input.y);
                 case "Keyboard&Mouse":
-
-
                     // VARIABLES
                     Vector3 delta = Vector3.zero;
                     float distance = 0f;
-                    Ray ray = Camera.main.ScreenPointToRay(moveAction.ReadValue<Vector2>());
+                    Ray ray = Camera.main.ScreenPointToRay(LookAction.ReadValue<Vector2>());
                     Plane plane = new Plane(Vector3.up, 0f);
 
                     plane.Raycast(ray, out distance);
@@ -125,6 +126,18 @@ public class TankTurret : MonoBehaviour
     }
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     #endregion
+
+
+    public void Enable()
+    {
+        LookVector = tankScript.Controller.transform.InverseTransformVector(Vector3.forward);
+        LookAction.Enable();
+    }
+    public void Disable()
+    {
+        LookAction.Disable();
+    }
+
 
     public void OnLoadStats(TankRef i)
     {

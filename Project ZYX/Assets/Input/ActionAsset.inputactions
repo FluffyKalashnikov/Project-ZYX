@@ -30,9 +30,9 @@
                     "interactions": "Press"
                 },
                 {
-                    "name": "Turret",
+                    "name": "Seamine",
                     "type": "Button",
-                    "id": "2d97cdb6-3add-482e-9c95-80403d3ebdfe",
+                    "id": "5a83063f-7e39-435a-abe3-251cef7a4ff9",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -41,14 +41,6 @@
                     "name": "Pause",
                     "type": "Button",
                     "id": "3d097f53-c7e1-4b56-885b-750424db5047",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": ""
-                },
-                {
-                    "name": "Seamine",
-                    "type": "Button",
-                    "id": "7381977e-553c-47b0-8717-5dfdbb8056d7",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -221,114 +213,15 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "Arrows",
-                    "id": "6b557225-190c-44fc-8a9a-06f29145e880",
-                    "path": "2DVector",
+                    "name": "",
+                    "id": "bcda49f9-dfb3-4896-a801-b18abc6ccada",
+                    "path": "<Gamepad>/rightShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Turret",
-                    "isComposite": true,
+                    "action": "Fire",
+                    "isComposite": false,
                     "isPartOfComposite": false
-                },
-                {
-                    "name": "up",
-                    "id": "87e2b45c-abc9-4699-9542-7dfae8009e53",
-                    "path": "<Keyboard>/upArrow",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Turret",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "down",
-                    "id": "23d58446-3de0-4520-8791-6a56f744c91c",
-                    "path": "<Keyboard>/downArrow",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Turret",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "left",
-                    "id": "962b5e94-4327-4be6-84ee-160902aa9e2a",
-                    "path": "<Keyboard>/leftArrow",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Turret",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "right",
-                    "id": "e6b29081-800d-4715-bec7-37c7199e859e",
-                    "path": "<Keyboard>/rightArrow",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Turret",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "Controller",
-                    "id": "eb77ba20-2601-4d4b-a4bf-d2724697d437",
-                    "path": "2DVector",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Turret",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "up",
-                    "id": "efda41f3-9694-4290-824c-423cbcc9be6e",
-                    "path": "<Gamepad>/dpad/up",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Turret",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "down",
-                    "id": "0830b752-5270-4032-921a-0f042a26d188",
-                    "path": "<Gamepad>/dpad/down",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Turret",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "left",
-                    "id": "12b64eb9-16a1-4851-9511-2b98641ebe79",
-                    "path": "<Gamepad>/dpad/left",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Turret",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "right",
-                    "id": "abf23f18-df87-46a7-a8f6-fecc6795c3e4",
-                    "path": "<Gamepad>/dpad/x",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Turret",
-                    "isComposite": false,
-                    "isPartOfComposite": true
                 },
                 {
                     "name": "",
@@ -343,7 +236,7 @@
                 },
                 {
                     "name": "",
-                    "id": "0baeb9cc-ca1c-4a20-99f1-1b7d583284a8",
+                    "id": "423a069b-08c7-41ec-a0b6-1a8cd3d2257a",
                     "path": "<Gamepad>/start",
                     "interactions": "",
                     "processors": "",
@@ -354,7 +247,7 @@
                 },
                 {
                     "name": "",
-                    "id": "acabf26c-bff4-4ee3-b88b-4f112cea5f9e",
+                    "id": "d0d868b6-93e5-48ca-aa7e-6e283f9b1899",
                     "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
@@ -365,8 +258,8 @@
                 },
                 {
                     "name": "",
-                    "id": "db36c7fa-d3fd-43e7-b1be-be6de4f41abf",
-                    "path": "<Gamepad>/buttonSouth",
+                    "id": "ff658188-c678-4308-85dd-33f981d76ba2",
+                    "path": "<Gamepad>/leftShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
