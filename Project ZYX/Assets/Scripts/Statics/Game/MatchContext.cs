@@ -17,10 +17,6 @@ public class MatchContext : MonoBehaviour
     }
     private static MatchContext _i = null;
 
-    public static IEnumerator IE_Timer     = null;
-    public static IEnumerator IE_Countdown = null;
-
-
     public static void Add(IEnumerator Enumerator)
     {
         if (Game.IsPlaying())

@@ -201,7 +201,8 @@ public class Tank : MonoBehaviour, IDamageable
         // 3. EVENT SUBSCRIPTION
         Game.OnNewLobby += EnablePreview;
         Game.OnEndLobby += DisablePreview;
-        
+        Game.OnNewMatch += () => Ready = false;
+
         OnTankFire += tank => 
         { 
             if (tank != this) return;

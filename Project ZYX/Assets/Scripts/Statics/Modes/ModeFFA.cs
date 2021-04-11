@@ -35,14 +35,15 @@ public class ModeFFA : Gamemode
         Game.ResetScore();
         Game.SpawnTanks();
         Game.EnableLookOnly();
+        //Game.DisableInput();
         Game.AddCountdown(5f);
-        
+
         yield return new WaitForSeconds(5f);
-        
+
         Game.EnableInput();
-        Game.StartTimer(MatchLength);
-        
-        yield return new WaitForSeconds(MatchLength);
+        yield return new WaitForSeconds(MatchLength-5f);
+        Game.AddCountdown(5f);
+        yield return new WaitForSeconds(5f);
 
         StopGame();
     }
