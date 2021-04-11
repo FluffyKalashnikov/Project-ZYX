@@ -71,6 +71,7 @@ public abstract class Gamemode : ScriptableObject
         Game.OnTankKill  -= StartTankKill;
         Game.OnTankSpawn -= StartTankSpawn;
 
+        Game.OnEndMatch?.Invoke();
         MatchContext.Stop();
 
         Debug.Log($"[{Name}]: Destroyed.");
@@ -80,6 +81,7 @@ public abstract class Gamemode : ScriptableObject
     {
         float time = Time.time;
         MatchContext.Add(BeginPlay());
+        Game.OnNewMatch?.Invoke();
         yield return new WaitWhile
         (
             () => 
