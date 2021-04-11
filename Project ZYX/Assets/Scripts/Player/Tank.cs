@@ -169,6 +169,7 @@ public class Tank : MonoBehaviour, IDamageable
     public static Action<Tank>       OnTankFire;
     public static Action<DamageInfo> OnTankDead;
 
+    public Action<float> Tick;
 
     public int Power = 0;
     public float PowerUpTimer;
@@ -228,10 +229,8 @@ public class Tank : MonoBehaviour, IDamageable
             }
         };
     }
-    private void Start()
-    {
-        DisableTank();
-    }
+    private void Start() => DisableTank();
+    
 
 
 
