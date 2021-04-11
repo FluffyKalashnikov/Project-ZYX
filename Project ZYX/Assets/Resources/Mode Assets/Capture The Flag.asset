@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DisplayName: Capture The Flag
   Name: CTF
-  MatchLength: 180
+  Time: 320
+  Score: 10
   Prefabs: []

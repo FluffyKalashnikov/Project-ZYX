@@ -55,8 +55,8 @@ public class Game : MonoBehaviour
     private static EState      m_State     = EState.Empty;
 
     // GAME EVENTS
-    public static       Action OnNewMatch;
-    public static       Action OnEndMatch;
+    public static event Action OnNewMatch;
+    public static event Action OnEndMatch;
     public static event Action OnNewLobby;
     public static event Action OnEndLobby;
 
@@ -75,19 +75,19 @@ public class Game : MonoBehaviour
     private static Widget WinWidget   = null;
     
     // REFERENCES
-    public static  Camera                   Camera        = null;
-    public static  PlayerInputManager       InputManager  = null;
-    public static  Game                     Instance      = null;
-    public         HorizontalLayoutGroup    PreviewRootUI = null;
-    public static  CinemachineTargetGroup   CameraTargets = null;
-    public static  CinemachineVirtualCamera MatchCamera   = null;
-    public static  CinemachineVirtualCamera LobbyCamera   = null;
-    private static WidgetSwitcher           MenuSwitch    = null;
-    private static WidgetSwitcher           PopupSwitch   = null;
-    public         TextMeshProUGUI          CountdownText = null;
-    public         List<Scoreboard>         Scoreboards   = new List<Scoreboard>();
-    public         TextMeshProUGUI          WinText       = null;
-    public         TextMeshProUGUI          TimerText     = null;
+    public static Camera                   Camera                  = null;
+    public static PlayerInputManager       InputManager            = null;
+    public static Game                     Instance                = null;
+    public        HorizontalLayoutGroup    PreviewRootUI           = null;
+    public static CinemachineTargetGroup   CameraTargets           = null;
+    public static CinemachineVirtualCamera MatchCamera             = null;
+    public static CinemachineVirtualCamera LobbyCamera             = null;
+    private static WidgetSwitcher          MenuSwitch              = null;
+    private static WidgetSwitcher          PopupSwitch             = null;
+    private static IEnumerator             IE_Count                = null;
+    public         TextMeshProUGUI         CountdownText           = null;
+    public         List<Scoreboard>        Scoreboards             = new List<Scoreboard>();
+    public         TextMeshProUGUI         WinText                 = null;
     
 
     public enum EState
@@ -179,7 +179,7 @@ public class Game : MonoBehaviour
         };
         WinWidget  .OnDisabled = () =>
         {
-            Game.MatchCleanup();
+
         };
 
         // 4. MISC
@@ -237,7 +237,6 @@ public class Game : MonoBehaviour
         IEnumerator Spawn()
         {
             tank.DisableTank();
-            if (delay > 0f)
             yield return new WaitForSeconds(delay);
             tank.Controller.transform.position = RespawnPosition();
             tank.OnSpawned();
@@ -304,7 +303,6 @@ public class Game : MonoBehaviour
         foreach (Tank tank in PlayerList)
         RespawnTank(tank, delay);
     }
-    
     public static void EnableTanks()
     {
         foreach (Tank tank in FindObjectsOfType<Tank>())
@@ -315,27 +313,13 @@ public class Game : MonoBehaviour
         foreach (Tank tank in FindObjectsOfType<Tank>())
         tank.DisableTank();
     }
-    public static void EnableInput()
-    {
-        foreach (var i in PlayerList)
-        i.EnableInput();
-    }
-    public static void DisableInput()
-    {
-        foreach (var i in PlayerList)
-        i.DisableInput();
-    }
-    public static void EnableLookOnly()
-    {
-        foreach (var i in PlayerList)
-        i.EnableLookOnly();
-    }
-
+   
     public static void BeginMatch()
     {
         SetActiveState(EState.Match);
-        ResetScore();
+        UpdateScoreboards();
         CurrentMode.Init();
+        OnNewMatch?.Invoke();
     }
     public static void StopMatch()
     {
@@ -349,60 +333,6 @@ public class Game : MonoBehaviour
     public static void StopLobby()
     {
         OnEndLobby?.Invoke();
-    }
-    
-//  TIMER LOGIC
-    public static void StartTimer(float Duration)
-    {
-        if (!IsPlaying()) return;
-        if (MatchContext.IE_Timer != null)
-        MatchContext.I.StopCoroutine (MatchContext.IE_Timer);
-        MatchContext.I.StartCoroutine(MatchContext.IE_Timer = Timer());
-
-        IEnumerator Timer()
-        {
-            while (Duration > 0)
-            {
-                int   min = Mathf.FloorToInt(Duration/60f);
-                float sec = Duration - (float) min * 60f;
-
-                Game.Instance.TimerText.SetText
-                (
-                    min == 0 
-                     ? $"{Duration}"
-                     : $"{min}:{(sec >= 10 ? $"{sec}" : $"0{sec}")}"
-                );
-                Duration--;
-                yield return new WaitForSeconds(1f);
-            }
-        }
-    }
-    public static void AddCountdown(float Duration)
-    {
-        if (!IsPlaying()) return;
-        if (MatchContext.IE_Timer != null)
-        MatchContext.I.StopCoroutine (MatchContext.IE_Countdown);
-        MatchContext.I.StartCoroutine(MatchContext.IE_Countdown = Timer());
-
-        IEnumerator Timer()
-        {
-            Game.Instance.CountdownText.gameObject.SetActive(true);
-            while (Duration > 0)
-            {
-                int   min = Mathf.FloorToInt(Duration/60f);
-                float sec = Duration - (float) min * 60f;
-
-                Game.Instance.CountdownText.SetText
-                (
-                    min == 0 
-                     ? $"{Duration}"
-                     : $"{min}:{(sec >= 10 ? $"{sec}" : $"0{sec}")}"
-                );
-                Duration--;
-                yield return new WaitForSeconds(1f);
-            }
-            Game.Instance.CountdownText.gameObject.SetActive(false);
-        }
     }
     
 //  MENU LOGIC
@@ -460,18 +390,38 @@ public class Game : MonoBehaviour
     {
         Widget.RemoveWidget(Widget);
     }
-    
+    public static void AddCountdown(float Time)
+    {
+        if (!IsPlaying()) return;
+        if (IE_Count != null)
+        MatchContext.I.StopCoroutine(IE_Count);
+        MatchContext.I.StartCoroutine(IE_Count = Logic());
+
+        IEnumerator Logic()
+        {
+            Game.Instance.CountdownText.gameObject.SetActive(true);
+            while (Time > 0)
+            {
+                int   min = Mathf.FloorToInt(Time/60f);
+                float sec = Time - (float) min * 60f;
+
+                Game.Instance.CountdownText.SetText
+                (
+                    min == 0 
+                     ? $"{Time}"
+                     : $"{min}:{(sec >= 10 ? $"{sec}" : $"0{sec}")}"
+                );
+                Time--;
+                yield return new WaitForSeconds(1f);
+            }
+            Game.Instance.CountdownText.gameObject.SetActive(false);
+        }
+    }
+
 //  MATCH LOGIC
     public static void MatchCleanup()
     {
-        // 1. DEACTIVATE PLAYERS
-        MatchContext.Stop();
         DisableTanks();
-        
-        // 2. DELETE OBJECTS
-        foreach (var i in GameObject.FindGameObjectsWithTag("Disposable"))
-        Destroy(i);
-        
 
         Debug.Log($"[GAME]: Cleanup Finished!");
     }

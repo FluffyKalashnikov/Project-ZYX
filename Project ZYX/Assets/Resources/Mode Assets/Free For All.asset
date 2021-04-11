@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DisplayName: Free For All
   Name: FFA
-  MatchLength: 20
+  MatchLength: 60
+  Score: 10
   Prefabs: []
-  PointsToWin: 10
   PointsPerKill: 2
