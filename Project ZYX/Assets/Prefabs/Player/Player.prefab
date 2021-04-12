@@ -369,6 +369,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tankPowerupsScript: {fileID: 6033883733049633988}
+  fireEvent: {fileID: 11400000, guid: b32476f744550f74ebe9cd1f1cdda28a, type: 2}
   bulletVelocity: 25
   minCharge: 0.1
   maxCharge: 1

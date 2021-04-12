@@ -60,20 +60,22 @@ public class BarrelRadioactive : BarrelBaseCode
 
         if (currentRadOverallDuration != 0)
         {
-            IDamageable hit = radCol.gameObject.GetComponentInParent<IDamageable>();
+            if(radCol != null)
+            {
+                IDamageable hit = radCol.gameObject.GetComponentInParent<IDamageable>();
 
-            hit?.TakeDamage
-            (
-                new DamageInfo
+                hit?.TakeDamage
                 (
-                    radiationDamage,
-                    DamageType.SeamineImpact,
-                    owner,
-                    hit
-                )
-            );
+                    new DamageInfo
+                    (
+                        radiationDamage,
+                        DamageType.RadioactiveBarrel,
+                        owner,
+                        hit
+                    )
+                );
+            }
         }
-
         //Set bool to false
         radiationPulse = false;
     }

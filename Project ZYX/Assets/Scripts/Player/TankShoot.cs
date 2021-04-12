@@ -9,6 +9,9 @@ public class TankShoot : MonoBehaviour
     [Header("Script")]
     [SerializeField] private TankPowerups tankPowerupsScript;
 
+    [Header("Fire Event")]
+    [SerializeField] private FireEventSingleMulti fireEvent;
+
     [Header("Firing Stats")]
     [SerializeField] private float bulletVelocity = 25f;
     public float minCharge      = 0.3f;
@@ -52,7 +55,9 @@ public class TankShoot : MonoBehaviour
 
     private void Fire(float charge)
     {
-        if(tankPowerupsScript.Multishot_Enabled)
+        fireEvent.Fire(TankScript, tankPowerupsScript, MuzzlePoint, charge, bulletVelocity);
+        #region OLD
+        /*if(tankPowerupsScript.Multishot_Enabled)
         {
             for (int i = 0; i < tankPowerupsScript.Multishot_Ammount; i++)
             {
@@ -84,7 +89,8 @@ public class TankShoot : MonoBehaviour
             // 2. INIT BULLET
             Shell.Init(bulletVelocity * charge, TankScript);
             Tank.OnTankFire.Invoke(TankScript);
-        }
+        }*/
+        #endregion
     }
 
     private void Fire(InputAction.CallbackContext ctx)
