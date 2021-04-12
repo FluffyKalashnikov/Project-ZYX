@@ -4,5 +4,5 @@ using UnityEngine;
 
 public abstract class FireEvent : ScriptableObject
 {
-    public abstract void Fire(Tank TankScript, TankPowerups tankPowerupsScript, Transform MuzzlePoint, float charge, float bulletVelocity);
+    public abstract void Fire(Tank TankScript, Transform MuzzlePoint, float charge, float bulletVelocity);
 }

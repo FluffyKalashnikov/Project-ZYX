@@ -15,8 +15,9 @@ public class TankPowerups : MonoBehaviour
     [SerializeField] private TankShoot tankShootScript;
     [SerializeField] private TankAudio tankAudioScript;
 
-    [Header("DestructEvent")]
+    [Header("Events")]
     [SerializeField] private DestructEvent pickupDestroyer;
+    [SerializeField] private FireEventSingleMulti fireEvent;
 
     [Header("Seamine")]
     [SerializeField] private List<GameObject> SeamineList = new List<GameObject>();
@@ -27,17 +28,18 @@ public class TankPowerups : MonoBehaviour
     [Header("SpeedBoost")]
     [SerializeField] private float SpeedBoost_AudioMultiplier;
 
+    [Header("Bouncy Bullets")]
+    [SerializeField] private GameObject BouncyBulletPrefab;
+
     [Header("PowerUp Ammounts")]
     [SerializeField] private float HP_Ammount;
     [SerializeField] private int Seamine_Ammount;
-    [SerializeField] public float Multishot_Ammount;
 
     [Header("PowerUp durations")]
-    [SerializeField] private float EMP_Duration;
+    [SerializeField] private float BouncyBullets_Duration;
     [SerializeField] private float QuickCharge_Duration;
     [SerializeField] private float Multishot_Duration;
     [SerializeField] private float SpeedBoost_Duration;
-    [SerializeField] public float Multishot_Angle;
     [SerializeField] private float Invincibility_Duration;
 
     [Header("PowerUp Multipliers")]
@@ -69,8 +71,16 @@ public class TankPowerups : MonoBehaviour
     private bool Multishot_Picked = false;
     private bool Multishot_TimerBool = false;
 
-    //[QUICK_CHARGE] Backup variables
+    //[MULTISHOT] Backup variables
     private float currentMultishotDuration;
+
+    //[BOUNCY_BULLETS] Powerup bool
+    private bool BouncyBullets_Picked = false;
+    private bool BouncyBullets_TimerBool = false;
+
+    //[QUICK_CHARGE] Backup variables
+    private GameObject standardBullet;
+    private float currentBouncyBulletsDuration;
     #endregion
 
     private void Awake()
@@ -90,6 +100,7 @@ public class TankPowerups : MonoBehaviour
         SpeedBoostTimerMethod();
         MultishotTimerMethod();
         QuickChargeTimerMethod();
+        BouncyBulletsTimerMethod();
         tankAudioScript.PickupSpeedBoostLOOPSound();
     }
 
@@ -121,8 +132,18 @@ public class TankPowerups : MonoBehaviour
                 }
                 break;
             //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+            //In this case, it's actually for bouncy bullets, since it replaced the EMP Pickup
             case "PU-EMP":
-                EMPMethod();
+                if (BouncyBullets_Picked == false)
+                {
+                    BouncyBullets_Picked = true;
+                    BouncyBulletsMethod();
+                    pickupDestroyer.Play(powerup.gameObject);
+                }
+                else
+                {
+                    return;
+                }
                 break;
             //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
             case "PU-QuickCharge":
@@ -186,12 +207,20 @@ public class TankPowerups : MonoBehaviour
         }
         seamineActive = true;
     }
-    private void EMPMethod()
+    private void BouncyBulletsMethod()
     {
-        Debug.Log("emp");
+        tankAudioScript.PickupBBSound();
+        currentBouncyBulletsDuration = BouncyBullets_Duration;
+        if (currentBouncyBulletsDuration != 0)
+        {
+            standardBullet = fireEvent.ShellPrefab;
+            fireEvent.ShellPrefab = BouncyBulletPrefab;
+            Debug.Log(fireEvent.ShellPrefab);
+        }
     }
     private void QuickChargeMethod()
     {
+        tankAudioScript.PickupQCSound();
         currentQuickChargeDuration = QuickCharge_Duration;
         if (currentQuickChargeDuration != 0)
         {
@@ -201,6 +230,7 @@ public class TankPowerups : MonoBehaviour
     }
     private void MultishotMethod()
     {
+        tankAudioScript.PickupMSSound();
         currentMultishotDuration = Multishot_Duration;
         if (currentMultishotDuration != 0)
         {
@@ -294,6 +324,22 @@ public class TankPowerups : MonoBehaviour
             }
         }
     }
+    private void BouncyBulletsTimerMethod()
+    {
+        if (BouncyBullets_Picked == true)
+        {
+            if (BouncyBullets_TimerBool == false && currentBouncyBulletsDuration > 0)
+            {
+                StartCoroutine(BouncyBulletsTimer());
+            }
+            else if (currentBouncyBulletsDuration == 0)
+            {
+                fireEvent.ShellPrefab = standardBullet;
+                BouncyBullets_Picked = false;
+            }
+        }
+        Debug.Log(currentBouncyBulletsDuration);
+    }
     #endregion
 
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -315,6 +361,15 @@ public class TankPowerups : MonoBehaviour
 
         //Set bool to false
         QuickCharge_TimerBool = false;
+    }
+    IEnumerator BouncyBulletsTimer()
+    {
+        BouncyBullets_TimerBool = true;
+        yield return new WaitForSeconds(1);
+        currentBouncyBulletsDuration -= 1;
+
+        //Set bool to false
+        BouncyBullets_TimerBool = false;
     }
     IEnumerator MultishotTimer()
     {

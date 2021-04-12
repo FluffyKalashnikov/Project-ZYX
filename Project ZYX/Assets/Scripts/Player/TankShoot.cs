@@ -6,11 +6,22 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Tank), typeof(PlayerInput))]
 public class TankShoot : MonoBehaviour
 {
+    #region knas
+    private Tank TankScript
+    {
+        get { return m_TankScript ? m_TankScript : m_TankScript = GetComponent<Tank>(); }
+        set { m_TankScript = value; }
+    }
+    private Tank m_TankScript = null;
+    #endregion
+
     [Header("Script")]
-    [SerializeField] private TankPowerups tankPowerupsScript;
+    [SerializeField] private TankAudio tankAudio;
 
     [Header("Fire Event")]
     [SerializeField] private FireEventSingleMulti fireEvent;
+    private FireEventSingleMulti ChargedFireEvent;
+
 
     [Header("Firing Stats")]
     [SerializeField] private float bulletVelocity = 25f;
@@ -22,17 +33,15 @@ public class TankShoot : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private Transform  MuzzlePoint;
-    [SerializeField] private GameObject ShellPrefab;
 
     // PRIVATE VARIABLES
     private float       FireTimestamp = 0;
 
     // PRIVATE REFERENCES
-    private Tank        TankScript    = null;
+    //private Tank        TankScript    = null;
     private PlayerInput PlayerInput   = null;
     private InputAction FireAction    = null;
     private IEnumerator IE_Fire       = null;
-
 
     private void Awake()
     {
@@ -55,7 +64,21 @@ public class TankShoot : MonoBehaviour
 
     private void Fire(float charge)
     {
-        fireEvent.Fire(TankScript, tankPowerupsScript, MuzzlePoint, charge, bulletVelocity);
+        switch (charge > 0.95)
+        {
+            case true:
+                ChargedFireEvent.Fire(TankScript, MuzzlePoint, charge, bulletVelocity);
+                break;
+            default:
+                fireEvent.Fire(TankScript, MuzzlePoint, charge, bulletVelocity);
+                break;
+        }
+
+        
+        
+        
+        
+        
         #region OLD
         /*if(tankPowerupsScript.Multishot_Enabled)
         {
@@ -121,6 +144,18 @@ public class TankShoot : MonoBehaviour
                     Mathf.Min((float) ctx.duration/chargeTime, 1f)
                 )
             );
+            #region audio
+            bool audioPlayed = false;
+            if (ctx.duration / chargeTime > 0.95 && !audioPlayed)
+            {
+                tankAudio.ChargeAbility();
+                audioPlayed = true;
+            }
+            else
+            {
+                audioPlayed = false;
+            }
+            #endregion
         }
     }
 
@@ -139,5 +174,6 @@ public class TankShoot : MonoBehaviour
     public void OnLoadStats(TankRef i)
     {
         MuzzlePoint = i.MuzzlePoint;
+        ChargedFireEvent = TankScript.TankAsset.FireChargeAbility;
     }
 }

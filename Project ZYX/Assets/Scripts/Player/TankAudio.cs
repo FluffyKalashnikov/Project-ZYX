@@ -57,7 +57,7 @@ public class TankAudio : MonoBehaviour
     [SerializeField] private AudioEvent cannonBlast;
     [SerializeField] private AudioSource cannonBlastsource;
 
-    [Header("Powerups")]
+    [Header("Repair")]
     [SerializeField] private AudioEvent PURepairSfx;
     [SerializeField] private AudioSource PURepairSource;
 
@@ -69,9 +69,24 @@ public class TankAudio : MonoBehaviour
     [SerializeField] private AudioEvent PUSpeedBoostEndSfx;
     [SerializeField] private AudioSource PUSpeedBoostEndSource;
 
+    [Header("Quick Charge")]
+    [SerializeField] private AudioEvent PUQuickChargeSfx;
+    [SerializeField] private AudioSource PUQuickChargeSource;
+
+    [Header("Multishot")]
+    [SerializeField] private AudioEvent PUMultishotSfx;
+    [SerializeField] private AudioSource PUMultishotSource;
+
+    [Header("BB")]
+    [SerializeField] private AudioEvent PUBouncyBulletsSfx;
+    [SerializeField] private AudioSource PUBouncyBulletsSource;
+
     [Header("Tank Explosion")]
     [SerializeField] private AudioEvent tankEXPLSFX;
     [SerializeField] private AudioSource tankEXPLSource;
+
+    private AudioEvent ChargeAbilitySFX;
+    [SerializeField] private AudioSource ChargeAbilitySource;
 
     private float velocityScaleAUDIO;
     #endregion
@@ -153,6 +168,18 @@ public class TankAudio : MonoBehaviour
     {
         PURepairSfx.Play(PURepairSource);
     }
+    public void PickupQCSound()
+    {
+        PUQuickChargeSfx.Play(PUQuickChargeSource);
+    }
+    public void PickupMSSound()
+    {
+        PUMultishotSfx.Play(PUMultishotSource);
+    }
+    public void PickupBBSound()
+    {
+        PUBouncyBulletsSfx.Play(PUBouncyBulletsSource);
+    }
     public void PickupSpeedBoostSTARTSound()
     {
         PUSpeedBoostStartSfx.Play(PUSpeedBoostStartSource);
@@ -167,6 +194,11 @@ public class TankAudio : MonoBehaviour
         PUSpeedBoostLoopSource.Stop();
         PUSpeedBoostEndSfx.Play(PUSpeedBoostEndSource);
     }
+
+    public void ChargeAbility()
+    {
+        ChargeAbilitySFX.Play(ChargeAbilitySource);
+    }
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -180,5 +212,7 @@ public class TankAudio : MonoBehaviour
         engineRevLOW = TankScript.TankAsset.AudioRevLow;
         engineRevMID = TankScript.TankAsset.AudioRevMid;
         engineRevHIGH = TankScript.TankAsset.AudioRevHigh;
+
+        ChargeAbilitySFX = TankScript.TankAsset.ChargeAbility;
     }
 }

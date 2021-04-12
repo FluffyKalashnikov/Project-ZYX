@@ -10560,19 +10560,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 868862682, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.8635249
+      value: 0.863525
       objectReference: {fileID: 0}
     - target: {fileID: 868862682, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.13604765
+      value: 0.13604762
       objectReference: {fileID: 0}
     - target: {fileID: 1350783316, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.8635249
+      value: 0.863525
       objectReference: {fileID: 0}
     - target: {fileID: 1350783316, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.13604765
+      value: 0.13604762
       objectReference: {fileID: 0}
     - target: {fileID: 821787623625406256, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
       propertyPath: m_RootOrder
@@ -16876,14 +16876,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 87134096231151835, guid: 62ac60a43019d684788a741e3d8d3ee8, type: 3}
-      propertyPath: selectedPickup
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 87134096231151835, guid: 62ac60a43019d684788a741e3d8d3ee8, type: 3}
-      propertyPath: RandomizePickups
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 648360342185822234, guid: 62ac60a43019d684788a741e3d8d3ee8, type: 3}
       propertyPath: m_Name
       value: PickupSpawner

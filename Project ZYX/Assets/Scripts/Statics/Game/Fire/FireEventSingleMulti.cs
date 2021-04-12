@@ -8,6 +8,9 @@ public class FireEventSingleMulti : FireEvent
     [Header("Shell Prefab")]
     public GameObject ShellPrefab;
 
+    [Header("Enable Multishot")]
+    public bool Multishot_Enabled;
+
     [Header("Multishot Settings")]
     [Tooltip("Ammount of bullets that will be fired when multishot is enabled")]
     public float Multishot_Ammount = 3;
@@ -16,9 +19,9 @@ public class FireEventSingleMulti : FireEvent
     public float Multishot_Angle = 30;
     // Start is called before the first frame update
 
-    public override void Fire(Tank TankScript, TankPowerups tankPowerupsScript, Transform MuzzlePoint, float charge, float bulletVelocity)
+    public override void Fire(Tank TankScript, Transform MuzzlePoint, float charge, float bulletVelocity)
     {
-        if (tankPowerupsScript.Multishot_Enabled == true)
+        if (Multishot_Enabled == true)
         {
             for (int i = 0; i < Multishot_Ammount; i++)
             {
@@ -37,7 +40,7 @@ public class FireEventSingleMulti : FireEvent
             }
         }
 
-        else if (tankPowerupsScript.Multishot_Enabled == false)
+        else if (Multishot_Enabled == false)
         {
             // 1. CREATE BULLET
             var Shell = Instantiate
