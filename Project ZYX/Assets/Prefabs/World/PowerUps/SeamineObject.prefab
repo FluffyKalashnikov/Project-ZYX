@@ -3143,6 +3143,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   seamineModel: {fileID: 2125602677791764884}
   seamineCollider: {fileID: -8830005282439281144}
+  mineDamage: 25
   seamineSonarAmbienceSFX: {fileID: 11400000, guid: 09665610d1e866f4db57a65caee0b8ea, type: 2}
   seamineSonarAmbienceSource: {fileID: 279719026143193794}
   seamineSwingAmbienceSFX: {fileID: 11400000, guid: 6bc3d9eb84c34904b96e65aa5ebfc258, type: 2}

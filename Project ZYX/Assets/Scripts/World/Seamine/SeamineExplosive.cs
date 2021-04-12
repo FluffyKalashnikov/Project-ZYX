@@ -4,9 +4,14 @@ using UnityEngine;
 
 public class SeamineExplosive : MonoBehaviour
 {
+    private Tank owner;
+
     [Header("Model")]
     [SerializeField] private GameObject seamineModel;
     [SerializeField] private BoxCollider seamineCollider;
+
+    [Header("Seamine Damage")]
+    [SerializeField] private float mineDamage;
 
     [Header("Audio")]
     [SerializeField] private AudioEvent seamineSonarAmbienceSFX;
@@ -49,6 +54,21 @@ public class SeamineExplosive : MonoBehaviour
     {
         if (seamine.gameObject.layer == 8 || seamine.gameObject.layer == 9)
         {
+            #region DamageDealer
+            IDamageable hit = seamine.gameObject.GetComponentInParent<IDamageable>();
+
+            hit?.TakeDamage
+            (
+                new DamageInfo
+                (
+                    mineDamage,
+                    DamageType.SeamineImpact,
+                    owner,
+                    hit
+                )
+            );
+            #endregion
+
             seamineCollider.enabled = false;
             destroyed = true;
             SeamineCollisionSound();
@@ -57,12 +77,18 @@ public class SeamineExplosive : MonoBehaviour
             StartCoroutine(SeamineDestroyer());
         }
     }
+    public void Init(Tank sender)
+    {
+        owner = sender;
+    }
+
+
+    #region Seamine Destroyer
     IEnumerator SeamineDestroyer()
     {
         yield return new WaitForSeconds(seamineCollisionSource.clip.length);
         DeleteSeamineCompletly();
     }
-
     public void SeamineCollisionSound()
     {
         seamineSonarAmbienceSource.Stop();
@@ -78,4 +104,5 @@ public class SeamineExplosive : MonoBehaviour
     {
         Destroy(gameObject);
     }
+    #endregion
 }

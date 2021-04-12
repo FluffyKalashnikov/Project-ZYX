@@ -236,7 +236,8 @@ public class TankPowerups : MonoBehaviour
     {
         if (SeamineList.Count >= 1 && seamineActive == true)
         {
-            Instantiate(SeamineList[0], new Vector3(SeaminePoint.position.x, SeaminePoint.position.y, SeaminePoint.position.z), Quaternion.identity);
+            var SemineExplosive = Instantiate(SeamineList[0], new Vector3(SeaminePoint.position.x, SeaminePoint.position.y, SeaminePoint.position.z), Quaternion.identity).GetComponent<SeamineExplosive>();
+            SemineExplosive.Init(tankScript);
             SeamineList.RemoveAt(0);
         }
     }
