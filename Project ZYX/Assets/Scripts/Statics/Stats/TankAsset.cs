@@ -19,4 +19,7 @@ public class TankAsset : ScriptableObject
     public AudioEvent AudioRevLow = null;
     public AudioEvent AudioRevMid = null;
     public AudioEvent AudioRevHigh = null;
+    public AudioEvent ChargeAbility = null;
+    [Space(10)]
+    public FireEventSingleMulti FireChargeAbility;
 }

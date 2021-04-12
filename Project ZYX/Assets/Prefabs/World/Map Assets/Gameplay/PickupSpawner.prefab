@@ -49,9 +49,8 @@ MonoBehaviour:
   PowerupList:
   - {fileID: 858144629958806314, guid: 3151fc67f43c8884da8249b8b927d82b, type: 3}
   - {fileID: 1790528126400932367, guid: 067b9494a27202f4284aed4297cfe5a6, type: 3}
-  - {fileID: 3654740387327859044, guid: a3c15e9b2c3188a47978856c437a45cf, type: 3}
-  - {fileID: 4530968311985034601, guid: d1ec784deef0deb4f801c6c9ee0c071a, type: 3}
   - {fileID: 3891652821791357036, guid: 47d935c5f608cbd4694a60b24f1a83f1, type: 3}
+  - {fileID: 4530968311985034601, guid: d1ec784deef0deb4f801c6c9ee0c071a, type: 3}
   layerMask:
     serializedVersion: 2
     m_Bits: 4096

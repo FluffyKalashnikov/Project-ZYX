@@ -261,6 +261,9 @@ MonoBehaviour:
   barrelCollisionSFX: {fileID: 11400000, guid: 71e064ceb0185a54a82cb8a863845e65, type: 2}
   barrelCollisionSource: {fileID: 7467419858030009571}
   barrelDestructEvent: {fileID: 11400000, guid: 53020d8b124d1a547b819c7181d644c6, type: 2}
+  radiationDamage: 10
+  radPulseDuration: 3
+  radOverallDuration: 10
 --- !u!65 &7160290408951749066
 BoxCollider:
   m_ObjectHideFlags: 0

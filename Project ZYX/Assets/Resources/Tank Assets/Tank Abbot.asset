@@ -24,3 +24,4 @@ MonoBehaviour:
   AudioRevLow: {fileID: 11400000, guid: da6a16cf2d256ae40864524f814bab6b, type: 2}
   AudioRevMid: {fileID: 11400000, guid: ca035b26f7afa314084ce732fcdcb8e7, type: 2}
   AudioRevHigh: {fileID: 11400000, guid: d29e01db6c8a77546bfcfb9abb6ae61f, type: 2}
+  ChargeAbility: {fileID: 11400000, guid: 59159690fa687ec44b0da32f798c0b67, type: 2}
