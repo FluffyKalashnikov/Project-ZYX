@@ -15,19 +15,19 @@ public class ModeFFA : Gamemode
     {
         // 1. GIVE SCORE TO KILLER
         Tank Dealer = (Tank) DamageInfo.Dealer;
-        Dealer.Score += PointsPerKill;
-
-        // 2. CHECK IF WON
-        if (Dealer.Score >= PointsToWin)
-        StopGame();
-
-        // 3. IF ONLY ONE ALIVE, SPAWN ALL
+        if (Dealer != null)
+        {
+            Dealer.Score += PointsPerKill;
+            if (Dealer.Score >= PointsToWin)
+            StopGame();
+        }
+        
+        // 2. IF ONLY ONE ALIVE, SPAWN ALL
         if (Game.AliveList.Count <= 1)
         {
             yield return new WaitForSeconds(4f);
             Game.SpawnTanks();
         }
-        
         yield return null;
     }
 
@@ -36,21 +36,18 @@ public class ModeFFA : Gamemode
     {
         Game.ResetScore();
         Game.RespawnTanks();
-        Game.EnableLookOnly();
+        Game.EnableLookOnlyHard();
         Game.AddCountdown(5f);
-
         yield return new WaitForSeconds(5f);
-
         Game.EnableInput();
         yield return new WaitForSeconds(MatchLength-5f);
         Game.AddCountdown(5f);
         yield return new WaitForSeconds(5f);
-
         StopGame();
     }
     protected override IEnumerator StopPlay()
     {
-        Game.EnableLookOnly();
+        Game.EnableLookOnlySoft();
         yield return new WaitForSeconds(3f);
         Game.DisableInput();
         Game.SetActiveState(Game.EState.WinScreen);

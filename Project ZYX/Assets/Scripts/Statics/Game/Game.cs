@@ -238,15 +238,11 @@ public class Game : MonoBehaviour
     }
     public static void RespawnTank(Tank Tank)
     {
-        // 1. DISABLE/ENABLE TANK
-        Tank.DisableTank();
+        // 1. DISABLE TANK
+        Tank.Disable();
         
         // 2. SET POSITION/ROTATION
-        Spawnpoint Spawnpoint = FindSpawnpoint();
-        Tank.Position = Spawnpoint.Position;
-        Tank.Rotation = Spawnpoint.Rotation;
-        
-        Debug.Log($"SPAWN POSITION: {Tank.Position}");
+        Tank.Teleport(FindSpawnpoint());
         OnTankSpawn?.Invoke(Tank);
     }
     public static void RespawnTanks()
@@ -279,36 +275,30 @@ public class Game : MonoBehaviour
             ? Otherpoint
             : Storedpoint;
         }
-
-        Debug.Log($"[GAME]: Found furthest point. ({Storedpoint.name})");
         return Storedpoint;
     }
     public static Spawnpoint   FindRandomSpawnpoint()
     {
+        // 1. GET ALL SPAWNPOINTS
         Spawnpoint[] Spawnpoints = FindSpawnpoints();
         int          max         = Spawnpoints.Length;
-        Spawnpoint   Storedpoint = null;
         
-        // 1. GET
-        Storedpoint = max != 0
+        // 2. RETURN RANDOM
+        return max != 0
         ? Spawnpoints[UnityEngine.Random.Range(0, max)]
         : null;
-
-        // 2. RETURN
-        Debug.Log($"[GAME]: Random point found. ({Storedpoint.name})");
-        return Storedpoint;
     }
 
 //  GAMEMODE LOGIC
     public static void EnableTanks()
     {
         foreach (Tank tank in FindObjectsOfType<Tank>())
-        tank.EnableTank();
+        tank.Enable();
     }
     public static void DisableTanks()
     {
         foreach (Tank tank in FindObjectsOfType<Tank>())
-        tank.DisableTank();
+        tank.Disable();
     }
     public static void EnableInput()
     {
@@ -320,10 +310,16 @@ public class Game : MonoBehaviour
         foreach (var i in PlayerList)
         i.DisableInput();
     }
-    public static void EnableLookOnly()
+    
+    public static void EnableLookOnlyHard()
     {
         foreach (var i in PlayerList)
-        i.EnableLookOnly();
+        i.EnableLookOnlyHard();
+    }
+    public static void EnableLookOnlySoft()
+    {
+        foreach (var i in PlayerList)
+        i.EnableLookOnlySoft();
     }
 
     public static void BeginMatch()

@@ -10,22 +10,19 @@ public abstract class Gamemode : ScriptableObject
     [SerializeField] protected float  MatchLength  =  320f;
     [SerializeField] protected GameObject[] Prefabs;
 
-//  ** NOTES **
-//  Destruct has to be called at 
-//  the end of the lifecycle.
-//
-
 //  TANK LOGIC
     protected virtual IEnumerator OnTankKill (Tank Tank, DamageInfo DamageInfo)
     {
         Debug.Log($"[{Name}]: Tank Died!");
-        yield return null;
+
+        yield return new WaitForSeconds(3f);
+        Game.SpawnTank(Tank);
     }
     protected virtual IEnumerator OnTankSpawn(Tank Tank)
     {
-        Debug.Log($"[{Name}]: Tank Spawned!");
+        Debug.Log($"[{Name}]: Tank \"{Tank.Name}\" Spawned!");
         Tank.Health = Tank.MaxHealth;
-        Tank.EnableTank();
+        Tank.Enable();
         yield return null;
     }
 
@@ -33,6 +30,7 @@ public abstract class Gamemode : ScriptableObject
     protected virtual IEnumerator BeginPlay()
     {
         Debug.Log($"[{Name}]: Begun playing!");
+        Game.RespawnTanks();
         yield return null;
     }
     protected virtual IEnumerator Tick()

@@ -5,14 +5,18 @@ using UnityEngine;
 [RequireComponent(typeof(Tank))]
 public class TankAnimation : MonoBehaviour
 {
-    [SerializeField] private Animator tankAnimator;
+    private Animator tankAnimator;
     private Tank tank;
     private ParticleSystem bubbleParticle;
+
+    private int MoveHash;
+
 
     private void Awake()
     {
         tank = GetComponent<Tank>();
-        tank.Tick += UpdateBubbles;
+        MoveHash = Animator.StringToHash("Speed");
+        tank.Tick += () => UpdateBubbles(tankAnimator.GetFloat(MoveHash));
     }
 
 
@@ -50,17 +54,21 @@ public class TankAnimation : MonoBehaviour
 
 
 
-    private void UpdateBubbles(float Velocity)
+    private void UpdateBubbles(float Speed)
+    {
+        SetBubbles(9f * Speed);
+    }
+    private void SetBubbles(float Emission)
     {
         ParticleSystem.EmissionModule i = bubbleParticle.emission;
         ParticleSystem.MinMaxCurve tempCurve = i.rateOverTime;
-        tempCurve.constant = 9f * Velocity;
+        tempCurve.constant = Emission;
         i.rateOverTime = tempCurve;
     }
 
-
     private void OnLoadStats(TankRef i)
     {
+        tankAnimator   = i.Animator;
         bubbleParticle = i.tankBubblesParticles;
     }
 }

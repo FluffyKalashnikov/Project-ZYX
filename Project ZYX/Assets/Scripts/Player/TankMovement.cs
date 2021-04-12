@@ -30,6 +30,8 @@ public class TankMovement : MonoBehaviour
     private Vector3 direction;
 
     private bool ifReving = false;
+    private bool active = false;
+    private int MoveHash;
 
     public float Timer;
 
@@ -42,17 +44,20 @@ public class TankMovement : MonoBehaviour
         tankScript = GetComponent<Tank>();
         playerInput = GetComponent<PlayerInput>();
 
+        MoveHash = Animator.StringToHash("Speed");
         moveAction = playerInput.actions.FindAction("Move");
+        tankScript.MoveTick += Tick;
     }
     void Start()
     {
         //StartCoroutine(tankAudioScript.EngineStartUpSound());
     }
-    private void Update()
+
+
+    private void Tick(Vector2 Input, float Velocity)
     {
         BaseMovement(moveAction.ReadValue<Vector2>());
         EngineRev(moveAction.ReadValue<Vector2>());
-        tankScript.Tick?.Invoke(currentVel.magnitude);
         
         VolumeManager();
 
@@ -68,6 +73,11 @@ public class TankMovement : MonoBehaviour
         }
     }
     #endregion
+
+
+
+
+
 
     private void BaseMovement(Vector2 input)
     {
@@ -89,7 +99,7 @@ public class TankMovement : MonoBehaviour
         tankScript.PlayerTransform.Rotate(0, multipliedRotationForce * Time.deltaTime, 0);
         direction = tankScript.PlayerTransform.TransformDirection(currentVel);
         tankScript.Controller.Move(direction * Time.deltaTime);
-        animator?.SetFloat("Speed", currentVel.z);
+        animator?.SetFloat(MoveHash, currentVel.magnitude);
         #endregion  
     }
 
@@ -133,14 +143,42 @@ public class TankMovement : MonoBehaviour
         float velocityScale = tankVelAbs / velocityMax;
         tankAudioScript.EngineSounds(velocityScale);
     }
+    
+    
+
+
+    private void MoveTick()
+    {
+        tankScript.MoveTick?.Invoke(moveAction.ReadValue<Vector2>(), currentVel.magnitude);
+    }
     public void Enable()
     {
+        if (active) return;
+        active = true;
+
+        Debug.LogWarning("Enabled Movement.");
+        tankScript.Tick += MoveTick;
         moveAction.Enable();
     }
     public void Disable()
     {
+        if (!active) return;
+        active = false;
+
+        Debug.LogWarning("Disabled Movement.");
+        tankScript.Tick -= MoveTick;
+        animator?.SetFloat(MoveHash, 0f);
         moveAction.Disable();
     }
+    public void SoftEnable()
+    {
+        moveAction.Enable();
+    }
+    public void SoftDisable()
+    {
+        moveAction.Disable();
+    }
+
 
     public void OnLoadStats(TankRef i)
     {

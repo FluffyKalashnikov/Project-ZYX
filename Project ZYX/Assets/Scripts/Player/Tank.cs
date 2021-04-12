@@ -144,6 +144,7 @@ public class Tank : MonoBehaviour, IDamageable
         get { return Controller.transform; }
     }
 
+
     private GameObject m_Model     = null;
     private TankAsset  m_TankAsset = null;
     private float      m_Health    = 0f;
@@ -183,7 +184,8 @@ public class Tank : MonoBehaviour, IDamageable
     public static Action<Tank>       OnTankFire;
     public static Action<DamageInfo> OnTankDead;
 
-    public Action<float> Tick;
+    public Action                 Tick;
+    public Action<Vector2, float> MoveTick;
 
     public int Power = 0;
     public float PowerUpTimer;
@@ -207,8 +209,7 @@ public class Tank : MonoBehaviour, IDamageable
         // 2. INIT LOGIC
         InitPlayer();
         UpdateTank();
-        DisableTank();
-        DisableTank();
+        Disable();
         InitPreview();
         InitHUD();
         InitScore();
@@ -246,6 +247,7 @@ public class Tank : MonoBehaviour, IDamageable
             }
         };
     }
+    private void Update() => Tick?.Invoke();
 
 
 //  TANK SETUP
@@ -267,7 +269,7 @@ public class Tank : MonoBehaviour, IDamageable
         }
     }
     
-//  TANK HEALTH
+//  TANK STATE
     public void TakeDamage(DamageInfo DamageInfo)
     {
         if (Game.IsPlaying())
@@ -278,36 +280,57 @@ public class Tank : MonoBehaviour, IDamageable
     }
     public void Die(DamageInfo damageInfo)
     {
-        DisableTank();
+        Disable();
         Game.OnTankKill((Tank) damageInfo.Reciever, damageInfo);
     }
-    
+    public void LoadStats(TankAsset Asset)
+    {
+        Model = Asset.Model;
+        UpdateTank();
+        BroadcastMessage
+        (
+            "OnLoadStats", 
+            TankRef, 
+            SendMessageOptions.RequireReceiver
+        );
+    }
+    public void Teleport(Vector3 Position, Quaternion Rotation = default(Quaternion))
+    {
+        PlayerTransform.SetPositionAndRotation(Position, Rotation);
+    }
+    public void Teleport(Spawnpoint Spawnpoint)
+    {
+        Teleport(Spawnpoint.Position, Spawnpoint.Rotation);
+    }
+
 //  TANK ENABLING
-    public void EnableTank()
+    public void Enable()
     {
         if (Alive) return;
 
         Game.AliveList.Add(this);
         Game.CameraTargets.AddMember(PlayerTransform, 1f, 0f);
-        ShowTank();
-        EnableHUD();
-        EnableInput();
+        EnableTank();
 
         Alive = true;
     }
-    public void DisableTank()
+    public void Disable()
     {
         if (!Alive) return;
 
         Game.AliveList.Remove(this);
         Game.CameraTargets.RemoveMember(PlayerTransform);
-        HideTank();
-        DisableHUD();
-        DisableInput();
+        DisableTank();
 
         Alive = false;
     }
 
+    public void EnableTank()
+    {
+        EnableInput();
+        ShowTank();
+        EnableHUD();
+    }
     public void EnableInput()
     {
         EnableMove();
@@ -318,6 +341,10 @@ public class Tank : MonoBehaviour, IDamageable
     {
         TankMovement.Enable();
     }
+    public void EnableMoveSoft()
+    {
+        TankMovement.SoftEnable();
+    }
     public void EnableLook()
     {
         TankTurret.Enable();
@@ -327,11 +354,21 @@ public class Tank : MonoBehaviour, IDamageable
         TankShoot.Enable();
     }
     
+    public void DisableTank()
+    {
+        DisableInput();
+        HideTank();
+        DisableHUD();
+    }
     public void DisableInput()
     {
         DisableMove();
         DisableLook();
         DisableFire();
+    }
+    public void DisableMoveSoft()
+    {
+        TankMovement.SoftDisable();
     }
     public void DisableMove()
     {
@@ -361,24 +398,17 @@ public class Tank : MonoBehaviour, IDamageable
         i.enabled = true;
     }
 
-    public void EnableLookOnly()
+    public void EnableLookOnlyHard()
     {
         DisableMove();
         EnableLook();
         DisableFire();
     }
-
-//  TANK STATS
-    public void LoadStats(TankAsset Asset)
+    public void EnableLookOnlySoft()
     {
-        Model = Asset.Model;
-        UpdateTank();
-        BroadcastMessage
-        (
-            "OnLoadStats", 
-            TankRef, 
-            SendMessageOptions.RequireReceiver
-        );
+        DisableMoveSoft();
+        EnableLook();
+        DisableFire();
     }
 
 //  USER INTERFACE

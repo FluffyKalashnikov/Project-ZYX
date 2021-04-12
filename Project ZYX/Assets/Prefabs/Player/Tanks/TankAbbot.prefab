@@ -298,6 +298,7 @@ MonoBehaviour:
   MuzzlePoint: {fileID: 7613571533011349202}
   TurretTransform: {fileID: 7613571533063746153}
   SeaminePoint: {fileID: 4800133254740997713}
+  Animator: {fileID: 7613571533282335643}
   tankBubblesParticles: {fileID: 6073454218599065769}
   tankShootParticles: {fileID: 7198492185005859236}
 --- !u!1 &7613571533737600294
