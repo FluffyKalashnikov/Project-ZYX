@@ -255,6 +255,7 @@ public class Tank : MonoBehaviour, IDamageable
     {
         UpdateReferences();
         UpdateColor();
+        HideTank();
     }
     public void UpdateReferences()
     {
