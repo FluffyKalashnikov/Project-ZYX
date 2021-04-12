@@ -156,7 +156,6 @@ public class TankMovement : MonoBehaviour
         if (active) return;
         active = true;
 
-        Debug.LogWarning("Enabled Movement.");
         tankScript.Tick += MoveTick;
         moveAction.Enable();
     }
@@ -165,7 +164,6 @@ public class TankMovement : MonoBehaviour
         if (!active) return;
         active = false;
 
-        Debug.LogWarning("Disabled Movement.");
         tankScript.Tick -= MoveTick;
         animator?.SetFloat(MoveHash, 0f);
         moveAction.Disable();
