@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DisplayName: Free For All
   Name: FFA
-  MatchLength: 20
-  Prefabs: []
+  MatchLength: 120
+  WidgetPrefab: {fileID: 3067919998030546167, guid: e61387697990bd2409ad5864af034368, type: 3}
   PointsToWin: 10
   PointsPerKill: 2

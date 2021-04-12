@@ -336,7 +336,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tankScript: {fileID: 838318969809300762}
   tankAudioScript: {fileID: 838318969809300737}
-  tankAnimationScript: {fileID: 0}
+  tankAnimationScript: {fileID: 838318969809300736}
   motorForce: 0
   accelerationForce: 3
   decelerationForce: 1
@@ -490,7 +490,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f799443631adcd4ba6cf26e66a5d7ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tankAnimator: {fileID: 0}
 --- !u!114 &6033883733049633988
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -15,4 +15,4 @@ MonoBehaviour:
   DisplayName: Capture The Flag
   Name: CTF
   MatchLength: 180
-  Prefabs: []
+  WidgetPrefab: {fileID: 0}

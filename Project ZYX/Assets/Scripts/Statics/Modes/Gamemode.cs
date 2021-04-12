@@ -8,7 +8,33 @@ public abstract class Gamemode : ScriptableObject
     [SerializeField] protected string DisplayName  =  "GAMEMODE";
     [SerializeField] protected string Name         =  "GMODE";
     [SerializeField] protected float  MatchLength  =  320f;
-    [SerializeField] protected GameObject[] Prefabs;
+
+    [SerializeField] 
+    protected      GameObject WidgetPrefab = null;
+    protected      GameObject Widget
+    {
+        get { return m_Widget; }
+        set
+        {
+            // 1. BAIL IF SET
+            if (value == null || m_Widget == value) 
+            return;
+            // 2. REPLACE WIDGET
+            if (m_Widget) Destroy(m_Widget);
+            m_Widget = Instantiate(value, Game.MatchWidget.transform);
+            // 3. PLACE WIDGET
+            var i = m_Widget.GetComponent<RectTransform>();
+            //i.anchorMax = new Vector2()
+        }
+    }
+    private static GameObject m_Widget     = null;
+
+
+//  INIT LOGIC
+    protected virtual void InitWidget(GameObject Widget)
+    {
+        
+    }
 
 //  TANK LOGIC
     protected virtual IEnumerator OnTankKill (Tank Tank, DamageInfo DamageInfo)
@@ -25,7 +51,7 @@ public abstract class Gamemode : ScriptableObject
         Tank.Enable();
         yield return null;
     }
-
+    
 //  EVENTS
     protected virtual IEnumerator BeginPlay()
     {
@@ -79,6 +105,8 @@ public abstract class Gamemode : ScriptableObject
     private   IEnumerator Exec()
     {
         float time = Time.time;
+        Widget = WidgetPrefab;
+        InitWidget(Widget);
         MatchContext.Add(BeginPlay());
         yield return new WaitWhile
         (

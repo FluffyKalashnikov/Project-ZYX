@@ -72,11 +72,11 @@ public class Game : MonoBehaviour
     public static Action<Tank>             OnTankSpawn;
 
     // GAME WIDGETS
-    private static Widget MenuWidget  = null;
-    private static Widget PauseWidget = null;
-    private static Widget MatchWidget = null;
-    private static Widget LobbyWidget = null;
-    private static Widget WinWidget   = null;
+    public static Widget MenuWidget  = null;
+    public static Widget PauseWidget = null;
+    public static Widget MatchWidget = null;
+    public static Widget LobbyWidget = null;
+    public static Widget WinWidget   = null;
     
     // REFERENCES
     public static Camera                   Camera                  = null;
@@ -409,23 +409,24 @@ public class Game : MonoBehaviour
 
         IEnumerator Logic()
         {
-            Game.Instance.CountdownText.gameObject.SetActive(true);
-            while (Time > 0)
+            Game.Instance.CountdownText.SetText(SecToTimer(Time));
+            Game.Instance.CountdownText.gameObject.SetActive(true);  
+            while (Time > 0f)
             {
-                int   min = Mathf.FloorToInt(Time/60f);
-                float sec = Time - (float) min * 60f;
-
-                Game.Instance.CountdownText.SetText
-                (
-                    min == 0 
-                     ? $"{Time}"
-                     : $"{min}:{(sec >= 10 ? $"{sec}" : $"0{sec}")}"
-                );
-                Time--;
                 yield return new WaitForSeconds(1f);
+                Game.Instance.CountdownText.SetText(SecToTimer(--Time));
             }
             Game.Instance.CountdownText.gameObject.SetActive(false);
         }
+    }
+    public static string SecToTimer(float Seconds)
+    {
+        int   min = Mathf.FloorToInt(Seconds/60f);
+        float sec = Seconds - (float) min * 60f;
+
+        return min == 0 
+        ? $"{Seconds}"
+        : $"{min}:{(sec >= 10 ? $"{sec}" : $"0{sec}")}";
     }
 
 //  MATCH LOGIC/

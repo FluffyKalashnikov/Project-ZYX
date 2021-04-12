@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 [CreateAssetMenu(fileName = "Free For All", menuName = "ZYX Assets/Gamemodes/Free For All")]
 public class ModeFFA : Gamemode
@@ -9,6 +10,8 @@ public class ModeFFA : Gamemode
     [Header("Free For All", order = 1)]
     [SerializeField] private float PointsToWin   = 10f;
     [SerializeField] private float PointsPerKill = 2f;
+
+    private TextMeshProUGUI TimerText = null;
     
 //  LOGIC
     protected override IEnumerator OnTankKill(Tank Tank, DamageInfo DamageInfo)
@@ -39,6 +42,7 @@ public class ModeFFA : Gamemode
         Game.EnableLookOnlyHard();
         Game.AddCountdown(5f);
         yield return new WaitForSeconds(5f);
+        this.StartTimer();
         Game.EnableInput();
         yield return new WaitForSeconds(MatchLength-5f);
         Game.AddCountdown(5f);
@@ -53,4 +57,23 @@ public class ModeFFA : Gamemode
         Game.SetActiveState(Game.EState.WinScreen);
     }
 
+//  WIDGET LOGIC
+    protected override void InitWidget(GameObject Widget)
+    {
+        TimerText = Widget.GetComponentInChildren<TextMeshProUGUI>(true);
+        TimerText.SetText(Game.SecToTimer(MatchLength));
+    }
+    private void StartTimer()
+    {
+        float Time = MatchLength;
+        MatchContext.Add(Timer());
+        IEnumerator Timer()
+        {
+            while (Time > 0)
+            {
+                yield return new WaitForSeconds(1f);
+                TimerText.SetText(Game.SecToTimer(--Time));
+            }
+        }
+    }
 }   
