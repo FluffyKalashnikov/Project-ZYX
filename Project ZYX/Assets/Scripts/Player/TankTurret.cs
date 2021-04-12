@@ -11,7 +11,7 @@ public class TankTurret : MonoBehaviour
     [SerializeField] private TankAudio tankAudioScript;
 
     // PRIVATE REFERENCES
-    InputAction LookAction;
+    InputAction LookAction = new InputAction();
     PlayerInput playerInput;
 
     private Vector3 LookVector = Vector2.zero;
@@ -114,7 +114,7 @@ public class TankTurret : MonoBehaviour
                         delta.z = point.z;
                     }
 
-                    delta -= tankScript.Controller.transform.position;
+                    delta -= tankScript.Position;
                     delta.y = 0f;
 
                     return delta.normalized;
@@ -130,7 +130,7 @@ public class TankTurret : MonoBehaviour
 
     public void Enable()
     {
-        LookVector = tankScript.Controller.transform.InverseTransformVector(Vector3.forward);
+        LookVector = tankScript.PlayerTransform.InverseTransformVector(Vector3.forward);
         LookAction.Enable();
     }
     public void Disable()

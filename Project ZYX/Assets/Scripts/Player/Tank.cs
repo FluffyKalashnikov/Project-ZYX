@@ -34,7 +34,7 @@ public class Tank : MonoBehaviour, IDamageable
         {
             // REPLACE MODEL
             if (m_Model) Destroy(m_Model);
-            m_Model = Instantiate(value, Controller ? Controller.transform : transform);
+            m_Model = Instantiate(value, PlayerTransform);
             m_Model.transform.localPosition = TankRef.ModelOffset;
             m_Model.name = "Tank Model";
             UpdateTank();
@@ -61,15 +61,15 @@ public class Tank : MonoBehaviour, IDamageable
         get { return TankAsset ? TankAsset.Speed : 42069; }
     }
 
-    public AudioEvent  AudioIdle
+    public AudioEvent AudioIdle
     {
         get { return TankAsset ? TankAsset.AudioIdle : null; }
     }
-    public AudioEvent  AudioStartup
+    public AudioEvent AudioStartup
     {
         get { return TankAsset ? TankAsset.AudioStartup : null; }
     }
-    public AudioEvent  AudioThrottle
+    public AudioEvent AudioThrottle
     {
         get { return TankAsset ? TankAsset.AudioThrottle : null; }
     }
@@ -87,16 +87,16 @@ public class Tank : MonoBehaviour, IDamageable
 
 
     // PROPERTIES
-    public float  Health
+    public float      Health
     {
         get { return m_Health; }
         set { m_Health = Mathf.Clamp(value, 0, MaxHealth); UpdateHealthbar(); }
     }
-    public float  HealthFactor
+    public float      HealthFactor
     {
         get {return Health/MaxHealth;}
     }
-    public string Name 
+    public string     Name 
     {
         get 
         {
@@ -110,16 +110,16 @@ public class Tank : MonoBehaviour, IDamageable
             Game.UpdateScoreboards();
         }
     }
-    public float  Score
+    public float      Score
     {
         get { return m_Score; }
         set { m_Score = value; Game.UpdateScoreboards(); }
     }
-    public int    PlayerIndex 
+    public int        PlayerIndex 
     {
         get {return PlayerInput.playerIndex;}
     }
-    public int    TankIndex
+    public int        TankIndex
     {
         get { return Mathf.Clamp(m_TankIndex, 0, Game.TankTypes.Length-1);  }
         set 
@@ -128,6 +128,20 @@ public class Tank : MonoBehaviour, IDamageable
             m_TankIndex = Mathf.Clamp(value, 0, Game.TankTypes.Length-1); 
             TankAsset = Game.TankTypes.Length != 0 ? Game.TankTypes[m_TankIndex] : null;
         }
+    }
+    public Vector3    Position
+    {
+        get { return PlayerTransform.position; }
+        set { PlayerTransform.position = value; }
+    }
+    public Quaternion Rotation
+    {
+        get { return PlayerTransform.rotation; }
+        set { PlayerTransform.rotation = value; }
+    }
+    public Transform  PlayerTransform
+    {
+        get { return Controller.transform; }
     }
 
     private GameObject m_Model     = null;
@@ -193,9 +207,12 @@ public class Tank : MonoBehaviour, IDamageable
         // 2. INIT LOGIC
         InitPlayer();
         UpdateTank();
+        DisableTank();
+        DisableTank();
         InitPreview();
         InitHUD();
         InitScore();
+        
 
         // 3. EVENT SUBSCRIPTION
         Game.OnNewLobby += EnablePreview;
@@ -229,10 +246,6 @@ public class Tank : MonoBehaviour, IDamageable
             }
         };
     }
-    private void Start() => DisableTank();
-    
-
-
 
 
 //  TANK SETUP
@@ -255,12 +268,12 @@ public class Tank : MonoBehaviour, IDamageable
     }
     
 //  TANK HEALTH
-    public void TakeDamage(DamageInfo damageInfo)
+    public void TakeDamage(DamageInfo DamageInfo)
     {
         if (Game.IsPlaying())
-        if ((Health -= damageInfo.Damage) <= 0f)
+        if ((Health -= DamageInfo.Damage) <= 0f)
         {
-            Die(damageInfo);
+            Die(DamageInfo);
         }
     }
     public void Die(DamageInfo damageInfo)
@@ -268,23 +281,14 @@ public class Tank : MonoBehaviour, IDamageable
         DisableTank();
         Game.OnTankKill((Tank) damageInfo.Reciever, damageInfo);
     }
-    public void Spawn(float delay = 0f)
-    {
-        Game.SpawnTank(this, delay);
-    }
-    public void OnSpawned()
-    {
-        Health = MaxHealth;
-        EnableTank();
-    }
-
+    
 //  TANK ENABLING
     public void EnableTank()
     {
         if (Alive) return;
 
         Game.AliveList.Add(this);
-        Game.CameraTargets.AddMember(Controller.transform, 1f, 0f);
+        Game.CameraTargets.AddMember(PlayerTransform, 1f, 0f);
         ShowTank();
         EnableHUD();
         EnableInput();
@@ -296,7 +300,7 @@ public class Tank : MonoBehaviour, IDamageable
         if (!Alive) return;
 
         Game.AliveList.Remove(this);
-        Game.CameraTargets.RemoveMember(Controller.transform);
+        Game.CameraTargets.RemoveMember(PlayerTransform);
         HideTank();
         DisableHUD();
         DisableInput();

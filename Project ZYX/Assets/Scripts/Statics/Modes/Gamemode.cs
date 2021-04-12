@@ -24,6 +24,8 @@ public abstract class Gamemode : ScriptableObject
     protected virtual IEnumerator OnTankSpawn(Tank Tank)
     {
         Debug.Log($"[{Name}]: Tank Spawned!");
+        Tank.Health = Tank.MaxHealth;
+        Tank.EnableTank();
         yield return null;
     }
 
@@ -64,7 +66,7 @@ public abstract class Gamemode : ScriptableObject
         Game.OnTankSpawn += StartTankSpawn;
 
         MatchContext.Add(Exec());
-        Debug.Log($"[{Name}]: Initialized.");
+        Debug.Log($"[{Name}]: Match Initialized.");
     }
     public    void Destruct()
     {
@@ -73,7 +75,7 @@ public abstract class Gamemode : ScriptableObject
 
         MatchContext.Stop();
 
-        Debug.Log($"[{Name}]: Destroyed.");
+        Debug.Log($"[{Name}]: Match Destroyed.");
     }
 
     private   IEnumerator Exec()

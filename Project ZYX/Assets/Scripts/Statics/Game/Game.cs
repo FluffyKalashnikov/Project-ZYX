@@ -20,13 +20,17 @@ public class Game : MonoBehaviour
             // 1. BAIL IF SET
             if (m_State == value)
             return;
-            switch(m_State)
+            EState OldState = m_State;
+            EState NewState = m_State = value;
+            
+            // 2. BEGIN END LOGIC
+            switch(OldState)
             {
                 case EState.Pause: RemoveWidget(PauseWidget); break;
                 default: break;
             }
-            // 2. BEGIN NEW LOGIC
-            switch(m_State = value)
+            // 3. BEGIN NEW LOGIC
+            switch(NewState)
             {
                 case EState.MainMenu:  SetActiveWidget(MenuWidget);  break;
                 case EState.Match:     SetActiveWidget(MatchWidget); break;
@@ -154,6 +158,7 @@ public class Game : MonoBehaviour
             SetActiveInput(Tank.EInputMode.Lobby);
             SetActiveCamera(LobbyCamera);
             EnableJoining();
+            MatchCleanup();
         };
         WinWidget  .OnEnabled = () =>
         {
@@ -220,91 +225,81 @@ public class Game : MonoBehaviour
         Game.InputManager.DisableJoining();
     }
 
-//  GAMEMODE LOGIC
-    public static void SpawnTank(Tank Tank, float Delay = 0f)
+//  RESPAWN LOGIC
+    public static void SpawnTank(Tank Tank)
     {
         if (!Tank.Alive)
-        RespawnTank(Tank, Delay);
+        RespawnTank(Tank);
     }
-    public static void SpawnTanks(float Delay = 0f)
+    public static void SpawnTanks()
     {
         foreach (Tank Tank in PlayerList)
-        SpawnTank(Tank, Delay);
+        SpawnTank(Tank);
     }
-    public static void RespawnTank(Tank tank, float delay = 0f)
+    public static void RespawnTank(Tank Tank)
     {
-        MatchContext.Add(Spawn());
-        IEnumerator Spawn()
-        {
-            tank.DisableTank();
-            if (delay > 0)
-            yield return new WaitForSeconds(delay);
-            tank.Controller.transform.position = RespawnPosition();
-            tank.OnSpawned();
-
-            Vector3 RespawnPosition()
-            {
-                GameObject[] points = GameObject.FindGameObjectsWithTag("Respawn Point");
-                switch (AliveList.Count)
-                {
-                    case 0:  return RandomPoint  ().transform.position;
-                    default: return FarthestPoint().transform.position;
-                }
-
-                GameObject FarthestPoint()
-                {
-                    // 1. GET OPPONENTS
-                    List<Tank> opponents = AliveList;
-                    opponents.Remove(tank);
-
-                    // 2. SAVE FURTHEST INDEX
-                    float maxDistance = 0f;
-                    int   maxIndex    = 0;
-
-                    for (int index = 0; index < points.Length; index++)
-                    {
-                        float distance = GetDistance(points[index]);
-
-                        if (maxDistance < distance)
-                        {
-                            maxDistance = distance;
-                            maxIndex    = index;
-                        }
-                    }
-
-                    // 3. RETURN FURTHEST POINT
-                    return points[maxIndex];
-
-                    float GetDistance(GameObject point)
-                    {
-                        float closest = Mathf.Infinity;
-
-                        // STORE CLOSEST DISTANCE
-                        foreach (var opponent in opponents)
-                        {
-                            float current = Vector3.Distance
-                            (
-                                point.transform.position,
-                                opponent.Controller.transform.position
-                            );
-                            closest = current < closest ? current : closest;
-                        }
-                        return closest;
-                    }
-                }
-                GameObject RandomPoint()
-                {
-                    return points[UnityEngine.Random.Range(0, points.Length)];
-                }
-            }
-        }
+        // 1. DISABLE/ENABLE TANK
+        Tank.DisableTank();
+        
+        // 2. SET POSITION/ROTATION
+        Spawnpoint Spawnpoint = FindSpawnpoint();
+        Tank.Position = Spawnpoint.Position;
+        Tank.Rotation = Spawnpoint.Rotation;
+        
+        Debug.Log($"SPAWN POSITION: {Tank.Position}");
+        OnTankSpawn?.Invoke(Tank);
     }
-    public static void RespawnTanks(float delay = 0f)
+    public static void RespawnTanks()
     {
         foreach (Tank tank in PlayerList)
-        RespawnTank(tank, delay);
+        RespawnTank(tank);
     }
-    
+
+    public static Spawnpoint[] FindSpawnpoints()
+    {
+        return Spawnpoint.List.ToArray();
+    }
+    public static Spawnpoint   FindSpawnpoint()
+    {
+        switch(AliveList.Count)
+        {
+            case 0:  return FindRandomSpawnpoint();
+            default: return FindFurthestSpawnpoint();
+        }
+    }
+    public static Spawnpoint   FindFurthestSpawnpoint()
+    {
+        // VARIABLES
+        Spawnpoint[] Spawnpoints = FindSpawnpoints();
+        Spawnpoint   Storedpoint = Spawnpoints[0];
+
+        foreach (var Otherpoint in Spawnpoints)
+        {
+            Storedpoint = Otherpoint.Distance > Storedpoint.Distance 
+            ? Otherpoint
+            : Storedpoint;
+        }
+
+        Debug.Log($"[GAME]: Found furthest point. ({Storedpoint.name})");
+        return Storedpoint;
+    }
+    public static Spawnpoint   FindRandomSpawnpoint()
+    {
+        Spawnpoint[] Spawnpoints = FindSpawnpoints();
+        int          max         = Spawnpoints.Length;
+        Spawnpoint   Storedpoint = null;
+        
+        // 1. GET
+        Storedpoint = max != 0
+        ? Spawnpoints[UnityEngine.Random.Range(0, max)]
+        : null;
+
+        // 2. RETURN
+        Debug.Log($"[GAME]: Random point found. ({Storedpoint.name})");
+        return Storedpoint;
+    }
+
+//  GAMEMODE LOGIC
     public static void EnableTanks()
     {
         foreach (Tank tank in FindObjectsOfType<Tank>())
@@ -335,6 +330,7 @@ public class Game : MonoBehaviour
     {
         SetActiveState(EState.Match);
         UpdateScoreboards();
+        MatchCleanup();
         CurrentMode.Init();
         OnNewMatch?.Invoke();
     }
@@ -368,6 +364,7 @@ public class Game : MonoBehaviour
     {
         Widget.RemoveOverlays();
         OnPauseReset?.Invoke();
+        MatchCleanup();
     }
     public static void ResetReady()
     {
@@ -445,7 +442,6 @@ public class Game : MonoBehaviour
         // 2. DELETE OBJECTS
         foreach (var i in GameObject.FindGameObjectsWithTag("Disposable"))
         Destroy(i);
-        
 
         Debug.Log($"[GAME]: Cleanup Finished!");
     }

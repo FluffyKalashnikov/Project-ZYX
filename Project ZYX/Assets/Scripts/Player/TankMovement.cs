@@ -11,7 +11,7 @@ public class TankMovement : MonoBehaviour
     [SerializeField] private TankAnimation tankAnimationScript;
 
     // PRIVATE REFERENCES
-    InputAction moveAction;
+    InputAction moveAction = new InputAction();
     PlayerInput playerInput;
 
     #region Stats
@@ -86,8 +86,8 @@ public class TankMovement : MonoBehaviour
         #endregion
         float multipliedRotationForce = input.x * rotationForce;
 
-        tankScript.Controller.transform.Rotate(0, multipliedRotationForce * Time.deltaTime, 0);
-        direction = tankScript.Controller.transform.TransformDirection(currentVel);
+        tankScript.PlayerTransform.Rotate(0, multipliedRotationForce * Time.deltaTime, 0);
+        direction = tankScript.PlayerTransform.TransformDirection(currentVel);
         tankScript.Controller.Move(direction * Time.deltaTime);
         animator?.SetFloat("Speed", currentVel.z);
         #endregion  

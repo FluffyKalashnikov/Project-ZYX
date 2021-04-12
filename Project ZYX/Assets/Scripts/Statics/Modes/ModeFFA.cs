@@ -23,8 +23,10 @@ public class ModeFFA : Gamemode
 
         // 3. IF ONLY ONE ALIVE, SPAWN ALL
         if (Game.AliveList.Count <= 1)
-        Game.SpawnTanks(4f);
-
+        {
+            yield return new WaitForSeconds(4f);
+            Game.SpawnTanks();
+        }
         
         yield return null;
     }
@@ -33,9 +35,8 @@ public class ModeFFA : Gamemode
     protected override IEnumerator BeginPlay()
     {
         Game.ResetScore();
-        Game.SpawnTanks();
+        Game.RespawnTanks();
         Game.EnableLookOnly();
-        //Game.DisableInput();
         Game.AddCountdown(5f);
 
         yield return new WaitForSeconds(5f);

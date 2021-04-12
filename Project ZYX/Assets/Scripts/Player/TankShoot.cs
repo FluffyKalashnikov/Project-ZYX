@@ -27,7 +27,7 @@ public class TankShoot : MonoBehaviour
     // PRIVATE REFERENCES
     private Tank        TankScript    = null;
     private PlayerInput PlayerInput   = null;
-    private InputAction FireAction    = null;
+    private InputAction FireAction    = new InputAction();
     private IEnumerator IE_Fire       = null;
 
 
@@ -48,7 +48,6 @@ public class TankShoot : MonoBehaviour
             StopCoroutine(IE_Fire);
         };
     }
-
 
     private void Fire(float charge)
     {
@@ -86,12 +85,11 @@ public class TankShoot : MonoBehaviour
             Tank.OnTankFire.Invoke(TankScript);
         }
     }
-
     private void Fire(InputAction.CallbackContext ctx)
     {
         if (IE_Fire != null)
-        StopCoroutine (IE_Fire);
-        StartCoroutine(IE_Fire = Logic());
+        MatchContext.Remove(IE_Fire);
+        MatchContext.Add(IE_Fire = Logic());
 
         IEnumerator Logic()
         {
@@ -118,7 +116,6 @@ public class TankShoot : MonoBehaviour
         }
     }
 
-
     public void Enable()
     {
         FireAction.Enable();
@@ -127,8 +124,6 @@ public class TankShoot : MonoBehaviour
     {
         FireAction.Disable();
     }
-
-
 
     public void OnLoadStats(TankRef i)
     {
