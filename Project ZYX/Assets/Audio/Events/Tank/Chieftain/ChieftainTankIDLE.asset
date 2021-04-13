@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ChieftainTankIDLE
   m_EditorClassIdentifier: 
   clips:
-  - {fileID: 8300000, guid: 61c9e2173a364bf4e893e0004ff9b687, type: 3}
+  - {fileID: 8300000, guid: 4829c6893dabb5c43b73869b5f7e7c6d, type: 3}
   loop: 1
   playOneShot: 0
   volume:

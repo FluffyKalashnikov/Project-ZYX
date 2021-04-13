@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ChieftainTankTHROTTLE
   m_EditorClassIdentifier: 
   clips:
-  - {fileID: 8300000, guid: f84a443bb4cae114a92475f4153e1765, type: 3}
+  - {fileID: 8300000, guid: 21749e81525784546b47e2265e241866, type: 3}
   loop: 1
   playOneShot: 0
   volume:

@@ -581,11 +581,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   engineStartUpTime: 1.1568
   idleVolumeMin: 0
-  idleVolumeMax: 0.5
+  idleVolumeMax: 0.55
   throttlePitchMin: 0
   throttlePitchMax: 1
   throttleVolumeMin: 0
-  throttleVolumeMax: 0.5
+  throttleVolumeMax: 0.55
   engineStartupSource: {fileID: 4355621582077282588}
   engineIdleSource: {fileID: 8289559909797590170}
   engineThrottleSource: {fileID: 5183246103435422681}
