@@ -33,11 +33,23 @@ public class Tank : MonoBehaviour, IDamageable
         get { return m_Model; }
         set 
         {
-            // REPLACE MODEL
+            // 1. REPLACE MAIN MODEL
             if (m_Model) Destroy(m_Model);
             m_Model = Instantiate(value, PlayerTransform);
             m_Model.transform.localPosition = TankRef.ModelOffset;
-            m_Model.name = "Tank Model";
+            
+            // 2. REPLACE PREVIEW MODEL
+            if (m_PreviewModel) Destroy(m_PreviewModel);
+            m_PreviewModel = Instantiate(m_Model, PreviewModelRoot.transform);
+            m_PreviewModel.transform.localPosition = TankRef.ModelOffset;
+            
+            // 3. PREVIEW SETUP
+            foreach(var i in m_PreviewModel.GetComponentsInChildren<Transform>())
+            i.gameObject.layer = 13;
+            foreach (var i in m_PreviewModel.GetComponentsInChildren<Collider>())
+            Destroy(i);
+
+            // 4. UPDATE MAIN MODEL
             UpdateTank();
         }
     }
@@ -144,14 +156,15 @@ public class Tank : MonoBehaviour, IDamageable
     {
         get { return Controller.transform; }
     }
+    
 
-
-    private GameObject m_Model     = null;
-    private TankAsset  m_TankAsset = null;
-    private float      m_Health    = 0f;
-    private float      m_Score     = 0f;
-    private string     m_Name      = string.Empty;
-    private int        m_TankIndex = 0;
+    private GameObject m_Model        = null;
+    private GameObject m_PreviewModel = null;
+    private TankAsset  m_TankAsset    = null;
+    private float      m_Health       = 0f;
+    private float      m_Score        = 0f;
+    private string     m_Name         = string.Empty;
+    private int        m_TankIndex    = 0;
 
     [Header("REFERENCES")]
     #region references
@@ -168,6 +181,9 @@ public class Tank : MonoBehaviour, IDamageable
     public GameObject             PreviewPrefab      = null;
     public GameObject             PreviewInstance    = null;
     public GameObject             ScorePrefab        = null;
+    public RenderTexture          PreviewTexture     = null;
+    public Camera                 PreviewCamera      = null;
+    public GameObject             PreviewModelRoot   = null;
     [Space(5)]
     public Button                 PreviewButtonReady = null;
     public Button                 PreviewButtonRight = null;
@@ -264,7 +280,12 @@ public class Tank : MonoBehaviour, IDamageable
     }
     public void UpdateColor()
     {
-        foreach (var rd in Model.GetComponentsInChildren<MeshRenderer>(true))
+        foreach (var rd in Model.GetComponentsInChildren<Renderer>(true))
+        {
+            foreach(var i in rd.materials)
+            i.color = Color;
+        }
+        foreach (var rd in m_PreviewModel.GetComponentsInChildren<Renderer>(true))
         {
             foreach(var i in rd.materials)
             i.color = Color;
@@ -437,6 +458,14 @@ public class Tank : MonoBehaviour, IDamageable
                 PreviewButtonRight = i[1];
                 PreviewButtonLeft  = i[2];
             }
+            
+            // 3. INIT TEXTURE
+            PreviewTexture = new RenderTexture(1024, 1024, 24);
+            PreviewTexture.antiAliasing = 8;
+            PreviewCamera.targetTexture = PreviewTexture;
+            PreviewTexture.Create();
+            PreviewTankImage.texture = PreviewTexture;
+            PreviewModelRoot.transform.position = Vector3.up * 20f * PlayerIndex;
         }
 
         // 3. UPDATE COLOR
@@ -462,6 +491,7 @@ public class Tank : MonoBehaviour, IDamageable
         PreviewInstance.SetActive(true);
         LocalEventSystem.SetSelectedGameObject(null);
         LocalEventSystem.sendNavigationEvents = true;
+        PreviewTexture.Create();
         ResetPreviewSelection();
     }
     public void DisablePreview()
@@ -469,6 +499,7 @@ public class Tank : MonoBehaviour, IDamageable
         PreviewInstance.SetActive(false);
         LocalEventSystem.SetSelectedGameObject(null);
         LocalEventSystem.sendNavigationEvents = false;
+        PreviewTexture.Release();
     }
     public void ResetPreviewSelection()
     {
