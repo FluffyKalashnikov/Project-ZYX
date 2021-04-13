@@ -14,9 +14,17 @@ public class BarrelBaseCode : MonoBehaviour
     public AudioEvent barrelCollisionSFX;
     public AudioSource barrelCollisionSource;
 
-    [Header("DestructEvent")]
-    public DestructEvent barrelDestructEvent;
-
+    //[Header("DestructEvent")]
+    //public DestructEvent barrelDestructEvent;
+    private void Awake()
+    {
+        Game.OnNewLobby += () => BarrelActivator();
+    }
+    private void BarrelActivator()
+    {
+        barrelModel.gameObject.SetActive(true);
+        barrelCollider.enabled = true;
+    }
     private void Start()
     {
         barrelAmbienceSFX.Play(barrelAmbienceSource);
@@ -30,11 +38,11 @@ public class BarrelBaseCode : MonoBehaviour
 
     public void DeleteBarrelModel()
     {
-        barrelDestructEvent.Play(barrelModel);
+        barrelModel.SetActive(false);
     }
 
     public void DeleteBarrelCompletly()
     {
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 }

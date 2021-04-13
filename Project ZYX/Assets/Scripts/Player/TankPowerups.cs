@@ -338,7 +338,6 @@ public class TankPowerups : MonoBehaviour
                 BouncyBullets_Picked = false;
             }
         }
-        Debug.Log(currentBouncyBulletsDuration);
     }
     #endregion
 

@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class BarrelStandardPickups : BarrelBaseCode
 {
-    [Header("Pickup Spawning Type")]
+    /*[Header("Pickup Spawning Type")]
     [Tooltip("If unselected, then you're able to control what pickup the barrel should spawn. If selected, then the game randomly selects a value for you")]
     [SerializeField] private bool RandomizePickups;
     
     [Space(10)]
     
     [Tooltip("Check the elements numbers!")]
-    [SerializeField] private int selectedPickup;
+    [SerializeField] private int selectedPickup;*/
 
     [Header("Pickup List")]
     [SerializeField] private List<GameObject> PowerupList = new List<GameObject>();
@@ -29,27 +29,13 @@ public class BarrelStandardPickups : BarrelBaseCode
             StartCoroutine(BarrelDestroyer());
         }
     }
-    private void Start()
+    private void Update()
     {
-        if(RandomizePickups)
-        {
-            randomizedPickup = Random.Range(0, PowerupList.Count);
-        }
-        else
-        {
-            return;
-        }
+        randomizedPickup = Random.Range(0, PowerupList.Count);
     }
     private void SpawnPickup()
     {
-        if (RandomizePickups)
-        {
-            Instantiate(PowerupList[randomizedPickup], gameObject.transform.position, Quaternion.identity);
-        }
-        else
-        {
-            Instantiate(PowerupList[selectedPickup], gameObject.transform.position, Quaternion.identity);
-        }
+         Instantiate(PowerupList[randomizedPickup], gameObject.transform.position, Quaternion.identity);
     }
     IEnumerator BarrelDestroyer()
     {

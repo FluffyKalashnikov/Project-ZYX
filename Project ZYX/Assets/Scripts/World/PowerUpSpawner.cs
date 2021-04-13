@@ -7,14 +7,14 @@ public class PowerUpSpawner : MonoBehaviour
     [Header("Pickup respawn time")]
     [SerializeField] private int respawnTime;
 
-    [Header("Pickup Spawning Type")]
+    /*[Header("Pickup Spawning Type")]
     [Tooltip("If unselected, you're able to control what pickup the barrel should spawn. If selected, the game randomly selects a value for you. The value (SelectedPickup) does get used on Start though where the first ever pickup that spawns is the value you input here")]
     [SerializeField] private bool RandomizePickups;
 
     [Space(10)]
 
     [Tooltip("Check the elements numbers!")]
-    [SerializeField] private int selectedPickup;
+    [SerializeField] private int selectedPickup; */
 
     [Header("Pickup List")]
     [SerializeField] private List<GameObject> PowerupList = new List<GameObject>();
@@ -30,10 +30,7 @@ public class PowerUpSpawner : MonoBehaviour
     private void Update()
     {
         #region RNG
-        if (RandomizePickups)
-        {
             randomizedPickup = Random.Range(0, PowerupList.Count);
-        }
         #endregion
 
         RaycastHit hit;
@@ -56,16 +53,8 @@ public class PowerUpSpawner : MonoBehaviour
     {
         spawned = true;
 
-        if (RandomizePickups)
-        {
             Instantiate(PowerupList[randomizedPickup], gameObject.transform.position, Quaternion.identity);
             spawned = true;
-        }
-        else if (!RandomizePickups)
-        {
-            Instantiate(PowerupList[selectedPickup], gameObject.transform.position, Quaternion.identity);
-            spawned = true;
-        }
     }
     private void PowerupSpawnerTimerMethod()
     {
@@ -85,14 +74,7 @@ public class PowerUpSpawner : MonoBehaviour
     }
     private void SpawnPickup()
     {
-        if (RandomizePickups)
-        {
             Instantiate(PowerupList[randomizedPickup], gameObject.transform.position, Quaternion.identity);
-        }
-        else if (!RandomizePickups)
-        {
-            Instantiate(PowerupList[selectedPickup], gameObject.transform.position, Quaternion.identity);
-        }
     }
     IEnumerator PowerupRespawner()
     {

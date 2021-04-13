@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &229222055910695923
+--- !u!1 &254394465621536659
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,36 +8,36 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5824507357231712618}
-  - component: {fileID: 8433359507759454720}
+  - component: {fileID: 421106654258755108}
+  - component: {fileID: 7899708915400881485}
   m_Layer: 0
-  m_Name: Collision
+  m_Name: Ambience
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5824507357231712618
+--- !u!4 &421106654258755108
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 229222055910695923}
+  m_GameObject: {fileID: 254394465621536659}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 248487569640008123}
-  m_RootOrder: 1
+  m_Father: {fileID: 5932032726449571147}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!82 &8433359507759454720
+--- !u!82 &7899708915400881485
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 229222055910695923}
+  m_GameObject: {fileID: 254394465621536659}
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
@@ -127,7 +127,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!1 &2623741184741615456
+--- !u!1 &748666841047230973
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -135,31 +135,65 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 248487569640008123}
+  - component: {fileID: 748666841047230972}
+  - component: {fileID: 2531819167599377048}
+  - component: {fileID: 2219132932311300746}
   m_Layer: 0
-  m_Name: Audio
+  m_Name: BarrelStandard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &248487569640008123
+--- !u!4 &748666841047230972
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2623741184741615456}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_GameObject: {fileID: 748666841047230973}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -4.74, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 6122657095803181780}
-  - {fileID: 5824507357231712618}
-  m_Father: {fileID: 6576331823566095628}
-  m_RootOrder: 1
+  - {fileID: 1499341622383880559}
+  - {fileID: 5932032726449571147}
+  m_Father: {fileID: 748666841057208380}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &5667065015818821413
+--- !u!114 &2531819167599377048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 748666841047230973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75a544bb807b7344e838e954d9728c04, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  barrelModel: {fileID: 2271340258729030613}
+  barrelCollider: {fileID: 2219132932311300746}
+  barrelAmbienceSFX: {fileID: 11400000, guid: f8c64497b4da4374ea4161b6a613d480, type: 2}
+  barrelAmbienceSource: {fileID: 7899708915400881485}
+  barrelCollisionSFX: {fileID: 11400000, guid: af6642baaa069c14a9de09e7ebc767c7, type: 2}
+  barrelCollisionSource: {fileID: 2605703742276810480}
+  barrelDestructEvent: {fileID: 11400000, guid: 53020d8b124d1a547b819c7181d644c6, type: 2}
+--- !u!65 &2219132932311300746
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 748666841047230973}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!1 &748666841057208381
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -167,9 +201,54 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5039146692345906591}
-  - component: {fileID: 8233000830716070458}
-  - component: {fileID: 6171490508742016752}
+  - component: {fileID: 748666841057208380}
+  - component: {fileID: 2658323841918041780}
+  m_Layer: 0
+  m_Name: BarrelStandardPrefab
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &748666841057208380
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 748666841057208381}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 748666841047230972}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2658323841918041780
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 748666841057208381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c712c9e3cc021c42bb379ed545b5ac8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Barrel: {fileID: 748666841047230973}
+--- !u!1 &2271340258729030613
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1499341622383880559}
+  - component: {fileID: 2549425343709128394}
+  - component: {fileID: 325833254311154176}
   m_Layer: 0
   m_Name: Model
   m_TagString: Untagged
@@ -177,35 +256,35 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5039146692345906591
+--- !u!4 &1499341622383880559
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5667065015818821413}
+  m_GameObject: {fileID: 2271340258729030613}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.6, z: 0}
   m_LocalScale: {x: 0.0048506614, y: 0.0048506614, z: 0.0048506614}
   m_Children: []
-  m_Father: {fileID: 6576331823566095628}
+  m_Father: {fileID: 748666841047230972}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &8233000830716070458
+--- !u!33 &2549425343709128394
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5667065015818821413}
+  m_GameObject: {fileID: 2271340258729030613}
   m_Mesh: {fileID: -5076798556035486163, guid: 338e2a5a213b13b49b8dad46f2a9ff39, type: 3}
---- !u!23 &6171490508742016752
+--- !u!23 &325833254311154176
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5667065015818821413}
+  m_GameObject: {fileID: 2271340258729030613}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -240,7 +319,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &5955962257724179299
+--- !u!1 &5912736254805872387
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -248,36 +327,36 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6122657095803181780}
-  - component: {fileID: 4359899033897949629}
+  - component: {fileID: 140967156698899866}
+  - component: {fileID: 2605703742276810480}
   m_Layer: 0
-  m_Name: Ambience
+  m_Name: Collision
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6122657095803181780
+--- !u!4 &140967156698899866
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5955962257724179299}
+  m_GameObject: {fileID: 5912736254805872387}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 248487569640008123}
-  m_RootOrder: 0
+  m_Father: {fileID: 5932032726449571147}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!82 &4359899033897949629
+--- !u!82 &2605703742276810480
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5955962257724179299}
+  m_GameObject: {fileID: 5912736254805872387}
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
@@ -367,7 +446,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!1 &6576331823566095629
+--- !u!1 &8451418950162238352
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -375,61 +454,27 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6576331823566095628}
-  - component: {fileID: 8215351232516314728}
-  - component: {fileID: 5758960233153287802}
+  - component: {fileID: 5932032726449571147}
   m_Layer: 0
-  m_Name: BarrelStandard
+  m_Name: Audio
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6576331823566095628
+--- !u!4 &5932032726449571147
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6576331823566095629}
+  m_GameObject: {fileID: 8451418950162238352}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 5039146692345906591}
-  - {fileID: 248487569640008123}
-  m_Father: {fileID: 0}
-  m_RootOrder: 0
+  - {fileID: 421106654258755108}
+  - {fileID: 140967156698899866}
+  m_Father: {fileID: 748666841047230972}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8215351232516314728
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6576331823566095629}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75a544bb807b7344e838e954d9728c04, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  barrelModel: {fileID: 5667065015818821413}
-  barrelCollider: {fileID: 5758960233153287802}
-  barrelAmbienceSFX: {fileID: 11400000, guid: f8c64497b4da4374ea4161b6a613d480, type: 2}
-  barrelAmbienceSource: {fileID: 4359899033897949629}
-  barrelCollisionSFX: {fileID: 11400000, guid: af6642baaa069c14a9de09e7ebc767c7, type: 2}
-  barrelCollisionSource: {fileID: 8433359507759454720}
-  barrelDestructEvent: {fileID: 11400000, guid: 53020d8b124d1a547b819c7181d644c6, type: 2}
---- !u!65 &5758960233153287802
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6576331823566095629}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0.5, z: 0}
