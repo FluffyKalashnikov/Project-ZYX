@@ -95,7 +95,7 @@ public class TankMovement : MonoBehaviour
 
         tankScript.PlayerTransform.Rotate(0, multipliedRotationForce * Time.deltaTime, 0);
         direction = tankScript.PlayerTransform.TransformDirection(currentVel);
-        tankScript.Controller.Move(direction * Time.deltaTime);
+        tankScript.Controller.Move((direction + -Vector3.up * 5f) * Time.deltaTime);
         animator?.SetFloat(MoveHash, currentVel.magnitude);
         #endregion  
     }

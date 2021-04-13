@@ -58,8 +58,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcfa7a7863c16f64fb2f9bed2d7e6a19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  path: Map/Layout
+  path: Map/Layout/Sand
   active: 1
+  activeDuringRuntime: 0
 --- !u!1001 &6612624846628220590
 PrefabInstance:
   m_ObjectHideFlags: 0
