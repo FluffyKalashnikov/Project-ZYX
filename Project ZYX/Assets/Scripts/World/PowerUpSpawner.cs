@@ -34,10 +34,6 @@ public class PowerUpSpawner : MonoBehaviour
         {
             randomizedPickup = Random.Range(0, PowerupList.Count);
         }
-        else
-        {
-            return;
-        }
         #endregion
 
         RaycastHit hit;

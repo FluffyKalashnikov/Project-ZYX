@@ -28,6 +28,9 @@ public enum DamageType
 {
     ShellImpact,
     ShellExplosion,
+    SeamineImpact,
+    ExplosiveBarrel,
+    RadioactiveBarrel,
     OutOfBounds
 }
 

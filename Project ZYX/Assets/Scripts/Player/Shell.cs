@@ -5,14 +5,14 @@ using UnityEngine.VFX;
 
 public class Shell : MonoBehaviour
 {
-    [SerializeField] private float damage = 0f;
+    [SerializeField] public float damage = 0f;
     [SerializeField] private VisualEffect bulletImpactParticle;
     [SerializeField] private AudioEvent bulletEXPLSfx;
     [SerializeField] private AudioSource bulletEXPLSource;
 
-    private Rigidbody    rb       = null;
-    private Tank         owner    = null;
-    private bool         hasHit   = false;
+    [HideInInspector] public Rigidbody    rb       = null;
+    [HideInInspector] public Tank         owner    = null;
+    [HideInInspector] public bool         hasHit   = false;
     private new Collider collider = null;
 
     private void Awake() 
@@ -42,6 +42,10 @@ public class Shell : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        CollisionAction(collision);
+    }
+    public virtual void CollisionAction(Collision collision)
+    {
         if (hasHit) return;
         IDamageable hit = collision.gameObject.GetComponentInParent<IDamageable>();
 
@@ -56,6 +60,10 @@ public class Shell : MonoBehaviour
             )
         );
 
+        DisableBullet();
+    }
+    public void DisableBullet()
+    {
         hasHit = true;
         rb.useGravity = true;
         Tank.IgnoreCollision(collider);
