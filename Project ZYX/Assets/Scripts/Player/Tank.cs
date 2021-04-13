@@ -279,7 +279,12 @@ public class Tank : MonoBehaviour, IDamageable
     }
     public void UpdateColor()
     {
-        foreach (var rd in Model.GetComponentsInChildren<MeshRenderer>(true))
+        foreach (var rd in Model.GetComponentsInChildren<Renderer>(true))
+        {
+            foreach(var i in rd.materials)
+            i.color = Color;
+        }
+        foreach (var rd in m_PreviewModel.GetComponentsInChildren<Renderer>(true))
         {
             foreach(var i in rd.materials)
             i.color = Color;
