@@ -47,13 +47,10 @@ public class TankMovement : MonoBehaviour
         MoveHash = Animator.StringToHash("Speed");
         moveAction = playerInput.actions.FindAction("Move");
         tankScript.MoveTick += Tick;
-    }
-    void Start()
-    {
-        //StartCoroutine(tankAudioScript.EngineStartUpSound());
-    }
 
-
+        Game.OnTankSpawn += (tank) => {StartCoroutine(tankAudioScript.EngineStartUpSound());};
+    }
+    
     private void Tick(Vector2 Input, float Velocity)
     {
         BaseMovement(moveAction.ReadValue<Vector2>());

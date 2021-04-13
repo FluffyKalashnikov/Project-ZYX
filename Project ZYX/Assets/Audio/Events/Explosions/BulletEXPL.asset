@@ -15,11 +15,11 @@ MonoBehaviour:
   clips:
   - {fileID: 8300000, guid: a327fdac5636af544b28c8d207e31292, type: 3}
   loop: 0
-  playOneShot: 0
+  playOneShot: 1
   volume:
     type: 0
     slider: 0
-    single: 1
+    single: 0.5
     min: 0
     max: 1
     minLimit: 1

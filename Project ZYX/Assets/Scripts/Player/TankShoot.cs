@@ -72,12 +72,23 @@ public class TankShoot : MonoBehaviour
                 fireEvent.Fire(TankScript, MuzzlePoint, charge, bulletVelocity);
                 break;
         }
+        #region audio
+        bool audioPlayed = false;
+        if (charge > 0.95 && !audioPlayed)
+        {
+            tankAudio.ChargeAbility();
+            audioPlayed = true;
+        }
+        else
+        {
+            audioPlayed = false;
+        }
+        #endregion
 
-        
-        
-        
-        
-        
+
+
+
+
         #region OLD
         /*if(tankPowerupsScript.Multishot_Enabled)
         {
@@ -142,18 +153,6 @@ public class TankShoot : MonoBehaviour
                     Mathf.Min((float) ctx.duration/chargeTime, 1f)
                 )
             );
-            #region audio
-            bool audioPlayed = false;
-            if (ctx.duration / chargeTime > 0.95 && !audioPlayed)
-            {
-                tankAudio.ChargeAbility();
-                audioPlayed = true;
-            }
-            else
-            {
-                audioPlayed = false;
-            }
-            #endregion
         }
     }
 

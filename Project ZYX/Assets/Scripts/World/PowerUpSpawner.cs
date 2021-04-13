@@ -8,7 +8,7 @@ public class PowerUpSpawner : MonoBehaviour
     [SerializeField] private int respawnTime;
 
     [Header("Pickup Spawning Type")]
-    [Tooltip("If unselected, then you're able to control what pickup the barrel should spawn. If selected, then the game randomly selects a value for you")]
+    [Tooltip("If unselected, you're able to control what pickup the barrel should spawn. If selected, the game randomly selects a value for you. The value (SelectedPickup) does get used on Start though where the first ever pickup that spawns is the value you input here")]
     [SerializeField] private bool RandomizePickups;
 
     [Space(10)]
@@ -61,7 +61,7 @@ public class PowerUpSpawner : MonoBehaviour
             Instantiate(PowerupList[randomizedPickup], gameObject.transform.position, Quaternion.identity);
             spawned = true;
         }
-        else
+        else if (!RandomizePickups)
         {
             Instantiate(PowerupList[selectedPickup], gameObject.transform.position, Quaternion.identity);
             spawned = true;
@@ -89,7 +89,7 @@ public class PowerUpSpawner : MonoBehaviour
         {
             Instantiate(PowerupList[randomizedPickup], gameObject.transform.position, Quaternion.identity);
         }
-        else
+        else if (!RandomizePickups)
         {
             Instantiate(PowerupList[selectedPickup], gameObject.transform.position, Quaternion.identity);
         }

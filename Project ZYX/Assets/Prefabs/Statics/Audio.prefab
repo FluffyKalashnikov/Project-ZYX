@@ -182,7 +182,7 @@ MonoBehaviour:
   battleTrackSource: {fileID: 5849127532958015337}
   battleTrack: {fileID: 11400000, guid: af7462522bdc00245a8d386fa00dfe70, type: 2}
   backgroundAmbientSound:
-  - {fileID: 11400000, guid: e3a39366f7e28b7499755f143f454af6, type: 2}
+  - {fileID: 11400000, guid: 7552dce7583e17d4296bb9f38981ec4d, type: 2}
   AmbientSoundsWHALE: {fileID: 11400000, guid: 221c855a8c9a3ad48b88314f86222223, type: 2}
   AmbientSourceWHALE: {fileID: 2258071006557366608}
   minWaitTimeWHALE: 10
@@ -199,10 +199,6 @@ MonoBehaviour:
   whaleAmbientSourceMISC: {fileID: 2258071005976438901}
   minWaitTimeMISC: 20
   maxWaitTimeMISC: 30
-  bulletEXPLSFX: {fileID: 11400000, guid: 178abfbc1bc425248aa38b9ae489d5a0, type: 2}
-  bulletEXPLSource: {fileID: 4725621600225262695}
-  tankEXPLSFX: {fileID: 11400000, guid: bae68b6f07dbfc840b9d10d0cfa0ef77, type: 2}
-  tankEXPLSource: {fileID: 4524456002441100630}
 --- !u!1 &2258071005976438890
 GameObject:
   m_ObjectHideFlags: 0

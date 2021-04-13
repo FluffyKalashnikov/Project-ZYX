@@ -13,6 +13,7 @@ using TMPro;
 [RequireComponent(typeof(MultiplayerEventSystem), typeof(InputSystemUIInputModule), typeof(PlayerInput))]
 public class Tank : MonoBehaviour, IDamageable
 {
+    [SerializeField] private TankAudio tankAudioScript;
     public TankAsset  TankAsset
     {
         get 
@@ -281,6 +282,7 @@ public class Tank : MonoBehaviour, IDamageable
     }
     public void Die(DamageInfo damageInfo)
     {
+        tankAudioScript.TankEXPLSfx();
         Disable();
         Game.OnTankKill((Tank) damageInfo.Reciever, damageInfo);
     }

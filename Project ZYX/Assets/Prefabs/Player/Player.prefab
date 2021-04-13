@@ -421,6 +421,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5090454c187f024c9a37f5b2edf566e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tankAudioScript: {fileID: 838318969809300737}
   Alive: 1
   Ready: 0
   MaxNameLength: 18
