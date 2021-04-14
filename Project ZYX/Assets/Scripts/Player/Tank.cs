@@ -296,16 +296,16 @@ public class Tank : MonoBehaviour, IDamageable
     public void TakeDamage(DamageInfo DamageInfo)
     {
         if (Game.IsPlaying())
-        if ((Health -= DamageInfo.Damage) <= 0f)
+        if ((Health -= DamageInfo.Damage) <= 0f && Alive)
         {
             Die(DamageInfo);
         }
     }
-    public void Die(DamageInfo damageInfo)
+    public void Die(DamageInfo DamageInfo)
     {
         tankAudioScript.TankEXPLSfx();
         Disable();
-        Game.OnTankKill((Tank) damageInfo.Reciever, damageInfo);
+        Game.OnTankKill((Tank) DamageInfo.Reciever, DamageInfo);
     }
     public void LoadStats(TankAsset Asset)
     {
@@ -318,9 +318,16 @@ public class Tank : MonoBehaviour, IDamageable
             SendMessageOptions.RequireReceiver
         );
     }
-    public void Teleport(Vector3 Position, Quaternion Rotation = default(Quaternion))
+    public void Teleport(Vector3 Position)
     {
-        PlayerTransform.SetPositionAndRotation(Position, Rotation);
+        Teleport(Position, this.Rotation);
+    }
+    public void Teleport(Vector3 Position, Quaternion Rotation)
+    {
+        Controller.enabled = false;
+        this.Position = Position;
+        this.Rotation = Rotation;
+        Controller.enabled = true;
     }
     public void Teleport(Spawnpoint Spawnpoint)
     {
