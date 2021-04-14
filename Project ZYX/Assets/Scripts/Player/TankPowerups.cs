@@ -42,6 +42,11 @@ public class TankPowerups : MonoBehaviour
     [SerializeField] private float SpeedBoost_Duration;
     [SerializeField] private float Invincibility_Duration;
 
+    private TankAsset TankAsset 
+    { 
+        get { return tankScript.TankAsset; }
+    }
+
     [Header("PowerUp Multipliers")]
     [SerializeField] private float SpeedBoost_Multiplier;
     #endregion
@@ -224,8 +229,8 @@ public class TankPowerups : MonoBehaviour
         currentQuickChargeDuration = QuickCharge_Duration;
         if (currentQuickChargeDuration != 0)
         {
-            currentMinCharge = tankShootScript.minCharge;
-            tankShootScript.minCharge = tankShootScript.maxCharge;
+            currentMinCharge = TankAsset.MinCharge;
+            TankAsset.MinCharge = TankAsset.MinCharge;
         }
     }
     private void MultishotMethod()
@@ -319,7 +324,7 @@ public class TankPowerups : MonoBehaviour
             }
             else if (currentQuickChargeDuration == 0)
             {
-                tankShootScript.minCharge = currentMinCharge;
+                TankAsset.MinCharge = currentMinCharge;
                 QuickCharge_Picked = false;
             }
         }
