@@ -24,7 +24,7 @@ MonoBehaviour:
   ChargeRate: 1.2
   MinCharge: 0.3
   MaxCharge: 1
-  StartupToIdleDelay: 2
+  StartupToIdleDelay: 1.16
   AudioIdle: {fileID: 11400000, guid: fa7b7d3b3fc24c045a3a5e0dba6c68b0, type: 2}
   AudioStartup: {fileID: 11400000, guid: db673f6fbf617f741b800be9176987de, type: 2}
   AudioThrottle: {fileID: 11400000, guid: 303a23b2945d1ca468847f89fd5245eb, type: 2}

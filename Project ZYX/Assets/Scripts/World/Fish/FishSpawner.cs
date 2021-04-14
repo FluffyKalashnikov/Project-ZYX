@@ -35,6 +35,7 @@ public class FishSpawner : MonoBehaviour
     {
         Game.OnNewMatch += () => startco();
         Game.OnEndMatch += () => stopco();
+        Game.OnNewLobby += () => stopco();
     }
     void startco()
     {

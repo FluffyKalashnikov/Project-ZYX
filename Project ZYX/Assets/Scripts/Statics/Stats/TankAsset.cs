@@ -20,7 +20,7 @@ public class TankAsset : ScriptableObject
     public float MinCharge   = 0.3f;
     public float MaxCharge   = 1f;
     [Space(10)]
-    public float StartupToIdleDelay = 1.1568f;
+    public float StartupToIdleDelay = 1.16f;
     public AudioEvent AudioIdle     = null;
     public AudioEvent AudioStartup  = null;
     public AudioEvent AudioThrottle = null;

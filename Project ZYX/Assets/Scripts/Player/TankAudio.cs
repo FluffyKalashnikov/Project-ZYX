@@ -111,10 +111,9 @@ public class TankAudio : MonoBehaviour
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     public IEnumerator EngineStartUpSound()
     {
-
         engineStartup.Play(engineStartupSource);
-        Debug.Log(engineThrottleSource.volume);
-        yield return new WaitForSeconds(engineStartUpTime * Time.deltaTime);
+
+        yield return new WaitForSeconds(engineStartUpTime);
 
         engineIdle.Play(engineIdleSource);
         engineThrottle.Play(engineThrottleSource);

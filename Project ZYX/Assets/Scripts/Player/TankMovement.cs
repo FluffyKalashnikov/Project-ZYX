@@ -47,6 +47,7 @@ public class TankMovement : MonoBehaviour
         moveAction = playerInput.actions.FindAction("Move");
         
         Game.OnTankSpawn += (tank) => {StartCoroutine(tankAudioScript.EngineStartUpSound());};
+        Game.OnNewLobby += () => { tankAudioScript.EngineShutOff(); tankAudioScript.PickupSpeedBoostSTOP(); };
     }
     
     private void Update()
@@ -55,7 +56,6 @@ public class TankMovement : MonoBehaviour
         EngineRev(moveAction.ReadValue<Vector2>());
         
         VolumeManager();
-
         if (Timer < 0)
         {
             Timer -= Time.deltaTime;
