@@ -103,7 +103,15 @@ public class Tank : MonoBehaviour, IDamageable
     public float      Health
     {
         get { return m_Health; }
-        set { m_Health = Mathf.Clamp(value, 0, MaxHealth); UpdateHealthbar(); }
+        set 
+        { 
+            m_Health = Mathf.Clamp(value, 0, MaxHealth); 
+            UpdateHealthbar(); 
+            if (Animator)    Animator   .SetFloat(HashHealth,       HealthFactor);
+            if (AnimatorHUD) AnimatorHUD.SetFloat(HashHealth,       HealthFactor);
+            if (AnimatorHUD) AnimatorHUD.SetFloat(HashHealthSwap, 1-HealthFactor);
+            Debug.Log($"\"{Name}\":s HealthFactor: {HealthFactor}");
+        }
     }
     public float      HealthFactor
     {
@@ -116,7 +124,8 @@ public class Tank : MonoBehaviour, IDamageable
         { 
             m_Charge = value; 
             UpdateChargebar(); 
-            Animator.SetFloat(HashCharge, ChargeFactor); 
+            if (Animator)    Animator   .SetFloat(HashCharge, ChargeFactor);
+            if (AnimatorHUD) AnimatorHUD.SetFloat(HashCharge, ChargeFactor);
         }
     }
     public float      ChargeFactor
@@ -181,8 +190,9 @@ public class Tank : MonoBehaviour, IDamageable
     private string     m_Name         = string.Empty;
     private int        m_TankIndex    = 0;
 
-    private int        HashCharge = 0;
-
+    private int        HashCharge;
+    private int        HashHealth;
+    private int        HashHealthSwap;
 
     [Header("REFERENCES")]
     #region references
@@ -213,6 +223,7 @@ public class Tank : MonoBehaviour, IDamageable
     public GameObject             HudRoot            = null;
     public Image                  HealthBar          = null;
     public Image                  ChargeBar          = null;
+    public Animator               AnimatorHUD        = null;
     #endregion
 
     IEnumerator IE_ResetSelect = null;
@@ -242,7 +253,10 @@ public class Tank : MonoBehaviour, IDamageable
         this.TankAudio        = GetComponent<TankAudio>();
         this.LocalEventSystem = GetComponent<MultiplayerEventSystem>();
 
-        HashCharge = Animator.StringToHash("Charge");
+        HashCharge     = Animator.StringToHash("Charge");
+        HashHealth     = Animator.StringToHash("Health");
+        HashHealthSwap = Animator.StringToHash("1-Health");
+
 
         // 2. INIT LOGIC
         InitPlayer();
@@ -262,7 +276,12 @@ public class Tank : MonoBehaviour, IDamageable
         { 
             if (tank != this) return;
             Animator?.Play("Shoot", 1);
-            Cam.Shake(15f, 5f, 1f);
+            Cam.Shake
+            (
+                TankAsset.ShakeAmplitude, 
+                TankAsset.ShakeFrequency, 
+                TankAsset.ShakeDuration
+            );
         };
 
         // 4. INPUT SETUP
@@ -317,8 +336,9 @@ public class Tank : MonoBehaviour, IDamageable
     public void TakeDamage(DamageInfo DamageInfo)
     {
         if (Game.IsPlaying())
-        if ((Health -= DamageInfo.Damage) <= 0f && Alive)
         {
+            //AnimatorHUD.Play("OnHit", 3);
+            if ((Health -= DamageInfo.Damage) <= 0f && Alive)
             Die(DamageInfo);
         }
     }
@@ -450,7 +470,15 @@ public class Tank : MonoBehaviour, IDamageable
         EnableLook();
         DisableFire();
     }
-    
+    public void OpenHUD()
+    {
+        AnimatorHUD.Play("OpenHUD");
+    }
+    public void CloseHUD()
+    {
+        AnimatorHUD.Play("CloseHUD");
+    }
+
 //  USER INTERFACE
     public void InitPreview()
     {

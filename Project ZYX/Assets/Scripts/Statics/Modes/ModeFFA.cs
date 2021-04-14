@@ -43,6 +43,7 @@ public class ModeFFA : Gamemode
         Game.AddCountdown(5f);
         yield return new WaitForSeconds(5f);
         this.StartTimer();
+        Game.OpenHUD();
         Game.EnableInput();
         yield return new WaitForSeconds(MatchLength-5f);
         Game.AddCountdown(5f);
@@ -52,6 +53,7 @@ public class ModeFFA : Gamemode
     protected override IEnumerator StopPlay()
     {
         Game.LookOnly();
+        Game.CloseHUD();
         yield return new WaitForSeconds(3f);
         Game.DisableInput();
         Game.SetActiveState(Game.EState.WinScreen);
