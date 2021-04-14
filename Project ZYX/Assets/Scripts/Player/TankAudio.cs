@@ -119,6 +119,12 @@ public class TankAudio : MonoBehaviour
         engineThrottle.Play(engineThrottleSource);
     }
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    public void EngineShutOff()
+    {
+        engineIdleSource.Stop();
+        engineThrottleSource.Stop();
+    }
+    //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     public void EngineSounds(float velocityScale)
     {
         velocityScaleAUDIO = velocityScale;

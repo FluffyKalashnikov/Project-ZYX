@@ -49,6 +49,7 @@ public class TankMovement : MonoBehaviour
         tankScript.MoveTick += Tick;
 
         Game.OnTankSpawn += (tank) => {StartCoroutine(tankAudioScript.EngineStartUpSound());};
+        Game.OnEndMatch += () => tankAudioScript.EngineShutOff();
     }
     
     private void Tick(Vector2 Input, float Velocity)
