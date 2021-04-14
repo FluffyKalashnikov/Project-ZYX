@@ -15,6 +15,7 @@ MonoBehaviour:
   Name: Chieftain
   Model: {fileID: 8518340098196470987, guid: 033d5b93e48006c408971b2861ee73a7, type: 3}
   Damage: 10
+  FireRate: 1.2
   Health: 200
   Speed: 2.5
   VelocityMax: 2.5

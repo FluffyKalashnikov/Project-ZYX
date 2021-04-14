@@ -179,6 +179,6 @@ public class TankMovement : MonoBehaviour
     {
         animator = i.GetComponent<Animator>();
         motorForce = tankScript.TankAsset.Speed;
-        velocityMax = tankScript.TankAsset.VelocityMax;
+        velocityMax = tankScript.TankAsset.Speed;
     }
 }

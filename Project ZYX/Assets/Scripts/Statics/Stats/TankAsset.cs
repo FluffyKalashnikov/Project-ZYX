@@ -12,7 +12,6 @@ public class TankAsset : ScriptableObject
     public float FireRate    = 0.6f;
     public float Health      = 100f;
     public float Speed       = 5f;
-    public float VelocityMax = 5f;
     [Space(5)]
     public float ChargeRate  = 0.75f;
     public float MinCharge   = 0.3f;
