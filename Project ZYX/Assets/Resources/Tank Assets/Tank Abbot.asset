@@ -15,9 +15,16 @@ MonoBehaviour:
   Name: Abbot
   Model: {fileID: 7613571533282335637, guid: ce60d599190d8bb4183df0080b5f02f4, type: 3}
   Damage: 20
+  FireRate: 0.6
   Health: 100
   Speed: 5
-  VelocityMax: 5
+  AccelerationForce: 3
+  DecelerationForce: 1
+  RotationForce: 100
+  ChargeRate: 0.75
+  MinCharge: 0.3
+  MaxCharge: 1
+  StartupToIdleDelay: 1
   AudioIdle: {fileID: 11400000, guid: 0166dd06cd772ec44bd672d6bfa21f0f, type: 2}
   AudioStartup: {fileID: 11400000, guid: 4045cf4dbe878b64fa54bb4cd27d4355, type: 2}
   AudioThrottle: {fileID: 11400000, guid: 6e42d13bebd4b3140b9526fbe72ac7b6, type: 2}

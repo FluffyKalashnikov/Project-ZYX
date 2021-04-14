@@ -87,7 +87,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 0.4
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -214,7 +214,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 0.4
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -504,11 +504,7 @@ MonoBehaviour:
   tankAudio: {fileID: 838318969809300737}
   fireEvent: {fileID: 11400000, guid: b32476f744550f74ebe9cd1f1cdda28a, type: 2}
   bulletVelocity: 25
-  minCharge: 0.1
-  maxCharge: 1
-  chargeTime: 1
   inputTolerance: 0.2
-  fireRate: 1
   MuzzlePoint: {fileID: 0}
 --- !u!114 &838318969809300764
 MonoBehaviour:
@@ -580,7 +576,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eda3ea722589d234c8aafb69f1d21965, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  engineStartUpTime: 1.1568
   idleVolumeMin: 0
   idleVolumeMax: 0.55
   throttlePitchMin: 0
@@ -788,7 +783,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 0.4
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -915,7 +910,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 0.4
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -1073,7 +1068,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 0.4
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -1200,7 +1195,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 0.4
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -1491,7 +1486,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 0.4
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -1618,7 +1613,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 0.4
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -2074,7 +2069,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 0.4
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -2525,7 +2520,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 0.4
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -2906,7 +2901,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 0.4
       inSlope: 0
       outSlope: 0
       tangentMode: 0

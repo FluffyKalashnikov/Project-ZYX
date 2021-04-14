@@ -68,11 +68,11 @@ public class RadiationTimerFunction : MonoBehaviour
         {
             if (radiationPulse == false && currentRadOverallDuration > 0)
             {
-                StartCoroutine(RadioactiveDamage());
+                MatchContext.Add(RadioactiveDamage());
             }
             else if (radiationTimer == false && currentRadOverallDuration > 0)
             {
-                StartCoroutine(RadioactiveTimer());
+                MatchContext.Add(RadioactiveTimer());
             }
         }
     }

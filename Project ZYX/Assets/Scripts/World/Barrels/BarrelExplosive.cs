@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class BarrelExplosive : BarrelBaseCode
 {
@@ -8,6 +9,8 @@ public class BarrelExplosive : BarrelBaseCode
 
     [Header("Barrel Damage")]
     [SerializeField] private float explosionDamage;
+    [SerializeField] private VisualEffect explosionFX1;
+    [SerializeField] private VisualEffect explosionFX2;
 
     private void OnTriggerEnter(Collider collision)
     {
@@ -27,6 +30,9 @@ public class BarrelExplosive : BarrelBaseCode
                 )
             );
             #endregion
+
+            explosionFX1.Play();
+            explosionFX2.Play();
 
             barrelCollider.enabled = false;
             BarrelCollisionSound();

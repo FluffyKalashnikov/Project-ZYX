@@ -299,9 +299,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   barrelBase: {fileID: 4107070881134943651}
-  radiationDamage: 10
-  radPulseDuration: 3
-  radOverallDuration: 10
+  radiationDamage: 2.5
+  radPulseDuration: 1
+  radOverallDuration: 5
 --- !u!1 &6405505003349761583
 GameObject:
   m_ObjectHideFlags: 0

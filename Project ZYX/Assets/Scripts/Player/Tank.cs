@@ -481,7 +481,7 @@ public class Tank : MonoBehaviour, IDamageable
             PreviewCamera.targetTexture = PreviewTexture;
             PreviewTexture.Create();
             PreviewTankImage.texture = PreviewTexture;
-            PreviewModelRoot.transform.position = Vector3.up * 20f * PlayerIndex;
+            PreviewModelRoot.transform.position = Vector3.up * 20f * (4 + PlayerIndex);
         }
 
         // 3. UPDATE COLOR
