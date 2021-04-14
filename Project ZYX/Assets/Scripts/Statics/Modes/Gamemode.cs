@@ -97,6 +97,7 @@ public abstract class Gamemode : ScriptableObject
         Game.OnTankKill  -= StartTankKill;
         Game.OnTankSpawn -= StartTankSpawn;
 
+        
         MatchContext.Stop();
 
         Debug.Log($"[{Name}]: Match Destroyed.");

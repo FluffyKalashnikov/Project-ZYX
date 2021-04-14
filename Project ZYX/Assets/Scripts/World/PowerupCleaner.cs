@@ -6,6 +6,7 @@ public class PowerupCleaner : MonoBehaviour
 {
     private GameObject[] powerupsHP;
     private GameObject[] powerupsSeamine;
+    private GameObject[] powerupsSeamineDamageable;
     private GameObject[] powerupsEMP;
     private GameObject[] powerupsQuickCharge;
     private GameObject[] powerupsMultishot;
@@ -31,6 +32,13 @@ public class PowerupCleaner : MonoBehaviour
         for (int i = 0; i < powerupsSeamine.Length; i++)
         {
             Destroy(powerupsSeamine[i].gameObject);
+        }
+        //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        powerupsSeamineDamageable = GameObject.FindGameObjectsWithTag("SeamineDamageable");
+
+        for (int i = 0; i < powerupsSeamineDamageable.Length; i++)
+        {
+            Destroy(powerupsSeamineDamageable[i].gameObject);
         }
         #endregion
 

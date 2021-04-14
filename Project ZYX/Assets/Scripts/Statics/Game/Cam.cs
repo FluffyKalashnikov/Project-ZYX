@@ -10,8 +10,7 @@ public class Cam : MonoBehaviour
     public static Cam Instance = null;
 
 
-    private IEnumerator IE_Shake      = null;
-    private IEnumerator IE_ShakeConst = null;
+    private IEnumerator IE_Shake   = null;
     private static float constFreq = 0f;
     private static float constAmpl = 0f;
     private CinemachineBasicMultiChannelPerlin ShakeComp = null;

@@ -176,6 +176,7 @@ public class Game : MonoBehaviour
         };
         MatchWidget.OnDisabled = () =>
         { 
+            OnEndMatch?.Invoke();
             CurrentMode.Destruct();
         };
         LobbyWidget.OnDisabled = () =>

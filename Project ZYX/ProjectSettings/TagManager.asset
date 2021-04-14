@@ -16,6 +16,7 @@ TagManager:
   - BarrelRadioactive
   - SeamineDamageable
   - Disposable
+  - FishDestroyer
   layers:
   - Default
   - TransparentFX

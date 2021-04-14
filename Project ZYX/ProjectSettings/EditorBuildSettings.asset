@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Test Kalash.unity
-    guid: 0fd1f4758f73a3348a3a14bf868b4c16
+    path: Assets/Scenes/Official Map.unity
+    guid: 8e08a65e966970b4c87f21a38afe5011
   m_configObjects: {}

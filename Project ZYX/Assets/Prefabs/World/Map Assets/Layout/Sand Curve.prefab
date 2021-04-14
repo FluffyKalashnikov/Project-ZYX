@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8790883845588250468}
-  - component: {fileID: 3289485490081051833}
+  - component: {fileID: 5381203510247577557}
   - component: {fileID: 6559351623977291196}
   - component: {fileID: 8047613324026611275}
   m_Layer: 10
@@ -34,8 +34,8 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &3289485490081051833
-BoxCollider:
+--- !u!136 &5381203510247577557
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -44,9 +44,10 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 3.0605392, y: 2.8295774, z: 3.0228744}
-  m_Center: {x: -0.8324082, y: 0.9758334, z: 0.84598213}
+  m_Radius: 1.6635008
+  m_Height: 4.1452994
+  m_Direction: 1
+  m_Center: {x: -1.0068319, y: 1.4491584, z: 0.97498447}
 --- !u!65 &6559351623977291196
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -72,7 +73,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcfa7a7863c16f64fb2f9bed2d7e6a19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  path: Map/Layout
+  path: Map/Layout/Sand
   active: 1
   activeDuringRuntime: 0
 --- !u!1001 &2841596379611482753

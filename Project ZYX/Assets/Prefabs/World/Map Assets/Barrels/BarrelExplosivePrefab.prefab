@@ -107,7 +107,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6730615328068797399}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 6.26, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3212730380692099800}
@@ -133,7 +133,6 @@ MonoBehaviour:
   barrelAmbienceSource: {fileID: 1427474753913146662}
   barrelCollisionSFX: {fileID: 11400000, guid: db6d055a08a563a469206a51716ef43c, type: 2}
   barrelCollisionSource: {fileID: 2204357708686630168}
-  barrelDestructEvent: {fileID: 11400000, guid: 53020d8b124d1a547b819c7181d644c6, type: 2}
   explosionDamage: 25
 --- !u!65 &7765704098462245149
 BoxCollider:
