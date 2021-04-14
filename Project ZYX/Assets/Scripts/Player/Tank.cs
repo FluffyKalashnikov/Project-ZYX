@@ -109,6 +109,20 @@ public class Tank : MonoBehaviour, IDamageable
     {
         get {return Health/MaxHealth;}
     }
+    public float      Charge
+    {
+        get { return m_Charge; }
+        set 
+        { 
+            m_Charge = value; 
+            UpdateChargebar(); 
+            Animator.SetFloat(HashCharge, ChargeFactor); 
+        }
+    }
+    public float      ChargeFactor
+    {
+        get { return ((Charge - TankAsset.MinCharge) /(TankAsset.MaxCharge - TankAsset.MinCharge)); }
+    }
     public string     Name 
     {
         get 
@@ -162,9 +176,13 @@ public class Tank : MonoBehaviour, IDamageable
     private GameObject m_PreviewModel = null;
     private TankAsset  m_TankAsset    = null;
     private float      m_Health       = 0f;
+    private float      m_Charge       = 0f;
     private float      m_Score        = 0f;
     private string     m_Name         = string.Empty;
     private int        m_TankIndex    = 0;
+
+    private int        HashCharge = 0;
+
 
     [Header("REFERENCES")]
     #region references
@@ -194,6 +212,7 @@ public class Tank : MonoBehaviour, IDamageable
     public ParentConstraint       HudConstraint      = null;
     public GameObject             HudRoot            = null;
     public Image                  HealthBar          = null;
+    public Image                  ChargeBar          = null;
     #endregion
 
     IEnumerator IE_ResetSelect = null;
@@ -203,7 +222,7 @@ public class Tank : MonoBehaviour, IDamageable
 
     public Action                 Tick;
     public Action<Vector2, float> MoveTick;
-
+ 
     public int Power = 0;
     public float PowerUpTimer;
 
@@ -222,6 +241,8 @@ public class Tank : MonoBehaviour, IDamageable
         this.TankTurret       = GetComponent<TankTurret>();
         this.TankAudio        = GetComponent<TankAudio>();
         this.LocalEventSystem = GetComponent<MultiplayerEventSystem>();
+
+        HashCharge = Animator.StringToHash("Charge");
 
         // 2. INIT LOGIC
         InitPlayer();
@@ -659,6 +680,10 @@ public class Tank : MonoBehaviour, IDamageable
     public void UpdateHealthbar()
     {
         HealthBar.fillAmount = HealthFactor;
+    }
+    public void UpdateChargebar()
+    {
+        ChargeBar.fillAmount = ChargeFactor;
     }
 
 //  COLLISION LOGIC

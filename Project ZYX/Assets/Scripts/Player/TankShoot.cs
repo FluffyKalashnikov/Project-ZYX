@@ -13,6 +13,10 @@ public class TankShoot : MonoBehaviour
         set { m_TankScript = value; }
     }
     private Tank m_TankScript = null;
+    private TankAsset TankAsset
+    {
+        get { return TankScript.TankAsset; }
+    }
     #endregion
 
     [Header("Script")]
@@ -25,24 +29,22 @@ public class TankShoot : MonoBehaviour
 
     [Header("Firing Stats")]
     [SerializeField] private float bulletVelocity = 25f;
-    public float minCharge      = 0.3f;
-    public float maxCharge      = 1f;
-    [SerializeField] private float chargeTime     = 1f;
     [SerializeField] private float inputTolerance = 0.5f;
-    [SerializeField] private float fireRate       = 1f;
 
     [Header("References")]
     [SerializeField] private Transform  MuzzlePoint;
 
     // PRIVATE VARIABLES
-    private float       FireTimestamp = 0;
+    private float       TimestampFire   = 0f;
+    private float       TimestampCharge = 0f;
 
     // PRIVATE REFERENCES
     //private Tank        TankScript    = null;
     private PlayerInput PlayerInput   = null;
     private InputAction FireAction    = new InputAction();
     private IEnumerator IE_Fire       = null;
-
+    private IEnumerator IE_Charge     = null;
+    
     private void Awake()
     {
         // 1. GET REFERENCES
@@ -52,8 +54,35 @@ public class TankShoot : MonoBehaviour
         FireAction = PlayerInput.actions.FindAction("Fire", true);
 
         // 2. EVENT SUBSCRIPTION
+        FireAction.started  += ctx => 
+        {
+            if (IE_Charge != null)
+            StopCoroutine(IE_Charge);
+            StartCoroutine(IE_Charge = UpdateCharge());
+            IEnumerator UpdateCharge()
+            {
+                TimestampCharge = Time.time;
+                TankScript.Charge = 0f;
+                yield return new WaitUntil
+                (
+                    () => 
+                    {
+                        TankScript.Charge = Mathf.Lerp
+                        (
+                            TankAsset.MinCharge, 
+                            TankAsset.MaxCharge, 
+                            (Time.time-TimestampCharge)/TankAsset.ChargeRate
+                        );
+
+                        return TimestampFire > TimestampCharge; 
+                    }
+                );
+                TankScript.Charge = 0f;
+            }
+        };
         FireAction.canceled += Fire;
 
+        
         Game.OnPauseReset += () => 
         {
             if (IE_Fire != null) 
@@ -63,14 +92,10 @@ public class TankShoot : MonoBehaviour
 
     private void Fire(float charge)
     {
-        switch (charge > 0.95)
+        switch (charge > 0.9)
         {
-            case true:
-                ChargedFireEvent.Fire(TankScript, MuzzlePoint, charge, bulletVelocity);
-                break;
-            default:
-                fireEvent.Fire(TankScript, MuzzlePoint, charge, bulletVelocity);
-                break;
+            case true: ChargedFireEvent.Fire(TankScript, MuzzlePoint, charge, bulletVelocity); break;
+            default:   fireEvent       .Fire(TankScript, MuzzlePoint, charge, bulletVelocity); break;
         }
         #region audio
         bool audioPlayed = false;
@@ -137,22 +162,14 @@ public class TankShoot : MonoBehaviour
             float time = Time.time;
             yield return new WaitUntil
             (
-                () => { return FireTimestamp + fireRate <= Time.time;}
+                () => { return TimestampFire + TankAsset.FireRate <= Time.time;}
             );
             if (!FireAction.enabled) yield break;
             if (time + inputTolerance < Time.time) yield break;
 
             // 2. FIRE ACTION
-            FireTimestamp = Time.time;
-            Fire
-            (   
-                Mathf.Lerp
-                (
-                    minCharge, 
-                    maxCharge, 
-                    Mathf.Min((float) ctx.duration/chargeTime, 1f)
-                )
-            );
+            TimestampFire = Time.time;
+            Fire(TankScript.Charge);
         }
     }
 
