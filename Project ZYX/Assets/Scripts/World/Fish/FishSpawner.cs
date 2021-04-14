@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FishSpawner : MonoBehaviour
 {
-    [Header("Spawn position")]
+    [Header("Spawn position offset")]
     [SerializeField] private float xposMin;
     [SerializeField] private float yposMin;
     [SerializeField] private float zposMin;
@@ -31,13 +31,23 @@ public class FishSpawner : MonoBehaviour
     [SerializeField] private float minWaitTimeBig;
     [SerializeField] private float maxWaitTimeBig;
     // Start is called before the first frame update
-    void Start()
+    private void Awake()
+    {
+        Game.OnNewMatch += () => startco();
+        Game.OnEndMatch += () => stopco();
+    }
+    void startco()
     {
         StartCoroutine(SpawnFishSmallCO());
         StartCoroutine(SpawnFishMediumCO());
         StartCoroutine(SpawnFishBigCO());
     }
-
+    void stopco()
+    {
+        StopCoroutine(SpawnFishSmallCO());
+        StopCoroutine(SpawnFishMediumCO());
+        StopCoroutine(SpawnFishBigCO());
+    }
     #region Small
     IEnumerator SpawnFishSmallCO()
     {
@@ -53,7 +63,7 @@ public class FishSpawner : MonoBehaviour
         for (int i = 0; i < ammountSmall; i++)
         {
             Vector3 randomizedPos = new Vector3(Random.Range(xposMin, xposMax), Random.Range(yposMin, yposMax), Random.Range(zposMin, zposMax));
-            Instantiate(fishSmall, randomizedPos, gameObject.transform.rotation);
+            Instantiate(fishSmall, transform.position + randomizedPos, gameObject.transform.rotation);
         }
     }
     #endregion
@@ -72,7 +82,7 @@ public class FishSpawner : MonoBehaviour
         for (int i = 0; i < ammountMedium; i++)
         {
             Vector3 randomizedPos = new Vector3(Random.Range(xposMin, xposMax), Random.Range(yposMin, yposMax), Random.Range(zposMin, zposMax));
-            Instantiate(fishMedium, randomizedPos, gameObject.transform.rotation);
+            Instantiate(fishMedium, transform.position + randomizedPos, gameObject.transform.rotation);
         }
     }
     #endregion
@@ -91,7 +101,7 @@ public class FishSpawner : MonoBehaviour
         for (int i = 0; i < ammountBig; i++)
         {
             Vector3 randomizedPos = new Vector3(Random.Range(xposMin, xposMax), Random.Range(yposMin, yposMax), Random.Range(zposMin, zposMax));
-            Instantiate(fishBig, randomizedPos, gameObject.transform.rotation);
+            Instantiate(fishBig, transform.position + randomizedPos, gameObject.transform.rotation);
         }
     }
     #endregion
