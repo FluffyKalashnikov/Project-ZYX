@@ -8,10 +8,15 @@ public class TankAsset : ScriptableObject
     public string     Name   = "TANK NAME";
     public GameObject Model  = null;
     [Space(10)]
-    public float Damage = 1f;
-    public float Health = 100f;
-    public float Speed  = 5f;
+    public float Damage      = 1f;
+    public float FireRate    = 0.6f;
+    public float Health      = 100f;
+    public float Speed       = 5f;
     public float VelocityMax = 5f;
+    [Space(5)]
+    public float ChargeRate  = 0.75f;
+    public float MinCharge   = 0.3f;
+    public float MaxCharge   = 1f;
     [Space(10)]
     public AudioEvent AudioIdle     = null;
     public AudioEvent AudioStartup  = null;
