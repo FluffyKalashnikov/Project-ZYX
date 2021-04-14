@@ -296,16 +296,16 @@ public class Tank : MonoBehaviour, IDamageable
     public void TakeDamage(DamageInfo DamageInfo)
     {
         if (Game.IsPlaying())
-        if ((Health -= DamageInfo.Damage) <= 0f)
+        if ((Health -= DamageInfo.Damage) <= 0f && Alive)
         {
             Die(DamageInfo);
         }
     }
-    public void Die(DamageInfo damageInfo)
+    public void Die(DamageInfo DamageInfo)
     {
         tankAudioScript.TankEXPLSfx();
         Disable();
-        Game.OnTankKill((Tank) damageInfo.Reciever, damageInfo);
+        Game.OnTankKill((Tank) DamageInfo.Reciever, DamageInfo);
     }
     public void LoadStats(TankAsset Asset)
     {
