@@ -30,7 +30,6 @@ public class TankMovement : MonoBehaviour
     private Vector3 direction;
 
     private bool ifReving = false;
-    private bool active = false;
     private int MoveHash;
 
     public float Timer;
@@ -46,12 +45,11 @@ public class TankMovement : MonoBehaviour
 
         MoveHash = Animator.StringToHash("Speed");
         moveAction = playerInput.actions.FindAction("Move");
-        tankScript.MoveTick += Tick;
-
+        
         Game.OnTankSpawn += (tank) => {StartCoroutine(tankAudioScript.EngineStartUpSound());};
     }
     
-    private void Tick(Vector2 Input, float Velocity)
+    private void Update()
     {
         BaseMovement(moveAction.ReadValue<Vector2>());
         EngineRev(moveAction.ReadValue<Vector2>());
@@ -144,36 +142,14 @@ public class TankMovement : MonoBehaviour
     
 
 
-    private void MoveTick()
-    {
-        tankScript.MoveTick?.Invoke(moveAction.ReadValue<Vector2>(), currentVel.magnitude);
-    }
     public void Enable()
     {
-        if (active) return;
-        active = true;
-
-        tankScript.Tick += MoveTick;
         moveAction.Enable();
     }
     public void Disable()
     {
-        if (!active) return;
-        active = false;
-
-        tankScript.Tick -= MoveTick;
-        animator?.SetFloat(MoveHash, 0f);
         moveAction.Disable();
     }
-    public void SoftEnable()
-    {
-        moveAction.Enable();
-    }
-    public void SoftDisable()
-    {
-        moveAction.Disable();
-    }
-
 
     public void OnLoadStats(TankRef i)
     {

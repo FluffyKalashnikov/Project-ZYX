@@ -393,10 +393,6 @@ public class Tank : MonoBehaviour, IDamageable
     {
         TankMovement.Enable();
     }
-    public void EnableMoveSoft()
-    {
-        TankMovement.SoftEnable();
-    }
     public void EnableLook()
     {
         TankTurret.Enable();
@@ -417,10 +413,6 @@ public class Tank : MonoBehaviour, IDamageable
         DisableMove();
         DisableLook();
         DisableFire();
-    }
-    public void DisableMoveSoft()
-    {
-        TankMovement.SoftDisable();
     }
     public void DisableMove()
     {
@@ -450,19 +442,13 @@ public class Tank : MonoBehaviour, IDamageable
         i.enabled = true;
     }
 
-    public void EnableLookOnlyHard()
+    public void LookOnly()
     {
         DisableMove();
         EnableLook();
         DisableFire();
     }
-    public void EnableLookOnlySoft()
-    {
-        DisableMoveSoft();
-        EnableLook();
-        DisableFire();
-    }
-
+    
 //  USER INTERFACE
     public void InitPreview()
     {
