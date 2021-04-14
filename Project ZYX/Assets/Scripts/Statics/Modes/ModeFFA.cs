@@ -39,7 +39,7 @@ public class ModeFFA : Gamemode
     {
         Game.ResetScore();
         Game.RespawnTanks();
-        Game.EnableLookOnlyHard();
+        Game.LookOnly();
         Game.AddCountdown(5f);
         yield return new WaitForSeconds(5f);
         this.StartTimer();
@@ -51,7 +51,7 @@ public class ModeFFA : Gamemode
     }
     protected override IEnumerator StopPlay()
     {
-        Game.EnableLookOnlySoft();
+        Game.LookOnly();
         yield return new WaitForSeconds(3f);
         Game.DisableInput();
         Game.SetActiveState(Game.EState.WinScreen);

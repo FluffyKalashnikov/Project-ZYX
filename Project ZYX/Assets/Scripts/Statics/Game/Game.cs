@@ -312,16 +312,12 @@ public class Game : MonoBehaviour
         i.DisableInput();
     }
     
-    public static void EnableLookOnlyHard()
+    public static void LookOnly()
     {
         foreach (var i in PlayerList)
-        i.EnableLookOnlyHard();
+        i.LookOnly();
     }
-    public static void EnableLookOnlySoft()
-    {
-        foreach (var i in PlayerList)
-        i.EnableLookOnlySoft();
-    }
+
 
     public static void BeginMatch()
     {
