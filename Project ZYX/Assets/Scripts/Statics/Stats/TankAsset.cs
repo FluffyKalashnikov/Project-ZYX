@@ -12,11 +12,15 @@ public class TankAsset : ScriptableObject
     public float FireRate    = 0.6f;
     public float Health      = 100f;
     public float Speed       = 5f;
+    public float AccelerationForce = 3;
+    public float DecelerationForce = 1;
+    public float RotationForce = 100;
     [Space(5)]
     public float ChargeRate  = 0.75f;
     public float MinCharge   = 0.3f;
     public float MaxCharge   = 1f;
     [Space(10)]
+    public float StartupToIdleDelay = 1.1568f;
     public AudioEvent AudioIdle     = null;
     public AudioEvent AudioStartup  = null;
     public AudioEvent AudioThrottle = null;

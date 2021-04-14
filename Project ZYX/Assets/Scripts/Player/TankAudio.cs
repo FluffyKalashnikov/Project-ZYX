@@ -18,7 +18,7 @@ public class TankAudio : MonoBehaviour
     #region Sounds
     [Tooltip("Sync the ‟play engine sounds‟ function with the start up sound")]
     [Header("Engine Start Up Time (In seconds)")]
-    [SerializeField] private float engineStartUpTime;
+    private float engineStartUpTime;
 
     [Header("Engine Sounds Values")]
     [SerializeField] float idleVolumeMin;
@@ -111,8 +111,9 @@ public class TankAudio : MonoBehaviour
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     public IEnumerator EngineStartUpSound()
     {
-        engineStartup.Play(engineStartupSource);
 
+        engineStartup.Play(engineStartupSource);
+        Debug.Log(engineThrottleSource.volume);
         yield return new WaitForSeconds(engineStartUpTime * Time.deltaTime);
 
         engineIdle.Play(engineIdleSource);
@@ -200,6 +201,12 @@ public class TankAudio : MonoBehaviour
         PUSpeedBoostLoopSource.Stop();
         PUSpeedBoostEndSfx.Play(PUSpeedBoostEndSource);
     }
+    public void PickupSpeedBoostSTOP()
+    {
+        PUSpeedBoostStartSource.Stop();
+        PUSpeedBoostLoopSource.Stop();
+        PUSpeedBoostEndSource.Stop();
+    }
 
     public void ChargeAbility()
     {
@@ -211,8 +218,10 @@ public class TankAudio : MonoBehaviour
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     public void OnLoadStats(TankRef i)
     {
+        engineStartUpTime = TankScript.TankAsset.StartupToIdleDelay;
+
         engineIdle = TankScript.TankAsset.AudioIdle;
-        engineStartup = TankScript.TankAsset.AudioIdle;
+        engineStartup = TankScript.TankAsset.AudioStartup;
         engineThrottle = TankScript.TankAsset.AudioThrottle;
 
         engineRevLOW = TankScript.TankAsset.AudioRevLow;

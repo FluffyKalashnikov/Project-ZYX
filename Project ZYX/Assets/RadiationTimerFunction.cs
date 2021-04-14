@@ -24,18 +24,27 @@ public class RadiationTimerFunction : MonoBehaviour
     {
         Game.OnNewLobby += () => ResetStats();
         Game.OnNewMatch += () => ResetTimer();
+
+        Game.OnTankSpawn += (tank) => ResetEverything();
     }
     private void ResetStats()
     {
         StopCoroutine(RadioactiveTimer());
         hitRadioactiveBarrel = false;
         StopCoroutine(RadioactiveDamage());
-        //StopCoroutine(BarrelDestroyer());
 
         currentRadOverallDuration = radOverallDuration;
     }
     private void ResetTimer()
     {
+        currentRadOverallDuration = radOverallDuration;
+    }
+    private void ResetEverything()
+    {
+        StopCoroutine(RadioactiveTimer());
+        hitRadioactiveBarrel = false;
+        StopCoroutine(RadioactiveDamage());
+
         currentRadOverallDuration = radOverallDuration;
     }
     #endregion
@@ -66,7 +75,6 @@ public class RadiationTimerFunction : MonoBehaviour
                 StartCoroutine(RadioactiveTimer());
             }
         }
-        Debug.Log(currentRadOverallDuration);
     }
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     IEnumerator RadioactiveDamage()

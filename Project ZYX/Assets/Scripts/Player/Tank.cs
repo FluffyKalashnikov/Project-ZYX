@@ -325,6 +325,8 @@ public class Tank : MonoBehaviour, IDamageable
     public void Die(DamageInfo DamageInfo)
     {
         tankAudioScript.TankEXPLSfx();
+        tankAudioScript.EngineShutOff();
+        tankAudioScript.PickupSpeedBoostSTOP();
         Disable();
         Game.OnTankKill((Tank) DamageInfo.Reciever, DamageInfo);
     }
