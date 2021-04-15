@@ -340,7 +340,10 @@ public class Tank : MonoBehaviour, IDamageable
         foreach (var rd in Model.GetComponentsInChildren<Renderer>(true))
         {
             foreach(var i in rd.materials)
-            i.color = Color;
+            {
+                i.color = Color;
+                i.SetColor("_TankColor", Color);
+            }
         }
         foreach (var rd in m_PreviewModel.GetComponentsInChildren<Renderer>(true))
         {
