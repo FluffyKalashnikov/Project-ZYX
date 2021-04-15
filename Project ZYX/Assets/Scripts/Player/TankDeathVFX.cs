@@ -17,11 +17,11 @@ public class TankDeathVFX : MonoBehaviour
         Game.OnEndMatch += () => { stopsmoke(); };
 
         Game.OnTankSpawn += (tank) => { stopsmoke(); };
-        Tank.OnTankDead += (tank) => { stopsmoke(); };
+        Tank.OnDead += (tank) => { stopsmoke(); };
     }
     private void Update()
     {
-        if(tankScript.HealthFactor <= 0.3f && isplaying == false)
+        if(tankScript.HealthFactor <= 0.3f && tankScript.HealthFactor > 0 && isplaying == false)
         {
             engineSmoke.Play();
             isplaying = true;
