@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.VFX;
 
 [RequireComponent(typeof(Tank), typeof(PlayerInput))]
 public class TankShoot : MonoBehaviour
@@ -40,6 +41,7 @@ public class TankShoot : MonoBehaviour
 
     // PRIVATE REFERENCES
     //private Tank        TankScript    = null;
+    private VisualEffect tankFireParticle;
     private PlayerInput PlayerInput   = null;
     private InputAction FireAction    = new InputAction();
     private IEnumerator IE_Fire       = null;
@@ -99,6 +101,7 @@ public class TankShoot : MonoBehaviour
             case true: ChargedFireEvent.Fire(TankScript, MuzzlePoint, charge, bulletVelocity); break;
             default:   fireEvent       .Fire(TankScript, MuzzlePoint, charge, bulletVelocity); break;
         }
+        tankFireParticle.Play();
         #region audio
         bool audioPlayed = false;
         if (charge > 0.95 && !audioPlayed)
@@ -188,5 +191,6 @@ public class TankShoot : MonoBehaviour
     {
         MuzzlePoint = i.MuzzlePoint;
         ChargedFireEvent = TankScript.TankAsset.FireChargeAbility;
+        tankFireParticle = i.tankShootParticles;
     }
 }

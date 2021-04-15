@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class SeamineExplosive : MonoBehaviour
 {
@@ -23,6 +24,10 @@ public class SeamineExplosive : MonoBehaviour
 
     [Header("DestructEvent")]
     public DestructEvent seamineDestructEvent;
+
+    [Header("Particles")]
+    public VisualEffect explosion1;
+    public VisualEffect explosion2;
 
     private bool destroyed = false;
 
@@ -68,6 +73,9 @@ public class SeamineExplosive : MonoBehaviour
                 )
             );
             #endregion
+
+            explosion1.Play();
+            explosion2.Play();
 
             seamineCollider.enabled = false;
             destroyed = true;
