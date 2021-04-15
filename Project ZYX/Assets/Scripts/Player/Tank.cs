@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
@@ -228,8 +227,10 @@ public class Tank : MonoBehaviour, IDamageable
 
     IEnumerator IE_ResetSelect = null;
 
-    public static Action<Tank>       OnTankFire;
-    public static Action<DamageInfo> OnTankDead;
+    public static Action<Tank>       OnFire;
+    public static Action<DamageInfo> OnDead;
+    public static Action<Tank>       OnBeginCharge;
+    public static Action<Tank>       OnStopCharge;
 
     public Action                 Tick;
     public Action<Vector2, float> MoveTick;
@@ -272,7 +273,7 @@ public class Tank : MonoBehaviour, IDamageable
         Game.OnEndLobby += DisablePreview;
         Game.OnNewMatch += () => Ready = false;
 
-        OnTankFire += tank => 
+        OnFire += tank => 
         { 
             if (tank != this) return;
             Animator?.Play("Shoot", 1);
@@ -283,6 +284,17 @@ public class Tank : MonoBehaviour, IDamageable
                 TankAsset.ShakeDuration
             );
         };
+        OnBeginCharge += tank =>
+        {
+            if (tank != this) return;
+            AnimatorHUD.Play("OpenChargebar", 4);
+        };
+        OnStopCharge += tank =>
+        {
+            if (tank != this) return;
+            AnimatorHUD.Play("CloseChargebar", 4);
+        };
+
 
         // 4. INPUT SETUP
         InputAction PauseAction  = PlayerInput.actions.FindAction("Pause");
@@ -337,7 +349,7 @@ public class Tank : MonoBehaviour, IDamageable
     {
         if (Game.IsPlaying())
         {
-            //AnimatorHUD.Play("OnHit", 3);
+            AnimatorHUD.Play("OnHit", 3);
             if ((Health -= DamageInfo.Damage) <= 0f && Alive)
             Die(DamageInfo);
         }
@@ -472,10 +484,12 @@ public class Tank : MonoBehaviour, IDamageable
     }
     public void OpenHUD()
     {
+        if (AnimatorHUD.isActiveAndEnabled)
         AnimatorHUD.Play("OpenHUD");
     }
     public void CloseHUD()
     {
+        if (AnimatorHUD.isActiveAndEnabled)
         AnimatorHUD.Play("CloseHUD");
     }
 
@@ -615,6 +629,7 @@ public class Tank : MonoBehaviour, IDamageable
     {
         gameObject.name = $"Player {PlayerInput.playerIndex+1}";
         Health = MaxHealth;
+        Charge = 0f;
         Game.PlayerList.Add(this);
         LoadStats(TankAsset);
     }
