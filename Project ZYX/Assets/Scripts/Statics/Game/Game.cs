@@ -14,11 +14,11 @@ public class Game : MonoBehaviour
     public static int          ReadyCount = 0;
     public static float        Volume
     {
-        get { return m_Volume; }
+        get { return PlayerPrefs.GetFloat("Main Volume", 0.5f); }
         set 
-        { 
-            m_Volume = Mathf.Clamp01(value); 
-            AudioListener.volume = value;
+        {        
+            PlayerPrefs.SetFloat("Main Volume", Mathf.Clamp01(value)); 
+            AudioListener.volume = Mathf.Clamp01(value);
         }
     }
     public static EState       State
@@ -64,7 +64,6 @@ public class Game : MonoBehaviour
     public        List<Color>  PlayerColors = new List<Color>(4);
     public static List<ScoreWidget> ScoreElements = new List<ScoreWidget>();
 
-    private static float       m_Volume    = 1f;
     private static EState      m_State     = EState.Empty;
 
     // GAME EVENTS
@@ -204,7 +203,11 @@ public class Game : MonoBehaviour
         // 4. MISC
         CurrentMode = ModeList[1];
     }
-    private void Start() => LoadMainMenu();
+    private void Start()
+    {
+        LoadSettings();
+        LoadMainMenu();
+    }
     
     
 //  PLAYER LOGIC
@@ -542,5 +545,9 @@ public class Game : MonoBehaviour
     public static bool IsPlaying()
     {
         return State == EState.Match;
+    }
+    public static void LoadSettings()
+    {
+        AudioListener.volume = Volume;
     }
 }

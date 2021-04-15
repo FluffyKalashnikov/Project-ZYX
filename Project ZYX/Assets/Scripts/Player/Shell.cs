@@ -13,7 +13,7 @@ public class Shell : MonoBehaviour
     [HideInInspector] public Rigidbody    rb       = null;
     [HideInInspector] public Tank         owner    = null;
     [HideInInspector] public bool         hasHit   = false;
-    private new Collider collider = null;
+    private new Collider collider = null; 
 
     private void Awake() 
     {

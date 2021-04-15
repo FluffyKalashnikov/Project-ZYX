@@ -21,9 +21,12 @@ public class SettingsWidget : Widget
         ExitButton = b[0];
         
 
-        // 2. EVENT SUBSCRIPTION
+        // 2. EVENT SUBSCRIPTION 
         VolumeSlider.onValueChanged.AddListener(UpdateVolume);
         ExitButton  .onClick       .AddListener(Close);
+
+        // 3. INIT
+        VolumeSlider.value = Game.Volume;
     }
 
 
