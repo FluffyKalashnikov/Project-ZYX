@@ -56,7 +56,7 @@ public class SeamineExplosive : MonoBehaviour
         {
             #region DamageDealer
             IDamageable hit = seamine.gameObject.GetComponentInParent<IDamageable>();
-
+            
             hit?.TakeDamage
             (
                 new DamageInfo
