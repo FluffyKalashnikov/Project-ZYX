@@ -18,7 +18,7 @@ public class ModeFFA : Gamemode
     {
         // 1. GIVE SCORE TO KILLER
         Tank Dealer = (Tank) DamageInfo.Dealer;
-        if (Dealer != null)
+        if (Dealer != null && Dealer != Tank)
         {
             Dealer.Score += PointsPerKill;
             if (Dealer.Score >= PointsToWin)

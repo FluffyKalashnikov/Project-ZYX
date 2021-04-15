@@ -432,7 +432,7 @@ MonoBehaviour:
   Ready: 0
   MaxNameLength: 18
   SpecialChars: 20005f00220023002d005b005d003d00
-  m_Health: 0
+  ChargeMultiplier: 1
   TankMovement: {fileID: 0}
   TankShoot: {fileID: 0}
   TankTurret: {fileID: 0}
@@ -655,6 +655,7 @@ MonoBehaviour:
   BouncyBulletPrefab: {fileID: 646759349837301862, guid: 8d418aa876989b9449f271453cd0a772, type: 3}
   HP_Ammount: 25
   Seamine_Ammount: 3
+  QuickCharge_Divider: 5
   BouncyBullets_Duration: 100
   QuickCharge_Duration: 5
   Multishot_Duration: 5
@@ -3465,14 +3466,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 022765526e83ea148b95fc1ca9a8318d, type: 3}
---- !u!4 &647275602622229857 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6228151220113376812, guid: 022765526e83ea148b95fc1ca9a8318d, type: 3}
-  m_PrefabInstance: {fileID: 6815427495074278221}
-  m_PrefabAsset: {fileID: 0}
 --- !u!2083052967 &647275602622229856 stripped
 VisualEffect:
   m_CorrespondingSourceObject: {fileID: 6228151220113376813, guid: 022765526e83ea148b95fc1ca9a8318d, type: 3}
+  m_PrefabInstance: {fileID: 6815427495074278221}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &647275602622229857 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6228151220113376812, guid: 022765526e83ea148b95fc1ca9a8318d, type: 3}
   m_PrefabInstance: {fileID: 6815427495074278221}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6862761169241689322
