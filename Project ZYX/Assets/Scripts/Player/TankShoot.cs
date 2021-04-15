@@ -41,7 +41,7 @@ public class TankShoot : MonoBehaviour
 
     // PRIVATE REFERENCES
     //private Tank        TankScript    = null;
-    private VisualEffect tankFireParticle;
+    [SerializeField] private VisualEffect tankFireParticle;
     private PlayerInput PlayerInput   = null;
     private InputAction FireAction    = new InputAction();
     private IEnumerator IE_Fire       = null;
@@ -96,6 +96,7 @@ public class TankShoot : MonoBehaviour
     private void Fire(float charge)
     {
         Tank.OnStopCharge?.Invoke(TankScript);
+
         switch (charge > 0.9)
         {
             case true: ChargedFireEvent.Fire(TankScript, MuzzlePoint, charge, bulletVelocity); break;
