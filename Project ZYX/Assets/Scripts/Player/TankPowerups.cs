@@ -95,6 +95,14 @@ public class TankPowerups : MonoBehaviour
 
         seaminePlacementAction = playerInput.actions.FindAction("Seamine");
         seaminePlacementAction.started += _ => SeamineOperator();
+
+        Game.OnNewLobby += () => { SeamineList.Clear(); };
+
+        Game.OnNewMatch += () => { SeamineList.Clear(); };
+        Game.OnEndMatch += () => { SeamineList.Clear(); };
+
+        Game.OnTankSpawn += (tank) => { SeamineList.Clear(); };
+        Tank.OnDead += (tank) => { SeamineList.Clear(); };
     }
     private void Start()
     {
