@@ -34,6 +34,7 @@ public class TankPowerups : MonoBehaviour
     [Header("PowerUp Ammounts")]
     [SerializeField] private float HP_Ammount;
     [SerializeField] private int Seamine_Ammount;
+    [SerializeField] private float QuickCharge_Divider;
 
     [Header("PowerUp durations")]
     [SerializeField] private float BouncyBullets_Duration;
@@ -67,7 +68,7 @@ public class TankPowerups : MonoBehaviour
     private bool QuickCharge_TimerBool = false;
 
     //[QUICK_CHARGE] Backup variables
-    private float currentMinCharge;
+    private float currentChargeMultiplier;
     private float currentQuickChargeDuration;
 
     //[MULTISHOT] Powerup bools
@@ -228,7 +229,6 @@ public class TankPowerups : MonoBehaviour
         {
             standardBullet = fireEvent.ShellPrefab;
             fireEvent.ShellPrefab = BouncyBulletPrefab;
-            Debug.Log(fireEvent.ShellPrefab);
         }
     }
     private void QuickChargeMethod()
@@ -237,8 +237,8 @@ public class TankPowerups : MonoBehaviour
         currentQuickChargeDuration = QuickCharge_Duration;
         if (currentQuickChargeDuration != 0)
         {
-            currentMinCharge = TankAsset.MinCharge;
-            TankAsset.MinCharge = TankAsset.MinCharge;
+            currentChargeMultiplier = tankScript.ChargeMultiplier;
+            tankScript.ChargeMultiplier = QuickCharge_Divider;
         }
     }
     private void MultishotMethod()
@@ -332,7 +332,7 @@ public class TankPowerups : MonoBehaviour
             }
             else if (currentQuickChargeDuration == 0)
             {
-                TankAsset.MinCharge = currentMinCharge;
+                tankScript.ChargeMultiplier = currentChargeMultiplier;
                 QuickCharge_Picked = false;
             }
         }
