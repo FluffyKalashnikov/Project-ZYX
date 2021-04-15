@@ -354,7 +354,7 @@ public class Tank : MonoBehaviour, IDamageable
     {
         if (Game.IsPlaying())
         {
-            AnimatorHUD.Play("OnHit", 3);
+            if (AnimatorHUD) AnimatorHUD.Play("OnHit", 3);
             if ((Health -= DamageInfo.Damage) <= 0f && Alive)
             Die(DamageInfo);
         }
