@@ -457,6 +457,7 @@ MonoBehaviour:
   HudRoot: {fileID: 7528241058903585255}
   HealthBar: {fileID: 917770011880744756}
   ChargeBar: {fileID: 1142149090050018019}
+  AnimatorHUD: {fileID: 8287253784651100582}
   Power: 0
   PowerUpTimer: 0
 --- !u!114 &838318969809300761
@@ -2196,8 +2197,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.1794}
-  m_SizeDelta: {x: -0.07999992, y: -0.4456702}
+  m_AnchoredPosition: {x: 0, y: -0.1604}
+  m_SizeDelta: {x: -0.07999992, y: -0.4075422}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1819225620478886194
 CanvasRenderer:
@@ -2250,6 +2251,7 @@ GameObject:
   - component: {fileID: 2658566369379514220}
   - component: {fileID: 3650711602008716714}
   - component: {fileID: 1565456373184121576}
+  - component: {fileID: 8287253784651100582}
   m_Layer: 5
   m_Name: HUD
   m_TagString: Untagged
@@ -2274,8 +2276,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 1.78}
-  m_SizeDelta: {x: 1.85, y: 0.325}
+  m_AnchoredPosition: {x: 0, y: 1.8889}
+  m_SizeDelta: {x: 1.85, y: 0.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &8693651145901777170
 Canvas:
@@ -2359,6 +2361,25 @@ ParentConstraint:
   m_IsContraintActive: 0
   m_IsLocked: 0
   m_Sources: []
+--- !u!95 &8287253784651100582
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7528241058903585255}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 61d3829f5d21d204fa65a97dc6691283, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &7619414987210440796
 GameObject:
   m_ObjectHideFlags: 0
@@ -3030,8 +3051,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.107}
-  m_SizeDelta: {x: 0, y: 0.21399224}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7464039925308781490
 CanvasRenderer:

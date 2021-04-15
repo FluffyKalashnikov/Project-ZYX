@@ -36,7 +36,7 @@ public class FireEventSingleMulti : FireEvent
 
                 // 2. INIT BULLET
                 Shell.Init(bulletVelocity * charge, TankScript);
-                Tank.OnTankFire.Invoke(TankScript);
+                Tank.OnFire.Invoke(TankScript);
             }
         }
 
@@ -52,7 +52,7 @@ public class FireEventSingleMulti : FireEvent
 
             // 2. INIT BULLET
             Shell.Init(bulletVelocity * charge, TankScript);
-            Tank.OnTankFire.Invoke(TankScript);
+            Tank.OnFire.Invoke(TankScript);
         }
     }
 }

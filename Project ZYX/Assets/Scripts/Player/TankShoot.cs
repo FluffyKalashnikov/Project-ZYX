@@ -63,6 +63,7 @@ public class TankShoot : MonoBehaviour
             {
                 TimestampCharge = Time.time;
                 TankScript.Charge = 0f;
+                Tank.OnBeginCharge?.Invoke(TankScript);
                 yield return new WaitUntil
                 (
                     () => 
@@ -92,6 +93,7 @@ public class TankShoot : MonoBehaviour
 
     private void Fire(float charge)
     {
+        Tank.OnStopCharge?.Invoke(TankScript);
         switch (charge > 0.9)
         {
             case true: ChargedFireEvent.Fire(TankScript, MuzzlePoint, charge, bulletVelocity); break;

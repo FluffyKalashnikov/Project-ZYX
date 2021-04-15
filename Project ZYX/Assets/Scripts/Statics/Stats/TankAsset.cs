@@ -5,8 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Tank Type", menuName = "ZYX Assets/Tank Type/Standard")]
 public class TankAsset : ScriptableObject
 {
-    public string     Name   = "TANK NAME";
-    public GameObject Model  = null;
+    public string     Name      = "TANK NAME";
+    public GameObject Model     = null;
     [Space(10)]
     public float Damage      = 1f;
     public float FireRate    = 0.6f;
@@ -16,9 +16,13 @@ public class TankAsset : ScriptableObject
     public float DecelerationForce = 1;
     public float RotationForce = 100;
     [Space(5)]
-    public float ChargeRate  = 0.75f;
-    public float MinCharge   = 0.3f;
-    public float MaxCharge   = 1f;
+    public float ShakeAmplitude = 12f;
+    public float ShakeFrequency = 5f;
+    public float ShakeDuration  = 1f;
+    [Space(5)]
+    public float ChargeRate     = 0.75f;
+    public float MinCharge      = 0.3f;
+    public float MaxCharge      = 1f;
     [Space(10)]
     public float StartupToIdleDelay = 1.16f;
     public AudioEvent AudioIdle     = null;

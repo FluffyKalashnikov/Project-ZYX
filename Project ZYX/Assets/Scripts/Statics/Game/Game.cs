@@ -317,6 +317,16 @@ public class Game : MonoBehaviour
         foreach (var i in PlayerList)
         i.LookOnly();
     }
+    public static void OpenHUD()
+    {
+        foreach (var i in PlayerList)
+        i.OpenHUD();
+    }
+    public static void CloseHUD()
+    {
+        foreach (var i in PlayerList)
+        i.CloseHUD();
+    }
 
 
     public static void BeginMatch()
