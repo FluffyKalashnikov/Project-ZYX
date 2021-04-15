@@ -48,8 +48,8 @@ public abstract class Gamemode : ScriptableObject
     {
         Debug.Log($"[{Name}]: Tank \"{Tank.Name}\" Spawned!");
         Tank.Health = Tank.MaxHealth;
-        Tank.OpenHUD();
         Tank.Enable();
+        Tank.OpenHUD();
         yield return null;
     }
     
