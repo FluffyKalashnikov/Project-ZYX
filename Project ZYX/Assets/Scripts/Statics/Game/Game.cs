@@ -390,6 +390,7 @@ public class Game : MonoBehaviour
     }
     public static void LoadMainMenu()
     {
+        MatchCleanup();
         SetActiveState(EState.MainMenu);
     }
     public static void OpenSettings()

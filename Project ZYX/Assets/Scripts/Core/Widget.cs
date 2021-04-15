@@ -18,6 +18,7 @@ public class Widget : MonoBehaviour
 
     private static IEnumerator  IE_SetSelected = null;
     private static List<Widget> OverlayWidgets = new List<Widget>();
+    private static List<Widget> ActiveWidgets = new List<Widget>();
 
     protected virtual void Awake()
     {
@@ -33,6 +34,7 @@ public class Widget : MonoBehaviour
     {
         if (IsActive()) return;
         gameObject.SetActive(true);
+        ActiveWidgets.Add(this);
         OnEnabled?.Invoke(); 
         ResetSelection(() => { if (Animator) Animator.Play("OnSelected"); });
     }
@@ -40,6 +42,7 @@ public class Widget : MonoBehaviour
     {
         if (!IsActive()) return;
         gameObject.SetActive(false);
+        ActiveWidgets.Remove(this);
         OnDisabled?.Invoke();
     }
     public bool ShownFirst()
@@ -83,10 +86,13 @@ public class Widget : MonoBehaviour
         // 1. ENABLE
         Widget.ShowFirst();
         Widget.Enable();
-
+        
         // 2. ADD TO LIST
         if (!OverlayWidgets.Contains(Widget))
         OverlayWidgets.Add(Widget);
+
+        // 3. FOCUS ADDED
+        Widget.ResetSelection(null);
     }
     public static void RemoveWidget(Widget Widget)
     {
@@ -96,6 +102,10 @@ public class Widget : MonoBehaviour
         // 2. REMOVE FROM LIST
         if (OverlayWidgets.Contains(Widget))
         OverlayWidgets.Remove(Widget);
+
+        // 3. FOCUS LAST
+        if (ActiveWidgets.Count != 0)
+        ActiveWidgets[ActiveWidgets.Count-1].ResetSelection(null);
     }
     public static void RemoveOverlays()
     {
