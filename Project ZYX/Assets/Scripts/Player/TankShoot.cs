@@ -72,7 +72,7 @@ public class TankShoot : MonoBehaviour
                         (
                             TankAsset.MinCharge, 
                             TankAsset.MaxCharge, 
-                            (Time.time-TimestampCharge)/TankAsset.ChargeRate
+                            (Time.time-TimestampCharge)/(TankAsset.ChargeRate / TankScript.ChargeMultiplier)
                         );
 
                         return TimestampFire > TimestampCharge; 

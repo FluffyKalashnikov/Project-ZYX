@@ -19,7 +19,7 @@ public class Widget : MonoBehaviour
     private static IEnumerator  IE_SetSelected = null;
     private static List<Widget> OverlayWidgets = new List<Widget>();
 
-    private void Awake()
+    protected virtual void Awake()
     {
         // 1. GET REFERENCES
         Animator = GetComponent<Animator>();

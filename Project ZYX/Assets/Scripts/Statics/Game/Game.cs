@@ -12,6 +12,15 @@ public class Game : MonoBehaviour
 {
     // GAME PROPERTIES
     public static int          ReadyCount = 0;
+    public static float        Volume
+    {
+        get { return m_Volume; }
+        set 
+        { 
+            m_Volume = Mathf.Clamp01(value); 
+            AudioListener.volume = value;
+        }
+    }
     public static EState       State
     {
         get { return m_State; }
@@ -26,17 +35,17 @@ public class Game : MonoBehaviour
             // 2. BEGIN END LOGIC
             switch(OldState)
             {
-                case EState.Pause: RemoveWidget(PauseWidget); break;
+                case EState.Pause:    RemoveWidget(PauseWidget);    break;
                 default: break;
             }
             // 3. BEGIN NEW LOGIC
             switch(NewState)
             {
-                case EState.MainMenu:  SetActiveWidget(MenuWidget);  break;
-                case EState.Match:     SetActiveWidget(MatchWidget); break;
-                case EState.Lobby:     SetActiveWidget(LobbyWidget); break;
-                case EState.Pause:     AddActiveWidget(PauseWidget); break;
-                case EState.WinScreen: SetActiveWidget(WinWidget);   break;
+                case EState.MainMenu:  SetActiveWidget(MenuWidget);     break;
+                case EState.Match:     SetActiveWidget(MatchWidget);    break;
+                case EState.Lobby:     SetActiveWidget(LobbyWidget);    break;
+                case EState.Pause:     AddActiveWidget(PauseWidget);    break;
+                case EState.WinScreen: SetActiveWidget(WinWidget);      break;
             }
         }
     }
@@ -55,7 +64,7 @@ public class Game : MonoBehaviour
     public        List<Color>  PlayerColors = new List<Color>(4);
     public static List<ScoreWidget> ScoreElements = new List<ScoreWidget>();
 
-
+    private static float       m_Volume    = 1f;
     private static EState      m_State     = EState.Empty;
 
     // GAME EVENTS
@@ -72,11 +81,12 @@ public class Game : MonoBehaviour
     public static Action<Tank>             OnTankSpawn;
 
     // GAME WIDGETS
-    public static Widget MenuWidget  = null;
-    public static Widget PauseWidget = null;
-    public static Widget MatchWidget = null;
-    public static Widget LobbyWidget = null;
-    public static Widget WinWidget   = null;
+    public static Widget MenuWidget     = null;
+    public static Widget PauseWidget    = null;
+    public static Widget MatchWidget    = null;
+    public static Widget LobbyWidget    = null;
+    public static Widget WinWidget      = null;
+    public static Widget SettingsWidget = null;
     
     // REFERENCES
     public static Camera                   Camera                  = null;
@@ -89,6 +99,7 @@ public class Game : MonoBehaviour
     private static WidgetSwitcher          MenuSwitch              = null;
     private static WidgetSwitcher          PopupSwitch             = null;
     private static IEnumerator             IE_Count                = null;
+    private static AudioListener           AudioListener           = null;
     public         TextMeshProUGUI         CountdownText           = null;
     public         List<Scoreboard>        Scoreboards             = new List<Scoreboard>();
     public         TextMeshProUGUI         WinText                 = null;
@@ -118,6 +129,7 @@ public class Game : MonoBehaviour
         InputManager  = GetComponent<PlayerInputManager>();
         Camera        = GetComponentInChildren<Camera>(true);
         CameraTargets = GetComponentInChildren<CinemachineTargetGroup>(true); 
+        AudioListener = GetComponentInChildren<AudioListener>(true);
         {
             var i = GetComponentsInChildren<WidgetSwitcher>(true);
             MenuSwitch  = i[0];
@@ -130,11 +142,12 @@ public class Game : MonoBehaviour
         }
         {
             var i = GetComponentsInChildren<Widget>(true);
-            MatchWidget = i[0];
-            LobbyWidget = i[1];
-            MenuWidget  = i[2];
-            PauseWidget = i[3];
-            WinWidget   = i[4];
+            MatchWidget    = i[0];
+            LobbyWidget    = i[1];
+            MenuWidget     = i[2];
+            PauseWidget    = i[3];
+            WinWidget      = i[4];
+            SettingsWidget = i[5];
         }
 
         // 3. INIT WIDGETS
@@ -378,6 +391,10 @@ public class Game : MonoBehaviour
     public static void LoadMainMenu()
     {
         SetActiveState(EState.MainMenu);
+    }
+    public static void OpenSettings()
+    {
+        Widget.AddWidget(SettingsWidget);
     }
 
 //  SETTERS

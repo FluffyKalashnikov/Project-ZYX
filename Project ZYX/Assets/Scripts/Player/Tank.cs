@@ -135,6 +135,7 @@ public class Tank : MonoBehaviour, IDamageable
     {
         get { return ((Charge - TankAsset.MinCharge) /(TankAsset.MaxCharge - TankAsset.MinCharge)); }
     }
+    public float      ChargeMultiplier = 1f;
     public string     Name 
     {
         get 
