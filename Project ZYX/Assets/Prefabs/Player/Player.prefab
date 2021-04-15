@@ -513,6 +513,7 @@ MonoBehaviour:
   bulletVelocity: 25
   inputTolerance: 0.2
   MuzzlePoint: {fileID: 0}
+  tankFireParticle: {fileID: 0}
 --- !u!114 &838318969809300764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3337,6 +3338,74 @@ PrefabInstance:
       propertyPath: m_Name
       value: Smoke
       objectReference: {fileID: 0}
+    - target: {fileID: 2344831540870461182, guid: 52bd04967794b03419ca2cc91d80ae4c, type: 3}
+      propertyPath: UVModule.tilesX
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2344831540870461182, guid: 52bd04967794b03419ca2cc91d80ae4c, type: 3}
+      propertyPath: UVModule.tilesY
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2344831540870461182, guid: 52bd04967794b03419ca2cc91d80ae4c, type: 3}
+      propertyPath: UVModule.enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2344831540870461182, guid: 52bd04967794b03419ca2cc91d80ae4c, type: 3}
+      propertyPath: NoiseModule.enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2344831540870461182, guid: 52bd04967794b03419ca2cc91d80ae4c, type: 3}
+      propertyPath: NoiseModule.frequency
+      value: 1.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 2344831540870461182, guid: 52bd04967794b03419ca2cc91d80ae4c, type: 3}
+      propertyPath: NoiseModule.scrollSpeed.scalar
+      value: 0.26
+      objectReference: {fileID: 0}
+    - target: {fileID: 2344831540870461182, guid: 52bd04967794b03419ca2cc91d80ae4c, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 400
+      objectReference: {fileID: 0}
+    - target: {fileID: 2344831540870461182, guid: 52bd04967794b03419ca2cc91d80ae4c, type: 3}
+      propertyPath: InitialModule.startLifetime.minScalar
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2344831540870461182, guid: 52bd04967794b03419ca2cc91d80ae4c, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.atime1
+      value: 4819
+      objectReference: {fileID: 0}
+    - target: {fileID: 2344831540870461182, guid: 52bd04967794b03419ca2cc91d80ae4c, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.atime2
+      value: 65535
+      objectReference: {fileID: 0}
+    - target: {fileID: 2344831540870461182, guid: 52bd04967794b03419ca2cc91d80ae4c, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key0.a
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2344831540870461182, guid: 52bd04967794b03419ca2cc91d80ae4c, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key0.b
+      value: 0.2924528
+      objectReference: {fileID: 0}
+    - target: {fileID: 2344831540870461182, guid: 52bd04967794b03419ca2cc91d80ae4c, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key0.g
+      value: 0.2924528
+      objectReference: {fileID: 0}
+    - target: {fileID: 2344831540870461182, guid: 52bd04967794b03419ca2cc91d80ae4c, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key0.r
+      value: 0.2924528
+      objectReference: {fileID: 0}
+    - target: {fileID: 2344831540870461182, guid: 52bd04967794b03419ca2cc91d80ae4c, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key1.a
+      value: 0.9411765
+      objectReference: {fileID: 0}
+    - target: {fileID: 2344831540870461182, guid: 52bd04967794b03419ca2cc91d80ae4c, type: 3}
+      propertyPath: InitialModule.startLifetime.minMaxState
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2344831540870461182, guid: 52bd04967794b03419ca2cc91d80ae4c, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.m_NumAlphaKeys
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 2344831540870461183, guid: 52bd04967794b03419ca2cc91d80ae4c, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -3486,6 +3555,10 @@ PrefabInstance:
     - target: {fileID: 6130294243776208164, guid: 8b02ac0850852284c8d79babef7ece24, type: 3}
       propertyPath: m_Name
       value: Hit_Explosion
+      objectReference: {fileID: 0}
+    - target: {fileID: 6130294243776208165, guid: 8b02ac0850852284c8d79babef7ece24, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6130294243776208165, guid: 8b02ac0850852284c8d79babef7ece24, type: 3}
       propertyPath: m_Materials.Array.data[0]
