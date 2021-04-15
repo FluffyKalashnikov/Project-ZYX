@@ -28,8 +28,8 @@ public abstract class Gamemode : ScriptableObject
         }
     }
     private static GameObject m_Widget     = null;
-
-
+    protected static bool     Playing      = false;
+    
 //  INIT LOGIC
     protected virtual void InitWidget(GameObject Widget)
     {
@@ -100,13 +100,19 @@ public abstract class Gamemode : ScriptableObject
 
         
         MatchContext.Stop();
+        Playing = false;
 
         Debug.Log($"[{Name}]: Match Destroyed.");
+    }
+    public static bool IsPlaying()
+    {
+        return Playing;
     }
 
     private   IEnumerator Exec()
     {
         float time = Time.time;
+        Playing = false;
         Widget = WidgetPrefab;
         InitWidget(Widget);
         MatchContext.Add(BeginPlay());

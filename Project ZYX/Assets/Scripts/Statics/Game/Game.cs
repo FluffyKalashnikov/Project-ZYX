@@ -371,12 +371,15 @@ public class Game : MonoBehaviour
     public static void PauseGame()
     {
         SetActiveState(EState.Pause);
+        CloseHUD();
         OnPause?.Invoke();
     }
     public static void ResumeGame()
     {
         SetActiveState(EState.Match);
         SetActiveInput(Tank.EInputMode.Game);
+        if (IsPlaying() && Gamemode.IsPlaying())
+        OpenHUD();
         OnResume?.Invoke();
     }
     public static void ResetOverlay()

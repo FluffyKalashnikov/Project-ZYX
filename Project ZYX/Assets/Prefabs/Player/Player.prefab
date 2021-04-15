@@ -513,6 +513,7 @@ MonoBehaviour:
   bulletVelocity: 25
   inputTolerance: 0.2
   MuzzlePoint: {fileID: 0}
+  tankFireParticle: {fileID: 0}
 --- !u!114 &838318969809300764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2374,7 +2375,7 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 61d3829f5d21d204fa65a97dc6691283, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 0
+  m_UpdateMode: 2
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
@@ -3486,6 +3487,10 @@ PrefabInstance:
     - target: {fileID: 6130294243776208164, guid: 8b02ac0850852284c8d79babef7ece24, type: 3}
       propertyPath: m_Name
       value: Hit_Explosion
+      objectReference: {fileID: 0}
+    - target: {fileID: 6130294243776208165, guid: 8b02ac0850852284c8d79babef7ece24, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6130294243776208165, guid: 8b02ac0850852284c8d79babef7ece24, type: 3}
       propertyPath: m_Materials.Array.data[0]
