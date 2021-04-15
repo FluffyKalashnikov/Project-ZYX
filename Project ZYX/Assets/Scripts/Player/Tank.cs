@@ -9,11 +9,15 @@ using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
 using UnityEngine.Animations;
 using TMPro;
+using UnityEngine.VFX;
 
 [RequireComponent(typeof(MultiplayerEventSystem), typeof(InputSystemUIInputModule), typeof(PlayerInput))]
 public class Tank : MonoBehaviour, IDamageable
 {
     [SerializeField] private TankAudio tankAudioScript;
+    [SerializeField] private VisualEffect explosionVFX1;
+    [SerializeField] private VisualEffect explosionVFX2;
+    [SerializeField] private ParticleSystem engineSmoke;
     public TankAsset  TankAsset
     {
         get 
@@ -324,9 +328,15 @@ public class Tank : MonoBehaviour, IDamageable
     }
     public void Die(DamageInfo DamageInfo)
     {
+        #region cosmetic
         tankAudioScript.TankEXPLSfx();
         tankAudioScript.EngineShutOff();
         tankAudioScript.PickupSpeedBoostSTOP();
+
+        explosionVFX1.Play();
+        explosionVFX2.Play();
+        #endregion
+
         Disable();
         Game.OnTankKill((Tank) DamageInfo.Reciever, DamageInfo);
     }
