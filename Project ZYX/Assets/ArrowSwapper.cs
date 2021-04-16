@@ -6,6 +6,10 @@ public class ArrowSwapper : MonoBehaviour
 {
     [SerializeField] private Texture2D arrow;
     [SerializeField] private Texture2D hand;
+    private void Awake()
+    {
+        Game.OnNewMatch += () => { SwapToArrow(); };
+    }
     public void SwapToArrow()
     {
         Cursor.SetCursor(arrow, Vector3.zero, CursorMode.ForceSoftware);
