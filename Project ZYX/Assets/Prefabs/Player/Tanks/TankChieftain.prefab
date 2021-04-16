@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 823888985112588563}
   - component: {fileID: 4377728910443495094}
   - component: {fileID: 1955730426968525436}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Propeller Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7108100535293192547}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SeaminePoint
   m_TagString: Untagged
   m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
@@ -126,7 +126,7 @@ GameObject:
   - component: {fileID: 4231286023646358743}
   - component: {fileID: 5967200776918577570}
   - component: {fileID: 4238373877623050116}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Propeller_Blades
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -209,7 +209,7 @@ GameObject:
   - component: {fileID: 1397078872031045217}
   - component: {fileID: 1362273497591165994}
   - component: {fileID: 5100842329851834370}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tank_02_Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -259,10 +259,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 0c3621fab2f1d0c4ca7ac9f14fd5a87a, type: 2}
-  - {fileID: 2100000, guid: e8420f743dc116246a2352ae6cf53b98, type: 2}
-  - {fileID: 2100000, guid: ef45c27956a671c49a28710d7f4f66fc, type: 2}
-  - {fileID: 2100000, guid: d3ac3ec80d640224d9b2317fd2c747f1, type: 2}
+  - {fileID: 2100000, guid: 072c7e42a9c360a45a72a6495d983a24, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -295,7 +292,7 @@ GameObject:
   - component: {fileID: 75301020339947928}
   - component: {fileID: 3211459063031189969}
   - component: {fileID: 1423006804554233314}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tank_02_Hatch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -345,11 +342,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8773360bc5c69d44c93b757dd54ccbaf, type: 2}
-  - {fileID: 2100000, guid: 1095af2fbe3b9644491de8ac3668381a, type: 2}
-  - {fileID: 2100000, guid: 0c3621fab2f1d0c4ca7ac9f14fd5a87a, type: 2}
-  - {fileID: 2100000, guid: ef45c27956a671c49a28710d7f4f66fc, type: 2}
-  - {fileID: 2100000, guid: e8420f743dc116246a2352ae6cf53b98, type: 2}
+  - {fileID: 2100000, guid: 072c7e42a9c360a45a72a6495d983a24, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -382,7 +375,7 @@ GameObject:
   - component: {fileID: 1959572098701647547}
   - component: {fileID: 7329167774698988432}
   - component: {fileID: 5094777096462532349}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tank_02_Threads
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -430,13 +423,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e8420f743dc116246a2352ae6cf53b98, type: 2}
-  - {fileID: 2100000, guid: 1095af2fbe3b9644491de8ac3668381a, type: 2}
-  - {fileID: 2100000, guid: 8773360bc5c69d44c93b757dd54ccbaf, type: 2}
-  - {fileID: 2100000, guid: 0c3621fab2f1d0c4ca7ac9f14fd5a87a, type: 2}
-  - {fileID: 2100000, guid: 814f58ef3bbbfa24bb5c60ce87895f53, type: 2}
-  - {fileID: 2100000, guid: 2889690f42e0b1b40b4d80d77ddc6e81, type: 2}
-  - {fileID: 2100000, guid: ef45c27956a671c49a28710d7f4f66fc, type: 2}
+  - {fileID: 2100000, guid: 072c7e42a9c360a45a72a6495d983a24, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -468,7 +455,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4908929568897009566}
   - component: {fileID: 4908929568897009537}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BackLight_01 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -560,7 +547,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4908929569616670201}
   - component: {fileID: 4908929569616670200}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: FrontLight_01 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -652,7 +639,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4908929570200203260}
   - component: {fileID: 4908929570200203263}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BackLight_02 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -744,7 +731,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4908929570279677293}
   - component: {fileID: 4908929570279677292}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: FrontLight_02 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -837,7 +824,7 @@ GameObject:
   - component: {fileID: 2061505898864170019}
   - component: {fileID: 5800666876689153189}
   - component: {fileID: 4307984034274898369}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tank_02_Antenna
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -885,9 +872,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 2889690f42e0b1b40b4d80d77ddc6e81, type: 2}
-  - {fileID: 2100000, guid: e8420f743dc116246a2352ae6cf53b98, type: 2}
-  - {fileID: 2100000, guid: 1095af2fbe3b9644491de8ac3668381a, type: 2}
+  - {fileID: 2100000, guid: 072c7e42a9c360a45a72a6495d983a24, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -920,7 +905,7 @@ GameObject:
   - component: {fileID: 7671888740709379586}
   - component: {fileID: 9196729777506491127}
   - component: {fileID: 143965307589308041}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tank_02_Gun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1006,7 +991,7 @@ GameObject:
   - component: {fileID: 6293489516279768344}
   - component: {fileID: 1699757731583439119}
   - component: {fileID: 5053899137285548178}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: polySurface62
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1054,8 +1039,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -8848810374240701247, guid: a97c4a47131980d4da2d8354bff3a743, type: 3}
-  - {fileID: -382652638819485698, guid: a97c4a47131980d4da2d8354bff3a743, type: 3}
+  - {fileID: 2100000, guid: 072c7e42a9c360a45a72a6495d983a24, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1086,7 +1070,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8518340097134131558}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BulletPoint
   m_TagString: Untagged
   m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}
@@ -1116,7 +1100,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8518340097316182071}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Lights
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1152,7 +1136,7 @@ GameObject:
   - component: {fileID: 8518340098196470984}
   - component: {fileID: 7886702913293367094}
   - component: {fileID: 2598261608830964409}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: TankChieftain
   m_TagString: Untagged
   m_Icon: {fileID: 3306451490063965843, guid: 0000000000000000d000000000000000, type: 0}
@@ -1272,6 +1256,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TankBubbles
       objectReference: {fileID: 0}
+    - target: {fileID: 7628928056879820821, guid: 12f03ed404acbd64390afe759514c2ab, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 12f03ed404acbd64390afe759514c2ab, type: 3}
 --- !u!4 &7144799047823870193 stripped
@@ -1366,6 +1354,10 @@ PrefabInstance:
     - target: {fileID: 6228151220113376819, guid: 022765526e83ea148b95fc1ca9a8318d, type: 3}
       propertyPath: m_Name
       value: TankShot
+      objectReference: {fileID: 0}
+    - target: {fileID: 6228151220113376819, guid: 022765526e83ea148b95fc1ca9a8318d, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 022765526e83ea148b95fc1ca9a8318d, type: 3}

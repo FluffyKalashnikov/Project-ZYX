@@ -312,7 +312,7 @@ GameObject:
   - component: {fileID: 7613571533737600295}
   - component: {fileID: 7613571533737600293}
   - component: {fileID: 7613571533737600292}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Propeller_Blades
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -589,7 +589,7 @@ GameObject:
   - component: {fileID: 7613571534335226688}
   - component: {fileID: 7613571534335226694}
   - component: {fileID: 7613571534335226689}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Propeller Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1190,7 +1190,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4800133254740997713}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SeaminePoint
   m_TagString: Untagged
   m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
@@ -1294,6 +1294,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TankShot
       objectReference: {fileID: 0}
+    - target: {fileID: 6228151220113376819, guid: 022765526e83ea148b95fc1ca9a8318d, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 022765526e83ea148b95fc1ca9a8318d, type: 3}
 --- !u!2083052967 &7198492185005859236 stripped
@@ -1360,6 +1364,10 @@ PrefabInstance:
     - target: {fileID: 7628928056879820821, guid: 12f03ed404acbd64390afe759514c2ab, type: 3}
       propertyPath: m_Name
       value: TankBubbles
+      objectReference: {fileID: 0}
+    - target: {fileID: 7628928056879820821, guid: 12f03ed404acbd64390afe759514c2ab, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 12f03ed404acbd64390afe759514c2ab, type: 3}

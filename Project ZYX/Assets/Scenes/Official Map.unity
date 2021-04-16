@@ -2876,6 +2876,18 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -1.8900018
       objectReference: {fileID: 0}
+    - target: {fileID: 1350783316, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.23252285
+      objectReference: {fileID: 0}
+    - target: {fileID: 1350783316, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.23455751
+      objectReference: {fileID: 0}
+    - target: {fileID: 1350783316, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.057891525
+      objectReference: {fileID: 0}
     - target: {fileID: 821787623625406256, guid: 6b2ca381406f6b349931660209b2137b, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -4258,6 +4270,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1804592550}
     m_Modifications:
+    - target: {fileID: 5950801251856324142, guid: db8430dc7bad80d4c9e46d64f52c3da7, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6405505002670975613, guid: db8430dc7bad80d4c9e46d64f52c3da7, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -5781,6 +5797,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1804592550}
     m_Modifications:
+    - target: {fileID: 5950801251856324142, guid: db8430dc7bad80d4c9e46d64f52c3da7, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6405505002670975613, guid: db8430dc7bad80d4c9e46d64f52c3da7, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -11713,6 +11733,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BarrelExplosivePrefab (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 6938926350346297576, guid: 6df14518937efc74980b03afe7ae7b67, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6df14518937efc74980b03afe7ae7b67, type: 3}
 --- !u!4 &941316760 stripped
@@ -12916,6 +12940,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BarrelExplosivePrefab (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 6938926350346297576, guid: 6df14518937efc74980b03afe7ae7b67, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6df14518937efc74980b03afe7ae7b67, type: 3}
 --- !u!4 &1033884252 stripped
@@ -13197,6 +13225,10 @@ PrefabInstance:
     - target: {fileID: 6730615328831535942, guid: 6df14518937efc74980b03afe7ae7b67, type: 3}
       propertyPath: m_Name
       value: BarrelExplosivePrefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 6938926350346297576, guid: 6df14518937efc74980b03afe7ae7b67, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6df14518937efc74980b03afe7ae7b67, type: 3}
@@ -15188,6 +15220,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BarrelExplosivePrefab (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 6938926350346297576, guid: 6df14518937efc74980b03afe7ae7b67, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6df14518937efc74980b03afe7ae7b67, type: 3}
 --- !u!4 &1260409278 stripped
@@ -16298,6 +16334,10 @@ PrefabInstance:
     - target: {fileID: 748666841057208381, guid: cf12fd62e3a5b6a4b90fb8184b76638c, type: 3}
       propertyPath: m_Name
       value: BarrelStandardPrefab (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2413318702756371687, guid: cf12fd62e3a5b6a4b90fb8184b76638c, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cf12fd62e3a5b6a4b90fb8184b76638c, type: 3}
@@ -17530,6 +17570,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BarrelStandardPickupsPrefab
       objectReference: {fileID: 0}
+    - target: {fileID: 2870735338441956206, guid: 024d896bde0a1ee40a9d01ae50d67541, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 024d896bde0a1ee40a9d01ae50d67541, type: 3}
 --- !u!1001 &1449500105
@@ -18530,6 +18574,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1804592550}
     m_Modifications:
+    - target: {fileID: 5950801251856324142, guid: db8430dc7bad80d4c9e46d64f52c3da7, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6405505002670975613, guid: db8430dc7bad80d4c9e46d64f52c3da7, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -22821,6 +22869,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BarrelStandardPrefab
       objectReference: {fileID: 0}
+    - target: {fileID: 2413318702756371687, guid: cf12fd62e3a5b6a4b90fb8184b76638c, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cf12fd62e3a5b6a4b90fb8184b76638c, type: 3}
 --- !u!1001 &1827818581
@@ -23329,10 +23381,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -22.81
       objectReference: {fileID: 0}
+    - target: {fileID: -6282743240418591041, guid: a97c4a47131980d4da2d8354bff3a743, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 072c7e42a9c360a45a72a6495d983a24, type: 2}
+    - target: {fileID: -163982832632333473, guid: a97c4a47131980d4da2d8354bff3a743, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 072c7e42a9c360a45a72a6495d983a24, type: 2}
     - target: {fileID: 919132149155446097, guid: a97c4a47131980d4da2d8354bff3a743, type: 3}
       propertyPath: m_Name
       value: Tank_02
       objectReference: {fileID: 0}
+    - target: {fileID: 4219812130400036308, guid: a97c4a47131980d4da2d8354bff3a743, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 072c7e42a9c360a45a72a6495d983a24, type: 2}
+    - target: {fileID: 9062640685291025824, guid: a97c4a47131980d4da2d8354bff3a743, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 072c7e42a9c360a45a72a6495d983a24, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a97c4a47131980d4da2d8354bff3a743, type: 3}
 --- !u!4 &1866889717 stripped
@@ -25335,6 +25403,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6938926350346297576, guid: 6df14518937efc74980b03afe7ae7b67, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6df14518937efc74980b03afe7ae7b67, type: 3}
 --- !u!4 &2028561368 stripped
@@ -26744,6 +26816,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1804592550}
     m_Modifications:
+    - target: {fileID: 5950801251856324142, guid: db8430dc7bad80d4c9e46d64f52c3da7, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6405505002670975613, guid: db8430dc7bad80d4c9e46d64f52c3da7, type: 3}
       propertyPath: m_RootOrder
       value: 0

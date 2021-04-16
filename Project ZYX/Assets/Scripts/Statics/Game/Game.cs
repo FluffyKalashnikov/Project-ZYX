@@ -211,17 +211,17 @@ public class Game : MonoBehaviour
     
     
 //  PLAYER LOGIC
-    public static void UpdateReady(Tank tank)
+    public static void UpdateReady(Tank Tank)
     {
         // 1. UPDATE COUNT
-        switch(tank.Ready = !tank.Ready)
+        switch(Tank.Ready = !Tank.Ready)
         {
-            case true:  ReadyCount++; break;
-            case false: ReadyCount--; break;
+            case true:  ReadyCount++; Tank.PreviewTextReady.SetText("Ready!"); Tank.PreviewImageReady.color = Color.green; break;
+            case false: ReadyCount--; Tank.PreviewTextReady.SetText("Ready?"); Tank.PreviewImageReady.color = Color.white; break;
         }
 
         // 2. CHECK COUNT
-        if (ReadyCount >= PlayerList.Count)
+        if (ReadyCount >= PlayerList.Count && PlayerList.Count > 1)
         {
             BeginMatch();
             ResetReady();
@@ -371,12 +371,15 @@ public class Game : MonoBehaviour
     public static void PauseGame()
     {
         SetActiveState(EState.Pause);
+        CloseHUD();
         OnPause?.Invoke();
     }
     public static void ResumeGame()
     {
         SetActiveState(EState.Match);
         SetActiveInput(Tank.EInputMode.Game);
+        if (IsPlaying() && Gamemode.IsPlaying())
+        OpenHUD();
         OnResume?.Invoke();
     }
     public static void ResetOverlay()
