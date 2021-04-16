@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class BarrelStandardPickups : BarrelBaseCode
 {
@@ -12,6 +13,7 @@ public class BarrelStandardPickups : BarrelBaseCode
     
     [Tooltip("Check the elements numbers!")]
     [SerializeField] private int selectedPickup;*/
+    [SerializeField] private VisualEffect explosionFX1;
 
     [Header("Pickup List")]
     [SerializeField] private List<GameObject> PowerupList = new List<GameObject>();
@@ -21,6 +23,7 @@ public class BarrelStandardPickups : BarrelBaseCode
     {
         if (collision.gameObject.layer == 8 || collision.gameObject.layer == 9)
         {
+            explosionFX1.Play();
             barrelCollider.enabled = false;
             BarrelCollisionSound();
             DeleteBarrelModel();
