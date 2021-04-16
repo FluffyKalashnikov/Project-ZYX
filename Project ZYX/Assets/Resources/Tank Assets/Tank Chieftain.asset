@@ -20,7 +20,7 @@ MonoBehaviour:
   Speed: 2.5
   AccelerationForce: 3
   DecelerationForce: 1
-  RotationForce: 100
+  RotationForce: 75
   ShakeAmplitude: 12
   ShakeFrequency: 3
   ShakeDuration: 1

@@ -21,8 +21,8 @@ MonoBehaviour:
   AccelerationForce: 3
   DecelerationForce: 1
   RotationForce: 100
-  ShakeAmplitude: 12
-  ShakeFrequency: 3
+  ShakeAmplitude: 8
+  ShakeFrequency: 2.5
   ShakeDuration: 1
   ChargeRate: 0.75
   MinCharge: 0.3
