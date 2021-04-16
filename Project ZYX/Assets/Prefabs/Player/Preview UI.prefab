@@ -765,6 +765,18 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5992908513887439355, guid: 6be06efaaca31274c83cf229019485f7, type: 3}
+      propertyPath: m_Colors.m_PressedColor.b
+      value: 0.78431374
+      objectReference: {fileID: 0}
+    - target: {fileID: 5992908513887439355, guid: 6be06efaaca31274c83cf229019485f7, type: 3}
+      propertyPath: m_Colors.m_PressedColor.g
+      value: 0.78431374
+      objectReference: {fileID: 0}
+    - target: {fileID: 5992908513887439355, guid: 6be06efaaca31274c83cf229019485f7, type: 3}
+      propertyPath: m_Colors.m_PressedColor.r
+      value: 0.78431374
+      objectReference: {fileID: 0}
+    - target: {fileID: 5992908513887439355, guid: 6be06efaaca31274c83cf229019485f7, type: 3}
       propertyPath: m_Navigation.m_SelectOnUp
       value: 
       objectReference: {fileID: 2305085264235608442}
@@ -783,6 +795,18 @@ PrefabInstance:
     - target: {fileID: 5992908514981768549, guid: 6be06efaaca31274c83cf229019485f7, type: 3}
       propertyPath: m_fontSize
       value: 43.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 5992908514981768549, guid: 6be06efaaca31274c83cf229019485f7, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 43.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 5992908514981768549, guid: 6be06efaaca31274c83cf229019485f7, type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5992908514981768549, guid: 6be06efaaca31274c83cf229019485f7, type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6be06efaaca31274c83cf229019485f7, type: 3}

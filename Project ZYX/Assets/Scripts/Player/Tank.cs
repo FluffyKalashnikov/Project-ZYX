@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
@@ -220,6 +221,8 @@ public class Tank : MonoBehaviour, IDamageable
     public Button                 PreviewButtonReady = null;
     public Button                 PreviewButtonRight = null;
     public Button                 PreviewButtonLeft  = null;
+    public TextMeshProUGUI        PreviewTextReady   = null;
+    public Image                  PreviewImageReady  = null;
     public TMP_InputField         PreviewNameField   = null;
     public RawImage               PreviewTankImage   = null;
     public Image                  PreviewBackground  = null;
@@ -236,6 +239,8 @@ public class Tank : MonoBehaviour, IDamageable
     public static Action<DamageInfo> OnDead;
     public static Action<Tank>       OnBeginCharge;
     public static Action<Tank>       OnStopCharge;
+    public        UnityEvent         OnReady;
+    public        UnityEvent         OnUnready;
 
     public Action                 Tick;
     public Action<Vector2, float> MoveTick;
@@ -527,6 +532,8 @@ public class Tank : MonoBehaviour, IDamageable
                 PreviewButtonRight = i[1];
                 PreviewButtonLeft  = i[2];
             }
+            PreviewTextReady  = PreviewButtonReady.GetComponentInChildren<TextMeshProUGUI>(true);
+            PreviewImageReady = PreviewButtonReady.GetComponentInChildren<Image>(true);
             
             // 3. INIT TEXTURE
             PreviewTexture = new RenderTexture(1024, 1024, 24);
@@ -537,10 +544,7 @@ public class Tank : MonoBehaviour, IDamageable
             PreviewModelRoot.transform.position = Vector3.up * 20f * (4 + PlayerIndex);
         }
 
-        // 3. UPDATE COLOR
-        PreviewBackground.color = Color;
-
-        // 4. SUBSCRIBE EVENTS
+        // 3. SUBSCRIBE EVENTS
         PreviewNameField.onValidateInput += NameValidation;
         PreviewNameField.onSubmit.AddListener(NameSubmit);
         PreviewNameField.onSelect.AddListener(NameSelect);
@@ -549,7 +553,7 @@ public class Tank : MonoBehaviour, IDamageable
         PreviewButtonRight.onClick.AddListener(() => TankIndex++);
         PreviewButtonLeft .onClick.AddListener(() => TankIndex--);
         
-        // 5. FINAL SETUP
+        // 4. FINAL SETUP
         DisablePreview();
         if (Game.State == Game.EState.Lobby)
         EnablePreview();
