@@ -48,6 +48,7 @@ public class TankMovement : MonoBehaviour
         
         Game.OnTankSpawn += (tank) => {StartCoroutine(tankAudioScript.EngineStartUpSound());};
         Game.OnNewLobby += () => { tankAudioScript.EngineShutOff(); tankAudioScript.PickupSpeedBoostSTOP(); };
+        Game.OnEndMatch += () => { tankAudioScript.EngineShutOff(); tankAudioScript.PickupSpeedBoostSTOP(); };
     }
     
     private void Update()

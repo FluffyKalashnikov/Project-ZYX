@@ -16,6 +16,10 @@ public class AmbientSFX : MonoBehaviour
     [Header("Played on start")]
     [SerializeField] private AudioEvent[] backgroundAmbientSound;
 
+    [Header("Pause SFX")]
+    [SerializeField] private AudioEvent pauseSfx;
+    [SerializeField] private AudioSource pauseSource;
+
     [Header("Randomly played (WHALE)")]
     [SerializeField] private AudioEvent AmbientSoundsWHALE;
     [SerializeField] private AudioSource AmbientSourceWHALE;
@@ -42,6 +46,7 @@ public class AmbientSFX : MonoBehaviour
     #endregion
 
     private int songstate;
+    private int gamestate;
     private void Awake()
     {
         #region Starts background SFX
@@ -52,7 +57,10 @@ public class AmbientSFX : MonoBehaviour
     {
         backgroundAmbientSound[i].Play(audioSources[i]);
     }
-    #endregion
+        #endregion
+
+        Game.OnPause += () => { PauseSFXMethod(); };
+        Game.OnResume += () => { PauseSFXMethod(); };
     }
     private void Start()
     {
@@ -62,6 +70,12 @@ public class AmbientSFX : MonoBehaviour
         StartCoroutine(DarkSFX());
         StartCoroutine(MiscSFX());
     }
+
+    private void PauseSFXMethod()
+    {
+        pauseSfx.Play(pauseSource);
+    }
+
     private void Update()
     {
         if (!Game.IsPlaying() && songstate == 0)
