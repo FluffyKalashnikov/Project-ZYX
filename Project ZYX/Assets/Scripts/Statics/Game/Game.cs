@@ -88,20 +88,20 @@ public class Game : MonoBehaviour
     public static Widget SettingsWidget = null;
     
     // REFERENCES
-    public static Camera                   Camera                  = null;
-    public static PlayerInputManager       InputManager            = null;
-    public static Game                     Instance                = null;
-    public        HorizontalLayoutGroup    PreviewRootUI           = null;
-    public static CinemachineTargetGroup   CameraTargets           = null;
-    public static CinemachineVirtualCamera MatchCamera             = null;
-    public static CinemachineVirtualCamera LobbyCamera             = null;
-    private static WidgetSwitcher          MenuSwitch              = null;
-    private static WidgetSwitcher          PopupSwitch             = null;
-    private static IEnumerator             IE_Count                = null;
-    private static AudioListener           AudioListener           = null;
-    public         TextMeshProUGUI         CountdownText           = null;
-    public         List<Scoreboard>        Scoreboards             = new List<Scoreboard>();
-    public         TextMeshProUGUI         WinText                 = null;
+    public static Camera                   Camera        = null;
+    public static PlayerInputManager       InputManager  = null;
+    public static Game                     Instance      = null;
+    public        HorizontalLayoutGroup    PreviewRootUI = null;
+    public static CinemachineTargetGroup   CameraTargets = null;
+    public static CinemachineVirtualCamera MatchCamera   = null;
+    public static CinemachineVirtualCamera LobbyCamera   = null;
+    private static WidgetSwitcher          MenuSwitch    = null;
+    private static WidgetSwitcher          PopupSwitch   = null;
+    private static IEnumerator             IE_Count      = null;
+    private static AudioListener           AudioListener = null;
+    public         TextMeshProUGUI         CountdownText = null;
+    public         List<Scoreboard>        Scoreboards   = new List<Scoreboard>();
+    public         TextMeshProUGUI         WinText       = null;
     
 
     public enum EState
@@ -216,12 +216,12 @@ public class Game : MonoBehaviour
         // 1. UPDATE COUNT
         switch(Tank.Ready = !Tank.Ready)
         {
-            case true:  ReadyCount++; Tank.PreviewTextReady.SetText("Ready!"); Tank.PreviewImageReady.color = Color.green; break;
-            case false: ReadyCount--; Tank.PreviewTextReady.SetText("Ready?"); Tank.PreviewImageReady.color = Color.white; break;
+            case true:  ReadyCount++; break;
+            case false: ReadyCount--; break;
         }
 
         // 2. CHECK COUNT
-        if (ReadyCount >= PlayerList.Count && PlayerList.Count > 1)
+        if (ReadyCount > 0 && ReadyCount >= PlayerList.Count && PlayerList.Count > 1)
         {
             BeginMatch();
             ResetReady();

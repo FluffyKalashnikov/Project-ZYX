@@ -93,7 +93,18 @@ public class Tank : MonoBehaviour, IDamageable
     
     [Header("Player Bools")]
     public bool       Alive = true;
-    public bool       Ready = false;
+    public bool       Ready
+    {
+        get {return m_Ready;}
+        set 
+        { 
+            switch (m_Ready = value)
+            {
+                case true: PreviewTextReady.SetText("Ready!"); PreviewImageReady.color = Color.green; break;
+                default:   PreviewTextReady.SetText("Ready?"); PreviewImageReady.color = Color.white; break;
+            }
+        }
+    }
     public Color      Color 
     {
         get {return Game.Instance.PlayerColors[PlayerIndex];}
@@ -194,6 +205,7 @@ public class Tank : MonoBehaviour, IDamageable
     private float      m_Score        = 0f;
     private string     m_Name         = string.Empty;
     private int        m_TankIndex    = 0;
+    private bool       m_Ready        = false;
 
     private int        HashCharge;
     private int        HashHealth;
