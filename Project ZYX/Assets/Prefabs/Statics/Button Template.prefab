@@ -173,6 +173,7 @@ GameObject:
   - component: {fileID: 5992908513887439352}
   - component: {fileID: 5992908513887439354}
   - component: {fileID: 5992908513887439359}
+  - component: {fileID: 1033996097297953190}
   m_Layer: 0
   m_Name: Button Template
   m_TagString: Untagged
@@ -379,6 +380,18 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+        - m_Target: {fileID: 1033996097297953190}
+          m_TargetAssemblyTypeName: ArrowSwapper, Assembly-CSharp
+          m_MethodName: SwapToHand
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
   - eventID: 1
     callback:
       m_PersistentCalls:
@@ -393,6 +406,18 @@ MonoBehaviour:
             m_IntArgument: 0
             m_FloatArgument: 0
             m_StringArgument: ButtonOnDeselect
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 1033996097297953190}
+          m_TargetAssemblyTypeName: ArrowSwapper, Assembly-CSharp
+          m_MethodName: SwapToArrow
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
 --- !u!95 &5992908513887439359
@@ -414,6 +439,20 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1033996097297953190
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5992908513887439348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37789eaa6a065cb49b4550a8aec8fa39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  arrow: {fileID: 2800000, guid: 0cf66641e86d801428c3a51c1b008fb9, type: 3}
+  hand: {fileID: 2800000, guid: 68795a817fc33af47ae88956cf853a75, type: 3}
 --- !u!1 &5992908514981768551
 GameObject:
   m_ObjectHideFlags: 0
