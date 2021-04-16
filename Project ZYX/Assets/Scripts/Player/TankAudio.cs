@@ -57,6 +57,10 @@ public class TankAudio : MonoBehaviour
     [SerializeField] private AudioEvent cannonBlast;
     [SerializeField] private AudioSource cannonBlastsource;
 
+    [Header("Seamine")]
+    [SerializeField] private AudioEvent PUSeaminePickupSfx;
+    [SerializeField] private AudioSource PUSeaminePickupSource;
+
     [Header("Repair")]
     [SerializeField] private AudioEvent PURepairSfx;
     [SerializeField] private AudioSource PURepairSource;
@@ -205,6 +209,10 @@ public class TankAudio : MonoBehaviour
         PUSpeedBoostStartSource.Stop();
         PUSpeedBoostLoopSource.Stop();
         PUSpeedBoostEndSource.Stop();
+    }
+    public void PickupSeaminePICKUP()
+    {
+        PUSeaminePickupSfx.Play(PUSeaminePickupSource);
     }
 
     public void ChargeAbility()

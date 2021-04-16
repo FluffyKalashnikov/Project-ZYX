@@ -259,6 +259,17 @@
                 {
                     "name": "",
                     "id": "ff658188-c678-4308-85dd-33f981d76ba2",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Seamine",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d0419646-14b9-4422-873f-352161b9844b",
                     "path": "<Gamepad>/leftShoulder",
                     "interactions": "",
                     "processors": "",

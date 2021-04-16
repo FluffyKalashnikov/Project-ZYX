@@ -214,6 +214,7 @@ public class TankPowerups : MonoBehaviour
     }
     private void SeamineMethod()
     {
+        tankAudioScript.PickupSeaminePICKUP();
         SeamineList.Clear();
         for (int i = 0; i < Seamine_Ammount; ++i)
         {
